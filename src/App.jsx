@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
 
 //Below is a functional tic-tac-toe game we should use as a starting point
 
