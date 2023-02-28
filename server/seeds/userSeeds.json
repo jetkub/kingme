@@ -1,0 +1,26 @@
+[
+    {
+      "username": "Addy Adminson",
+      "email": "Admin@test.com",
+      "password": "password",
+      "wins": 0,
+      "losses": 0,
+      "draws": 0
+    },
+    {
+      "username": "Timmy Turner",
+      "email": "Test@test.com",
+      "password": "password",
+      "wins": 2,
+      "losses": 6,
+      "draws": 2
+    },
+    {
+      "username": "Walter White",
+      "email": "Testy@test.com",
+      "password": "password",
+      "wins": 4,
+      "losses": 2,
+      "draws": 1
+    }
+  ]
