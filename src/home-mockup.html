@@ -13,7 +13,8 @@
 				background-color: white;
 				font-family: "Space Grotesk", normal;
 				font-weight: 700;
-				width: 150px;
+				font-size: 25px;
+				width: 200px;
 				height: 70px;
 				border-radius: 10px;
 			}
@@ -23,11 +24,12 @@
 			}
 			#hero {
 				font-family: "Climate Crisis", cursive;
-				font-size: 100px;
+				font-size: 125px;
 				text-align: center;
 			}
 			#menu {
 				background-color: rgb(255, 69, 69);
+				border: solid 2px black;
 				text-align: center;
 			}
 			#hotseatContainer {
@@ -36,16 +38,29 @@
 			#hotseatBtn {
 				margin-top: 120px;
 			}
-            #deco1{
-                position: absolute;
-                transform: translateX(80px);
-                background-color: red;
-                border-radius: 100px;
-                border: solid 2px black;
-                width: 200px;
-                height: 200px;
-                box-shadow: black 15px 15px 0px;
-            }
+			#deco {
+				position: absolute;
+				transform: translate(80px, 100px);
+				background-color: rgb(255, 69, 69);
+				border-radius: 100px;
+				border: solid 2px black;
+				width: 200px;
+				height: 200px;
+				box-shadow: black 15px 15px 0px;
+				animation: MoveUpDown 5s linear infinite;
+			}
+			@keyframes MoveUpDown {
+				0%, 100% {
+					transform: translate(80px,100px);
+				}
+				50% {
+					transform: translate(80px,110px);
+				}
+			}
+			#decoImg {
+				width: 150px;
+				margin-top: 23px;
+			}
 			#multiplayerContainer {
 				background-color: black;
 				height: 300px;
@@ -56,10 +71,10 @@
 			#joinInput {
 				font-family: "Space Grotesk", normal;
 				font-weight: 700;
-				font-size: larger;
+				font-size: 25px;
 				height: 66px;
-                width: 100px;
-				padding: 0px;
+				width: 100px;
+				padding: 0px 20px 0px 0px;
 				margin-top: 120px;
 				margin-right: -4px;
 				border: none;
@@ -67,18 +82,17 @@
 			}
 			#joinBtn {
 				border-radius: 0px 10px 10px 0px;
-                transform: translateY(-2px);
 			}
 		</style>
 	</head>
 	<body>
 		<div id="nav">
-			<button style="float: right; border-radius: 0px;">login</button>
+			<button style="float: right; border-radius: 0px">login</button>
 		</div>
 		<h1 id="hero">kingme.gg</h1>
 		<div id="menu">
 			<section id="hotseatContainer">
-                <div id="deco1"></div>
+				<div id="deco"><img id="decoImg" src="./assets/crown.png" /></div>
 				<button id="hotseatBtn">Play Solo</button>
 			</section>
 			<section id="multiplayerContainer" style="display: flex">
