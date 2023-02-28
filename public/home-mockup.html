@@ -8,26 +8,72 @@
 			href="https://fonts.googleapis.com/css2?family=Climate+Crisis&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
 			rel="stylesheet"
 		/>
-        <style>
-            #hero{
-                
+		<style>
+            button {
+                background-color: white;
+                font-family: 'Space Grotesk', normal;
+                font-weight: 700;
+                width: 150px;
+				height: 70px;
+                border-radius: 10px;
             }
-        </style>
+            #nav {
+                background-color: black;
+                height: 70px;
+            }
+			#hero {
+				font-family: "Climate Crisis", cursive;
+				font-size: 100px;
+				text-align: center;
+			}
+			#menu {
+				background-color: rgb(255, 69, 69);
+				text-align: center;
+			}
+			#hotseatContainer {
+				height: 300px;
+			}
+			#hotseatBtn {
+
+			}
+			#multiplayerContainer {
+				background-color: black;
+				height: 300px;
+			}
+			#hostBtn {
+
+			}
+            #joinInput{
+                height: 66px;
+                padding: 0px;
+                margin: 0px;
+                margin-right: -4px;
+                border: none;
+                border-radius: 10px 0px 0px 10px;
+            }
+			#joinBtn {
+                border-radius: 10px 8px 8px 10px;
+
+			}
+		</style>
 	</head>
 	<body>
-		<div id="nav"></div>
-		<h1 id="hero" style="font-family: 'Climate Crisis', cursive; font-size: 100px; text-align: center;">kingme.gg</h1>
-		<div id="menu" style="background-color: rgb(255, 69, 69); text-align: center;">
-			<section id="hotseatContainer" style="height: 300px;">
-				<button id="hotseatBtn" style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; width: 300px; height: 70px;">Play Solo</button>
+		<div id="nav">
+            <button>login</button>
+            <button>logout</button>
+        </div>
+		<h1 id="hero">kingme.gg</h1>
+		<div id="menu">
+			<section id="hotseatContainer">
+				<button id="hotseatBtn">Play Solo</button>
 			</section>
-			<section id="multiplayerContainer" style="background-color: black; height: 300px;">
+			<section id="multiplayerContainer">
 				<div id="hostContainer">
-					<button id="hostBtn" style="font-family: 'Space Grotesk', sans-serif; font-weight: 700;">Host a Game</button>
+					<button id="hostBtn">Host a Game</button>
 				</div>
-				<div id="joinContainer" style=>
-					<input id="joinInput">
-					<button id="joinBtn" style="font-family: 'Space Grotesk', sans-serif; font-weight: 700;">Join a Friend</button>
+				<div id="joinContainer">
+					<input id="joinInput" />
+					<button id="joinBtn">Join a Friend</button>
 				</div>
 			</section>
 		</div>
