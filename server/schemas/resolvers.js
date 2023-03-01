@@ -18,8 +18,12 @@ const resolvers = {
             return User.find()
                 .select('-__v -password')
                 .populate('games');
-        }
-    },
+        },
+        user: async (parent, { _id }) => {
+            const params = _id ? { _id } : {};
+            return User.findOne(params).select('-__v -password').populate('games');
+    }
+},
     Mutation: {
         
         addUser: async (parent, args) => {
@@ -45,8 +49,11 @@ const resolvers = {
             return { token, user };
 
     }
-}
-};
+}}
+
+
+
+
 
 module.exports = resolvers;
 
