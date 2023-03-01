@@ -1,5 +1,5 @@
 
-import whiteKing from '../../assets/white-king.svg'
+import whiteKing from '../../assets/whiteking.png'
 
 function WhiteKing(props) {
     return (
