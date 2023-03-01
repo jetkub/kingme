@@ -1,5 +1,5 @@
 
-import whitePiece from '../../assets/white-piece.svg'
+import whitePiece from '../../assets/whitepiece.png'
 
 function WhitePiece(props) {
     return (

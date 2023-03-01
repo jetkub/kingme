@@ -1,4 +1,4 @@
-import blackKing from '../../assets/black-king.svg'
+import blackKing from '../../assets/blackking.png'
 
 function BlackKing(props) {
     return (
