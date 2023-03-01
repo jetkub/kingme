@@ -1,9 +1,7 @@
 
-import whitePiece from '../../assets/whitepiece.png'
-
 function WhitePiece(props) {
     return (
-        <img src={whitePiece} alt={'A white piece.'} className={'piece'} />
+        <button class="whitePiece"/>
     )
 }
 

@@ -3,7 +3,6 @@ import Square from "./Square";
 function Row(props) {
 	return (
 		<tr>
-			<th>{props.number}</th>
 			{props.data.map((Piece, index) => {
 				const column = String.fromCharCode(97 + index);
 				return (
@@ -16,7 +15,6 @@ function Row(props) {
 					</Square>
 				);
 			})}
-			<th>{props.number}</th>
 		</tr>
 	);
 }
