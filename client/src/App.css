@@ -1,22 +1,64 @@
+#board {
+	border: solid 3px black;
+  width: 100vw;
+  height: 100vw;
+}
 
-.no-border {
-    border-collapse: collapse;
-  }
-  
-  .square {
-    width: 83px;
-    height: 83px;
-  }
-  
-  .light {
-    background-color: rgb(255, 69, 69);
-  }
-  
-  .dark {
-    background-color: #000000;
-  }
-  
-  .piece {
-    display:block;
-    margin: auto;
-  }
+.whitePiece {
+	background-color: white;
+	width: 80%;
+	height: 80%;
+	margin: 10%;
+	border-radius: 50%;
+	border: solid 3px black;
+}
+
+.whiteKing {
+	background-color: white;
+	width: 80%;
+	height: 80%;
+	margin: 10%;
+	border-radius: 50%;
+	border: solid 3px black;
+}
+
+.blackPiece {
+	background-color: rgb(0, 0, 0);
+	width: 80%;
+	height: 80%;
+	margin: 10%;
+	border-radius: 50%;
+}
+
+.blackKing {
+	background-color: rgb(0, 0, 0);
+	width: 80%;
+	height: 80%;
+	margin: 10%;
+	border-radius: 50%;
+}
+
+.blackKing.hover,
+.blackPiece.hover,
+.whiteKing.hover,
+.whitePiece.hover {
+  box-shadow: 5px 5px 0px black;
+}
+
+.square {
+	width: 12.5%;
+	height: 12.5%
+}
+
+.light {
+	background-color: rgb(255, 255, 255);
+}
+
+.dark {
+	background-color: rgb(255, 69, 69);
+}
+
+.piece {
+	display: block;
+	margin: auto;
+}
