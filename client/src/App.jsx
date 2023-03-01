@@ -19,7 +19,7 @@ function App() {
   ]
 
   return (
-    <table className='no-border'>
+    <table id="board">
       <tbody>
         {data.map((rowData, index) => {
           const number = data.length - index
