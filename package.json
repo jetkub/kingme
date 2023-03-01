@@ -1,27 +1,18 @@
 {
-    "name": "kingme",
-    "private": true,
-    "version": "0.0.0",
-    "type": "module",
-    "scripts": {
-      "dev": "vite",
-      "build": "vite build",
-      "preview": "vite preview"
-    },
-    "dependencies": {
-      "react": "^18.2.0",
-      "react-dom": "^18.2.0"
-    },
-    "devDependencies": {
-      "@types/react": "^18.0.27",
-      "@types/react-dom": "^18.0.10",
-      "@vitejs/plugin-react": "^3.1.0",
-      "autoprefixer": "^10.4.13",
-      "eslint": "^8.35.0",
-      "eslint-config-prettier": "^8.6.0",
-      "postcss": "^8.4.21",
-      "tailwindcss": "^3.2.7",
-      "vite": "^4.1.0"
-    }
+  "name": "kingme",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js --ignore client",
+    "develop": "concurrently --kill-others-on-fail \"cd server && npm run watch\" \"cd client && npm run dev\"",
+    "install": "cd server && npm i && cd ../client && npm i",
+    "seed": "cd server && npm run seed",
+    "build": "cd client && npm run build"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^5.3.0"
   }
-  
+}
