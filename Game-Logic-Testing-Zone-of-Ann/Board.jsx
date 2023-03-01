@@ -9,6 +9,10 @@ export default function Board() {
 
     const [squares, setSquares] = useState(initialBoardLayout);
 
+    function handleClick(i) {
+        
+    }
+
     return (
         <>
             <div>
@@ -102,7 +106,19 @@ export default function Board() {
 const initialBoardLayout = [null, 'black', null, 'black', null, 'black', null, 'black', 'black', null, 'black', null, 'black', null, 'black', null, null, 'black', null, 'black', null, 'black', null, 'black', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 'red', null, 'red', null, 'red', null, 'red', null, null, 'red', null, 'red', null, 'red', null, 'red', 'red', null, 'red', null, 'red', null, 'red', null];
 const initialRedCount = 12;
 const initialBlackCount = 12;
+let redCount;
+let blackCount;
 
 function movePiece() {
 
+}
+
+function calculateWinner() {
+    if (redCount = 0) {
+        return console.log('Red wins!')
+    } else if (blackCount = 0) {
+        return console.log('Black wins!')
+    } else {
+        return console.log('Next turn')
+    }
 }

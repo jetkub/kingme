@@ -35,7 +35,7 @@ type Auth {
 type Query {
     me: User
     users: [User]
-    user(username: String!): User
+    user(_id: ID!): User
     games: [Game]
     game(_id: ID!): Game
 }
