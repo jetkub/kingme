@@ -1,0 +1,22 @@
+
+.no-border {
+    border-collapse: collapse;
+  }
+  
+  .square {
+    width: 83px;
+    height: 83px;
+  }
+  
+  .light {
+    background-color: rgb(255, 69, 69);
+  }
+  
+  .dark {
+    background-color: #000000;
+  }
+  
+  .piece {
+    display:block;
+    margin: auto;
+  }
