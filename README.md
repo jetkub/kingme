@@ -1,2 +1,0 @@
-# kingme
-hello world 
