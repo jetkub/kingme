@@ -22,11 +22,11 @@ function onPieceClick() {
             // ex. 'C4'
         // Check if valid move was made
             // ex. true
-        // Check if piece(s) were taken
+        // Check if piece was taken
             // ex. false
         // Check if game is won
             // ex. false
-        // Check if able to be Kinged
+        // Check if able to be Kinged - location && notAlreadyKing
             // ex. false
     }
 
@@ -34,8 +34,9 @@ function onPieceClick() {
         // ex. false
     // Tally score
         // Red - 12, Black - 12
-    // End turn
+    // End turn (onDoubleClick ???)
         // ex. blackIsNext = false
+    // Update Board
 }
 
 
@@ -162,3 +163,16 @@ function onPieceClick() {
         // "C8" to (("B7" || "A6") || ("D7" || "E6"))
         // "E8" to (("D7" || "C6") || ("F7" || "G6"))
         // "G8" to (("F7" || "E6") || "H7")
+
+// King-able Locations
+    // Black
+        // "A8"
+        // "C8"
+        // "E8"
+        // "G8"
+
+    // Red
+        // "B1"
+        // "D1"
+        // "F1"
+        // "H1"
