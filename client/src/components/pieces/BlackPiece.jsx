@@ -1,5 +1,5 @@
 
-import blackPiece from '../../assets/black-piece.svg'
+import blackPiece from '../../assets/blackpiece.png'
 
 function BlackPiece(props) {
     return (
