@@ -19,10 +19,7 @@ function App() {
   ]
 
   return (
-    <table className='no-border'>
-      <thead>
-        <tr><th></th><th>a</th><th>b</th><th>c</th><th>d</th><th>e</th><th>f</th><th>g</th><th>h</th><th></th></tr>
-      </thead>
+    <table id="board">
       <tbody>
         {data.map((rowData, index) => {
           const number = data.length - index
@@ -30,9 +27,6 @@ function App() {
           return <Row key={number.toString()} number={number} data={rowData} />
         })}
       </tbody>
-      <tfoot>
-        <tr><th></th><th>a</th><th>b</th><th>c</th><th>d</th><th>e</th><th>f</th><th>g</th><th>h</th><th></th></tr>
-      </tfoot>
     </table>
   );
 }
