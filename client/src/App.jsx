@@ -10,7 +10,7 @@ function App() {
   const data = [
     [null, BlackPiece, null, BlackPiece, null, BlackPiece, null, BlackPiece],
     [BlackPiece, null, BlackPiece, null, BlackPiece, null, BlackPiece, null],
-    [null, BlackPiece, null, BlackKing, null, BlackPiece, null, BlackPiece],
+    [null, BlackPiece, null, BlackPiece, null, BlackPiece, null, BlackPiece],
     [null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null],
     [WhitePiece, null, WhitePiece, null, WhitePiece, null, WhitePiece, null],
