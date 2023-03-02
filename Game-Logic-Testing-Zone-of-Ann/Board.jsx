@@ -13,11 +13,17 @@ function Square({ value, onSquareClick }) {
 export default function Board() {
   const [blackIsNext, setBlackIsNext] = useState(true);
 
-  const [squares, setSquares] = useState([null, 'black', null, 'black', null, 'black', null, 'black', 'black', null, 'black', null, 'black', null, 'black', null, null, 'black', null, 'black', null, 'black', null, 'black', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 'red', null, 'red', null, 'red', null, 'red', null, null, 'red', null, 'red', null, 'red', null, 'red', 'red', null, 'red', null, 'red', null, 'red', null]);
+  const [squares, setSquares] = useState([undefined, 'black', undefined, 'black', undefined, 'black', undefined, 'black', 'black', undefined, 'black', undefined, 'black', undefined, 'black', undefined, undefined, 'black', undefined, 'black', undefined, 'black', undefined, 'black', null, undefined, null, undefined, null, undefined, null, undefined, undefined, null, undefined, null, undefined, null, undefined, null, 'red', undefined, 'red', undefined, 'red', undefined, 'red', undefined, undefined, 'red', undefined, 'red', undefined, 'red', undefined, 'red', 'red', undefined, 'red', undefined, 'red', undefined, 'red', undefined]);
 
   function handleClick(i) {
     const nextSquares = squares.slice();
-    if (nextSquares[i] !== null) {
+
+    // Indicates unplayable tiles
+    if (nextSquares[i] === undefined) {
+        console.log('invalid move')
+    }
+
+    if ((nextSquares[i] === 'red') || (nextSquares[i] === 'black')) {
       nextSquares[i] = null;
     } else if ((nextSquares[i] === null) && blackIsNext) {
       nextSquares[i] = 'black';
@@ -30,8 +36,12 @@ export default function Board() {
     setSquares(nextSquares);
   }
 
+  let status = (blackIsNext ? "Black" : "Red") + "'s Turn";
+
   return (
     <>
+      <div className="status">{status}</div>
+
       <div className="board-row">
         <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
         <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
@@ -121,7 +131,7 @@ export default function Board() {
 
 // const redPieceArray = []
 
-const initialBoardLayout = [null, 'black', null, 'black', null, 'black', null, 'black', 'black', null, 'black', null, 'black', null, 'black', null, null, 'black', null, 'black', null, 'black', null, 'black', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 'red', null, 'red', null, 'red', null, 'red', null, null, 'red', null, 'red', null, 'red', null, 'red', 'red', null, 'red', null, 'red', null, 'red', null];
+const initialBoardLayout = [undefined, 'black', undefined, 'black', undefined, 'black', undefined, 'black', 'black', undefined, 'black', undefined, 'black', undefined, 'black', undefined, undefined, 'black', undefined, 'black', undefined, 'black', undefined, 'black', null, undefined, null, undefined, null, undefined, null, undefined, undefined, null, undefined, null, undefined, null, undefined, null, 'red', undefined, 'red', undefined, 'red', undefined, 'red', undefined, undefined, 'red', undefined, 'red', undefined, 'red', undefined, 'red', 'red', undefined, 'red', undefined, 'red', undefined, 'red', undefined];
 const initialRedCount = 12;
 const initialBlackCount = 12;
 let redCount;
