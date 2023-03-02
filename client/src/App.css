@@ -1,7 +1,7 @@
 #board {
 	border: solid 3px black;
-  width: 100vw;
-  height: 100vw;
+	width: 100vw;
+	height: 100vw;
 }
 
 .whitePiece {
@@ -42,12 +42,12 @@
 .blackPiece.hover,
 .whiteKing.hover,
 .whitePiece.hover {
-  box-shadow: 5px 5px 0px black;
+	box-shadow: 5px 5px 0px black;
 }
 
 .square {
 	width: 12.5%;
-	height: 12.5%
+	height: 12.5%;
 }
 
 .light {
@@ -61,4 +61,72 @@
 .piece {
 	display: block;
 	margin: auto;
+}
+
+#menu {
+	background-color: rgb(255, 69, 69);
+	border: solid 2px black;
+	text-align: center;
+}
+#hotseatContainer {
+	height: 300px;
+}
+#hotseatBtn {
+	margin-top: 120px;
+}
+#deco {
+	position: absolute;
+	background-color: rgb(255, 69, 69);
+	border-radius: 100px;
+	border: solid 2px black;
+	width: 200px;
+	height: 200px;
+	box-shadow: black 15px 15px 0px;
+	animation: MoveUpDown 5s linear infinite;
+}
+#deco2 {
+	position: absolute;
+	margin: -70px 0px 0px 100px;
+	background-color: rgb(0, 0, 0);
+	border-radius: 100px;
+	border: solid 2px rgb(255, 255, 255);
+	width: 200px;
+	height: 200px;
+	box-shadow: black 15px 15px 0px;
+	animation: MoveUpDown 5s linear infinite;
+}
+@keyframes MoveUpDown {
+	0%,
+	100% {
+		transform: translate(80px, 100px);
+	}
+	50% {
+		transform: translate(80px, 110px);
+	}
+}
+#decoImg {
+	width: 150px;
+	margin-top: 23px;
+}
+#multiplayerContainer {
+	background-color: black;
+	height: 300px;
+}
+#hostBtn {
+	margin-top: 120px;
+}
+#joinInput {
+	font-family: "Space Grotesk", normal;
+	font-weight: 700;
+	font-size: 25px;
+	height: 66px;
+	width: 100px;
+	padding: 0px 20px 0px 0px;
+	margin-top: 120px;
+	margin-right: -4px;
+	border: none;
+	border-radius: 10px 0px 0px 10px;
+}
+#joinBtn {
+	border-radius: 0px 10px 10px 0px;
 }
