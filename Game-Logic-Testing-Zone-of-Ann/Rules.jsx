@@ -40,6 +40,18 @@ function onPieceClick() {
 }
 
 
+// Viable Move
+    // Go through board array to find the starting square of the selectedPiece
+    // Get the move list for the starting square based on the color of the piece and whether it is single or kinged
+        // If the selected destination is not a square in the move list of the starting square -> MOVE IS NOT VIABLE
+    // Get the contents of the squares in the move list of the starting square
+        // If the selected destination is in the move list of the starting square && is only one tile away from the starting square && the selected destination is empty -> MOVE IS VIABLE
+        // If the selected destination is in the move list of the starting square && is only one tile away from the starting square && the selected destination is not empty -> MOVE IS NOT VIABLE
+        // If the selected destination is in the move list of the starting square && is two tiles away from the starting square && the tile in between is occupied by the opponent && the selected destination is empty -> MOVE IS VIABLE
+        // If the selected destination is in the move list of the starting square && is two tiles away from the starting square && the tile in between is occupied by the opponent && the selected destination is not empty -> MOVE IS NOT VIABLE
+        // If the selected destination is in the move list of the starting square && is two tiles away from the starting square && the tile in between is not occupied by the opponent -> MOVE IS NOT VIABLE
+
+
 // Moves List
     // Black Single Piece
         // "B1" to ("A2" || ("C2" || "D3")
