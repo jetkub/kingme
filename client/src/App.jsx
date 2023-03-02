@@ -1,11 +1,10 @@
-import { useState } from "react";
-import "./App.css";
-import Menu from "./components/Menu";
-import Row from "./components/Row";
-import BlackPiece from "./components/pieces/BlackPiece";
-import WhitePiece from "./components/pieces/WhitePiece";
-import BlackKing from "./components/pieces/BlackKing";
-import WhiteKing from "./components/pieces/WhiteKing";
+import React, { useState } from 'react';
+import './App.css';
+import Header from './components/Header';
+import Checkers from './components/Checkers';
+import Menu from './components/Menu';
+import { Route, Routes } from 'react-router-dom';
+
 
 function App() {
 	const data = [
