@@ -1,4 +1,3 @@
-
 function WhitePiece(props) {
     return (
         <button class="whitePiece"/>

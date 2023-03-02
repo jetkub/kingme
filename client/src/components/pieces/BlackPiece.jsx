@@ -1,4 +1,3 @@
-
 function BlackPiece(props) {
     return (
         <button class="blackPiece"/>

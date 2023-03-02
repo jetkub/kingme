@@ -1,4 +1,3 @@
-
 function BlackKing(props) {
     return (
         <button class="blackKing"/>
