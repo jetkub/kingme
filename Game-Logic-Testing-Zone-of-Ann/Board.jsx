@@ -11,27 +11,41 @@ function Square({ value, onSquareClick }) {
 }
 
 export default function Board() {
-  const [blackIsNext, setBlackIsNext] = useState(true);
-
-  const [squares, setSquares] = useState([undefined, 'black', undefined, 'black', undefined, 'black', undefined, 'black', 'black', undefined, 'black', undefined, 'black', undefined, 'black', undefined, undefined, 'black', undefined, 'black', undefined, 'black', undefined, 'black', null, undefined, null, undefined, null, undefined, null, undefined, undefined, null, undefined, null, undefined, null, undefined, null, 'red', undefined, 'red', undefined, 'red', undefined, 'red', undefined, undefined, 'red', undefined, 'red', undefined, 'red', undefined, 'red', 'red', undefined, 'red', undefined, 'red', undefined, 'red', undefined]);
-
-  function handleClick(i) {
-    const nextSquares = squares.slice();
-
-    // Indicates unplayable tiles
-    if (nextSquares[i] === undefined) {
-        console.log('invalid move')
-    }
-
-    if ((nextSquares[i] === 'red') || (nextSquares[i] === 'black')) {
-      nextSquares[i] = null;
-    } else if ((nextSquares[i] === null) && blackIsNext) {
-      nextSquares[i] = 'black';
-      setBlackIsNext(!blackIsNext);
-    } else if ((nextSquares[i] === null) && !blackIsNext) {
-      nextSquares[i] = 'red';
-      setBlackIsNext(!blackIsNext);
-    }
+    let redCount = 0;
+    let blackCount = 0;
+  
+    const [blackIsNext, setBlackIsNext] = useState(true);
+  
+    const [squares, setSquares] = useState([undefined, 'black', undefined, 'black', undefined, 'black', undefined, 'black', 'black', undefined, 'black', undefined, 'black', undefined, 'black', undefined, undefined, 'black', undefined, 'black', undefined, 'black', undefined, 'black', null, undefined, null, undefined, null, undefined, null, undefined, undefined, null, undefined, null, undefined, null, undefined, null, 'red', undefined, 'red', undefined, 'red', undefined, 'red', undefined, undefined, 'red', undefined, 'red', undefined, 'red', undefined, 'red', 'red', undefined, 'red', undefined, 'red', undefined, 'red', undefined]);
+  
+    function handleClick(i) {
+      const nextSquares = squares.slice();
+  
+      function tallyPieces() {
+        
+        for (let index = 0; index < nextSquares.length; index++) {
+          if (nextSquares[index] === 'red') {
+            redCount ++;          
+          } else if (nextSquares[index] === 'black') {
+            blackCount ++;          
+          }
+        }
+        console.log('redCount: ' + redCount);
+        console.log('blackCount: ' + blackCount);
+      }
+  
+      if ((nextSquares[i] === 'red') || (nextSquares[i] === 'black')) {
+        nextSquares[i] = null;
+        tallyPieces();
+      } else if ((nextSquares[i] === null) && blackIsNext) {
+        nextSquares[i] = 'black';
+        setBlackIsNext(!blackIsNext);
+        tallyPieces();
+      } else if ((nextSquares[i] === null) && !blackIsNext) {
+        nextSquares[i] = 'red';
+        setBlackIsNext(!blackIsNext);
+        tallyPieces();
+      }
     
     setSquares(nextSquares);
   }
