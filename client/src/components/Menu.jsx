@@ -5,11 +5,7 @@ const Menu = () => {
 		<div id="menu">
 		<section id="hotseatContainer">
 			<div id="deco2">
-				<img
-					id="decoImg"
-					src="./assets/crownwhite.png"
-					style="transform: rotate(10deg);"
-				></img>
+			  <img id="decoImg" src="./assets/crownwhite.png" style={{transform: 'rotate(10deg)'}} />
 			</div>
 			<div id="deco">
 				<img
