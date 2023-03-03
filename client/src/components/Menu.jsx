@@ -1,4 +1,4 @@
-import React, { Menu } from "react";
+import React from "react";
 
 const Menu = () => {
 	return (
@@ -32,3 +32,5 @@ const Menu = () => {
 	</div>
 	)
 }
+
+export default Menu
