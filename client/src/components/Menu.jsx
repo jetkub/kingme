@@ -13,11 +13,11 @@ const Menu = () => {
 			</div>
 			<button id="hotseatBtn">Play Solo</button>
 		  </section>
-		  <section id="multiplayerContainer" style={{display: 'flex'}}>
-			<div id="hostContainer" style={{flex: 1}}>
+		  <section id="multiplayerContainer">
+			<div id="hostContainer" >
 			  <button id="hostBtn">Host a Game</button>
 			</div>
-			<div id="joinContainer" style={{flex: 1}}>
+			<div id="joinContainer">
 			  <input id="joinInput" maxLength={5} />
 			  <button id="joinBtn">Join a Friend</button>
 			</div>
