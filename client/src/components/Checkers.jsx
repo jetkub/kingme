@@ -17,7 +17,7 @@ function Checkers() {
 	];
 
 	return (
-		<table className="no-border">
+		<table id="board" className="no-border">
 			{data.map((rowData, index) => {
 				const number = data.length - index;
 

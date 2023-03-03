@@ -25,7 +25,7 @@ const Menu = () => {
 				<button id="hostBtn">Host a Game</button>
 			</div>
 			<div id="joinContainer" style="flex: 1">
-				<input id="joinInput" maxlength="5" />
+				<input id="joinInput" />
 				<button id="joinBtn">Join a Friend</button>
 			</div>
 		</section>
