@@ -41,15 +41,39 @@ export default function Board() {
         console.log('blackCount: ' + blackCount);
       }
   
-      if ((nextSquares[i] === '🔴') || (nextSquares[i] === '⚫')) {
+      if ((nextSquares[i] === '🔴') || (nextSquares[i] === '❤️') || (nextSquares[i] === '⚫') || (nextSquares[i] === '🖤')) {
         nextSquares[i] = null;
         tallyPieces();
       } else if ((nextSquares[i] === null) && blackIsNext) {
         nextSquares[i] = '⚫';
+        if (nextSquares[56] === '⚫') {
+          (nextSquares[56] = '🖤')
+        }
+        if (nextSquares[58] === '⚫') {
+          (nextSquares[58] = '🖤')
+        }
+        if (nextSquares[60] === '⚫') {
+          (nextSquares[60] = '🖤')
+        }
+        if (nextSquares[62] === '⚫') {
+          (nextSquares[62] = '🖤')
+        }
         setBlackIsNext(!blackIsNext);
         tallyPieces();
       } else if ((nextSquares[i] === null) && !blackIsNext) {
         nextSquares[i] = '🔴';
+        if (nextSquares[1] === '🔴') {
+          (nextSquares[1] = '❤️')
+        }
+        if (nextSquares[3] === '🔴') {
+          (nextSquares[3] = '❤️')
+        }
+        if (nextSquares[5] === '🔴') {
+          (nextSquares[5] = '❤️')
+        }
+        if (nextSquares[7] === '🔴') {
+          (nextSquares[7] = '❤️')
+        }
         setBlackIsNext(!blackIsNext);
         tallyPieces();
       }
