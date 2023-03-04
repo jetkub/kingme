@@ -60,9 +60,9 @@ export default function Board() {
           blackCount ++;          
         }
       }
-      if ((redCount === 0) && !blackIsNext) {
+      if ((redCount === 0) && blackIsNext) {
         console.log('Black wins!');
-      } else if ((blackCount === 0) && blackIsNext) {
+      } else if ((blackCount === 0) && !blackIsNext) {
         console.log('Red wins!');
       }
     }
