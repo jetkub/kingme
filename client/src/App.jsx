@@ -10,7 +10,7 @@ import { setContext } from "@apollo/client/link/context";
 import "./App.css";
 import Header from "./components/Header";
 import Checkers from "./components/Checkers";
-import Menu from "./components/Menu";
+import Menu from "./pages/Menu";
 import { Route, Routes } from "react-router-dom";
 
 const httpLink = createHttpLink({
