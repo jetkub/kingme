@@ -18,46 +18,115 @@ function RedSquare({ value, onSquareClick }) {
   );
 }
 
+function EndTurnButton({ onEndTurnClick }) {
+  return (
+    <button onClick={onEndTurnClick}>
+      End Turn
+    </button>
+  );
+}
+
 export default function Board() {
-    let redCount = 0;
-    let blackCount = 0;
+  let redCount = 0;
+  let blackCount = 0;
   
-    const [blackIsNext, setBlackIsNext] = useState(true);
+  const [blackIsNext, setBlackIsNext] = useState(true);
   
-    const [squares, setSquares] = useState([undefined, '⚫', undefined, '⚫', undefined, '⚫', undefined, '⚫', '⚫', undefined, '⚫', undefined, '⚫', undefined, '⚫', undefined, undefined, '⚫', undefined, '⚫', undefined, '⚫', undefined, '⚫', null, undefined, null, undefined, null, undefined, null, undefined, undefined, null, undefined, null, undefined, null, undefined, null, '🔴', undefined, '🔴', undefined, '🔴', undefined, '🔴', undefined, undefined, '🔴', undefined, '🔴', undefined, '🔴', undefined, '🔴', '🔴', undefined, '🔴', undefined, '🔴', undefined, '🔴', undefined]);
+  const [squares, setSquares] = useState([undefined, '⚫', undefined, '⚫', undefined, '⚫', undefined, '⚫', '⚫', undefined, '⚫', undefined, '⚫', undefined, '⚫', undefined, undefined, '⚫', undefined, '⚫', undefined, '⚫', undefined, '⚫', null, undefined, null, undefined, null, undefined, null, undefined, undefined, null, undefined, null, undefined, null, undefined, null, '🔴', undefined, '🔴', undefined, '🔴', undefined, '🔴', undefined, undefined, '🔴', undefined, '🔴', undefined, '🔴', undefined, '🔴', '🔴', undefined, '🔴', undefined, '🔴', undefined, '🔴', undefined]);
   
-    function handleClick(i) {
-      const nextSquares = squares.slice();
-  
-      function tallyPieces() { 
-        for (let index = 0; index < nextSquares.length; index++) {
-          if (nextSquares[index] === '🔴') {
-            redCount ++;          
-          } else if (nextSquares[index] === '⚫') {
-            blackCount ++;          
-          }
+  const [selectedPiece, setSelectedPiece] = useState('⚫');
+  const savedPiece = ['🔴', '❤️', '⚫', '🖤']
+
+  const statusMessage = ["Black's Turn", "Red's Turn", "Black Wins!", "Red Wins!"]
+  const [status, setStatus] = useState(statusMessage[0]);
+
+  function handleClick(i) {
+    const nextSquares = squares.slice();
+
+    function changeSelectedPiece() {
+      if (nextSquares[i] === '🔴') {
+        setSelectedPiece(savedPiece[0]);
+      } else if (nextSquares[i] === '❤️') {
+        setSelectedPiece(savedPiece[1]);
+      } else if (nextSquares[i] === '⚫') {
+        setSelectedPiece(savedPiece[2]);
+      } else if (nextSquares[i] === '🖤') {
+        setSelectedPiece(savedPiece[3]);
+      } 
+    }
+      
+    function tallyPieces() { 
+      for (let index = 0; index < nextSquares.length; index++) {
+        if ((nextSquares[index] === '🔴') || nextSquares[index] === '❤️') {
+          redCount ++;          
+        } else if ((nextSquares[index] === '⚫') || nextSquares[index] === '🖤') {
+          blackCount ++;          
         }
-        console.log('redCount: ' + redCount);
-        console.log('blackCount: ' + blackCount);
       }
+      if ((redCount === 0) && blackIsNext) {
+        setStatus(statusMessage[2]);
+        console.log('Black wins!');
+      } else if ((blackCount === 0) && !blackIsNext) {
+        setStatus(statusMessage[3]);
+        console.log('Red wins!');
+      }
+    }
   
-      if ((nextSquares[i] === '🔴') || (nextSquares[i] === '⚫')) {
-        nextSquares[i] = null;
-        tallyPieces();
-      } else if ((nextSquares[i] === null) && blackIsNext) {
-        nextSquares[i] = '⚫';
-        setBlackIsNext(!blackIsNext);
-        tallyPieces();
-      } else if ((nextSquares[i] === null) && !blackIsNext) {
-        nextSquares[i] = '🔴';
-        setBlackIsNext(!blackIsNext);
-        tallyPieces();
+    if ((nextSquares[i] === '🔴') || (nextSquares[i] === '❤️') || (nextSquares[i] === '⚫') || (nextSquares[i] === '🖤')) {
+      changeSelectedPiece();
+      console.log(selectedPiece);
+      nextSquares[i] = null;
+      tallyPieces();
+    } else if ((nextSquares[i] === null) && blackIsNext) {
+      nextSquares[i] = selectedPiece;
+      if (nextSquares[56] === '⚫') {
+        (nextSquares[56] = '🖤')
+        // Add 1 to black's kinged piece stat
       }
-    
+      if (nextSquares[58] === '⚫') {
+        (nextSquares[58] = '🖤')
+        // Add 1 to black's kinged piece stat
+      }
+      if (nextSquares[60] === '⚫') {
+        (nextSquares[60] = '🖤')
+        // Add 1 to black's kinged piece stat
+      }
+      if (nextSquares[62] === '⚫') {
+        (nextSquares[62] = '🖤')
+        // Add 1 to black's kinged piece stat
+      }
+      tallyPieces();
+    } else if ((nextSquares[i] === null) && !blackIsNext) {
+      nextSquares[i] = selectedPiece;
+      if (nextSquares[1] === '🔴') {
+        (nextSquares[1] = '❤️')
+        // Add 1 to red's kinged piece stat
+      }
+      if (nextSquares[3] === '🔴') {
+        (nextSquares[3] = '❤️')
+        // Add 1 to red's kinged piece stat
+      }
+      if (nextSquares[5] === '🔴') {
+        (nextSquares[5] = '❤️')
+        // Add 1 to red's kinged piece stat
+      }
+      if (nextSquares[7] === '🔴') {
+        (nextSquares[7] = '❤️')
+        // Add 1 to red's kinged piece stat
+      }      
+      tallyPieces();
+    }
     setSquares(nextSquares);
   }
 
-  let status = (blackIsNext ? "Black" : "Red") + "'s Turn";
+  function handleEndTurnClick() {
+    setBlackIsNext(!blackIsNext);
+    if (!blackIsNext) {
+      setStatus(statusMessage[0])
+    } else if (blackIsNext) {
+      setStatus(statusMessage[1])
+    }
+  }
 
   return (
     <>
@@ -143,12 +212,16 @@ export default function Board() {
         <RedSquare value={squares[62]} onSquareClick={() => handleClick(62)} />
         <BlackSquare value={squares[63]} onSquareClick={() => handleClick(63)} />
       </div>
+
+      <EndTurnButton onEndTurnClick={handleEndTurnClick} />
     </>
   );
 }
 
 
-// For reference: The CSS from the tic-tac-toe
+
+
+// For reference: The CSS from the tic-tac-toe with blackSquare and redSquare
 /*
 * {
   box-sizing: border-box;
@@ -256,32 +329,3 @@ body {
   margin-left: 20px;
 }
 */
-
-
-
-
-// Vestigial Code
-
-// const pieceTypes = ['🔴', '⚫', 'redKing', 'blackKing'];
-
-// const redPieceArray = []
-
-// const initialBoardLayout = [undefined, BlackPiece, undefined, BlackPiece, undefined, BlackPiece, undefined, BlackPiece, BlackPiece, undefined, BlackPiece, undefined, BlackPiece, undefined, BlackPiece, undefined, undefined, BlackPiece, undefined, BlackPiece, undefined, BlackPiece, undefined, BlackPiece, null, undefined, null, undefined, null, undefined, null, undefined, undefined, null, undefined, null, undefined, null, undefined, null, WhitePiece, undefined, WhitePiece, undefined, WhitePiece, undefined, WhitePiece, undefined, undefined, WhitePiece, undefined, WhitePiece, undefined, WhitePiece, undefined, WhitePiece, WhitePiece, undefined, WhitePiece, undefined, WhitePiece, undefined, WhitePiece, undefined];
-// const initialRedCount = 12;
-// const initialBlackCount = 12;
-// let redCount;
-// let blackCount;
-
-// function movePiece() {
-
-// }
-
-// function calculateWinner() {
-//     if (redCount = 0) {
-//         return console.log('Red wins!')
-//     } else if (blackCount = 0) {
-//         return console.log('Black wins!')
-//     } else {
-//         return console.log('Next turn')
-//     }
-// }
