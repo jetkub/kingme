@@ -9,7 +9,7 @@ const FormHeader = ({ heading, paragraph, linkName, linkUrl = '#' }) => {
 				<img alt='' className='h-14 w-14' src={crown} />
 			</div>
 			<h2 className='mt-6 text-center font-hero text-3xl text-gray-900'>{heading}</h2>
-			<p className='mt-5 text-center font-base text-base text-gray-600'>
+			<p className='mt-5 text-center font-base text-base font-bold text-gray-600'>
 				{paragraph}{' '}
 				<Link to={linkUrl} className='font-medium text-neutral-900 hover:text-neutral-700'>
 					{linkName}
