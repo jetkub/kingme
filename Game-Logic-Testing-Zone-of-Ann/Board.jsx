@@ -31,14 +31,19 @@ export default function Board() {
   
       function tallyPieces() { 
         for (let index = 0; index < nextSquares.length; index++) {
-          if (nextSquares[index] === '🔴') {
+          if ((nextSquares[index] === '🔴') || nextSquares[index] === '❤️') {
             redCount ++;          
-          } else if (nextSquares[index] === '⚫') {
+          } else if ((nextSquares[index] === '⚫') || nextSquares[index] === '🖤') {
             blackCount ++;          
           }
         }
-        console.log('redCount: ' + redCount);
-        console.log('blackCount: ' + blackCount);
+        if ((redCount === 0) && !blackIsNext) {
+          console.log('Black wins!');
+        } else if ((blackCount === 0) && blackIsNext) {
+          console.log('Red wins!');
+        }
+        // console.log('redCount: ' + redCount);
+        // console.log('blackCount: ' + blackCount);
       }
   
       if ((nextSquares[i] === '🔴') || (nextSquares[i] === '❤️') || (nextSquares[i] === '⚫') || (nextSquares[i] === '🖤')) {
@@ -48,15 +53,19 @@ export default function Board() {
         nextSquares[i] = '⚫';
         if (nextSquares[56] === '⚫') {
           (nextSquares[56] = '🖤')
+          // Add 1 to black's kinged piece stat
         }
         if (nextSquares[58] === '⚫') {
           (nextSquares[58] = '🖤')
+          // Add 1 to black's kinged piece stat
         }
         if (nextSquares[60] === '⚫') {
           (nextSquares[60] = '🖤')
+          // Add 1 to black's kinged piece stat
         }
         if (nextSquares[62] === '⚫') {
           (nextSquares[62] = '🖤')
+          // Add 1 to black's kinged piece stat
         }
         setBlackIsNext(!blackIsNext);
         tallyPieces();
@@ -64,15 +73,19 @@ export default function Board() {
         nextSquares[i] = '🔴';
         if (nextSquares[1] === '🔴') {
           (nextSquares[1] = '❤️')
+          // Add 1 to red's kinged piece stat
         }
         if (nextSquares[3] === '🔴') {
           (nextSquares[3] = '❤️')
+          // Add 1 to red's kinged piece stat
         }
         if (nextSquares[5] === '🔴') {
           (nextSquares[5] = '❤️')
+          // Add 1 to red's kinged piece stat
         }
         if (nextSquares[7] === '🔴') {
           (nextSquares[7] = '❤️')
+          // Add 1 to red's kinged piece stat
         }
         setBlackIsNext(!blackIsNext);
         tallyPieces();
@@ -170,6 +183,7 @@ export default function Board() {
     </>
   );
 }
+
 
 
 // For reference: The CSS from the tic-tac-toe
