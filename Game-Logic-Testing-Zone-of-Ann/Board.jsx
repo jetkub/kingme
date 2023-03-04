@@ -37,6 +37,9 @@ export default function Board() {
   const [selectedPiece, setSelectedPiece] = useState('⚫');
   const savedPiece = ['🔴', '❤️', '⚫', '🖤']
 
+  const statusMessage = ["Black's Turn", "Red's Turn", "Black Wins!", "Red Wins!"]
+  const [status, setStatus] = useState(statusMessage[0]);
+
   function handleClick(i) {
     const nextSquares = squares.slice();
 
@@ -61,8 +64,10 @@ export default function Board() {
         }
       }
       if ((redCount === 0) && blackIsNext) {
+        setStatus(statusMessage[2]);
         console.log('Black wins!');
       } else if ((blackCount === 0) && !blackIsNext) {
+        setStatus(statusMessage[3]);
         console.log('Red wins!');
       }
     }
@@ -116,9 +121,12 @@ export default function Board() {
 
   function handleEndTurnClick() {
     setBlackIsNext(!blackIsNext);
+    if (!blackIsNext) {
+      setStatus(statusMessage[0])
+    } else if (blackIsNext) {
+      setStatus(statusMessage[1])
+    }
   }
-
-  let status = (blackIsNext ? "Black" : "Red") + "'s Turn";
 
   return (
     <>
@@ -209,6 +217,7 @@ export default function Board() {
     </>
   );
 }
+
 
 
 
