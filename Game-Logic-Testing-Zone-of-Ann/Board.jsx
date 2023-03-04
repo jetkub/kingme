@@ -73,7 +73,7 @@ export default function Board() {
       nextSquares[i] = null;
       tallyPieces();
     } else if ((nextSquares[i] === null) && blackIsNext) {
-      nextSquares[i] = '⚫';
+      nextSquares[i] = selectedPiece;
       if (nextSquares[56] === '⚫') {
         (nextSquares[56] = '🖤')
         // Add 1 to black's kinged piece stat
@@ -92,7 +92,7 @@ export default function Board() {
       }
       tallyPieces();
     } else if ((nextSquares[i] === null) && !blackIsNext) {
-      nextSquares[i] = '🔴';
+      nextSquares[i] = selectedPiece;
       if (nextSquares[1] === '🔴') {
         (nextSquares[1] = '❤️')
         // Add 1 to red's kinged piece stat
