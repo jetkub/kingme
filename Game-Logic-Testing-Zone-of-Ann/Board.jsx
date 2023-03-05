@@ -71,14 +71,43 @@ export default function Board() {
         console.log('Red wins!');
       }
     }
+
+    function removeGhostPieces() {
+      for (let index = 0; index < nextSquares.length; index++) {
+        if ((nextSquares[index] === 'B') || (nextSquares[index] === 'R') || (nextSquares[index] === 'BK') || (nextSquares[index] === 'RK')) {
+          nextSquares[index] = null;          
+        }
+      }
+    }
   
-    if ((nextSquares[i] === '🔴') || (nextSquares[i] === '❤️') || (nextSquares[i] === '⚫') || (nextSquares[i] === '🖤')) {
+    if ((nextSquares[i] === '🔴') && !blackIsNext) {
+      changeSelectedPiece();
+      console.log(selectedPiece);
+      nextSquares[i] = 'R';
+      tallyPieces();
+    } else if ((nextSquares[i] === '❤️') && !blackIsNext) {
+      changeSelectedPiece();
+      console.log(selectedPiece);
+      nextSquares[i] = 'RK';
+      tallyPieces();
+    } else if ((nextSquares[i] === '⚫') && blackIsNext) {
+      changeSelectedPiece();
+      console.log(selectedPiece);
+      nextSquares[i] = 'B';
+      tallyPieces();
+    } else if ((nextSquares[i] === '🖤') && blackIsNext) {
+      changeSelectedPiece();
+      console.log(selectedPiece);
+      nextSquares[i] = 'BK';
+      tallyPieces();
+    } else if ((nextSquares[i] === '🔴') || (nextSquares[i] === '❤️') || (nextSquares[i] === '⚫') || (nextSquares[i] === '🖤')) {
       changeSelectedPiece();
       console.log(selectedPiece);
       nextSquares[i] = null;
       tallyPieces();
-    } else if ((nextSquares[i] === null) && blackIsNext) {
+    } else if (((nextSquares[i] === null) || (nextSquares[i] === 'B') || (nextSquares[i] === 'BK'))  && blackIsNext) {
       nextSquares[i] = selectedPiece;
+      removeGhostPieces();
       if (nextSquares[56] === '⚫') {
         (nextSquares[56] = '🖤')
         // Add 1 to black's kinged piece stat
@@ -96,8 +125,9 @@ export default function Board() {
         // Add 1 to black's kinged piece stat
       }
       tallyPieces();
-    } else if ((nextSquares[i] === null) && !blackIsNext) {
+    } else if (((nextSquares[i] === null) || (nextSquares[i] === 'R') || (nextSquares[i] === 'RK')) && !blackIsNext) {
       nextSquares[i] = selectedPiece;
+      removeGhostPieces();
       if (nextSquares[1] === '🔴') {
         (nextSquares[1] = '❤️')
         // Add 1 to red's kinged piece stat
@@ -217,6 +247,7 @@ export default function Board() {
     </>
   );
 }
+
 
 
 
