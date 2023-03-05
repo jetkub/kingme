@@ -1,5 +1,7 @@
 import { React, useState } from 'react';
 import { loginFields } from '../constants/formFields';
+import FormAction from './FormAction';
+import FormExtra from './FormExtra';
 import Input from './Input';
 
 const fields = loginFields;
@@ -12,6 +14,14 @@ const Login = () => {
 	const handleChange = (e) => {
 		setLoginState({ ...loginState, [e.target.id]: e.target.value });
 	};
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		authenticateUser();
+	};
+
+	// handle login here
+	const authenticateUser = () => {};
 
 	return (
 		<form className='mt-8 space-y-6'>
@@ -31,6 +41,8 @@ const Login = () => {
 					/>
 				))}
 			</div>
+			<FormExtra />
+			<FormAction handleSubmit={handleSubmit} text='login' />
 		</form>
 	);
 };
