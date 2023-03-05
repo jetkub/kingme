@@ -2,7 +2,7 @@
     {
       "username": "Addy Adminson",
       "email": "Admin@test.com",
-      "password": "password",
+      "password": "Winter24",
       "wins": 0,
       "losses": 0,
       "draws": 0
@@ -10,7 +10,7 @@
     {
       "username": "Timmy Turner",
       "email": "Test@test.com",
-      "password": "password",
+      "password": "apple3",
       "wins": 2,
       "losses": 6,
       "draws": 2
@@ -18,7 +18,7 @@
     {
       "username": "Walter White",
       "email": "Testy@test.com",
-      "password": "password",
+      "password": "twitter34",
       "wins": 4,
       "losses": 2,
       "draws": 1
