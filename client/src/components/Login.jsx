@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import React, { useState } from 'react';
 import { loginFields } from '../constants/formFields';
 import FormAction from './FormAction';
 import FormExtra from './FormExtra';
