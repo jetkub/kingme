@@ -32,11 +32,10 @@ const Signup = () => {
 	const createAccount = async () => {
 		try {
 			const { data } = await addUser({
-				variables: { ...signupState},
+				variables: { ...signupState },
 			});
-			
+
 			Auth.login(data.addUser.token);
-			
 		} catch (err) {
 			console.error(err);
 		}
@@ -48,7 +47,6 @@ const Signup = () => {
 
 		// redirect to homepage
 		// window.location.assign('/');
-
 	};
 
 	return (
@@ -69,6 +67,9 @@ const Signup = () => {
 					/>
 				))}
 				<FormAction handleSubmit={handleSubmit} text='signup' />
+				{error && (
+					<div className='bg-red-600 my-3 p-3 font-base text-white'>Signup failed with error: {error.message}</div>
+				)}
 			</div>
 		</form>
 	);
