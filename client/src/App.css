@@ -1,58 +1,31 @@
-/* checkers board styling */
-#board {
-	border: solid 3px black;
-	width: 100vw;
-	height: 100vw;
+/* game board styling */
+.board-row {
+width: 99vw;
+margin: -3px 0px;
+border: 2px solid black;
 }
-.whitePiece {
-	background-color: white;
-	width: 80%;
-	height: 80%;
-	margin: 10%;
-	border-radius: 50%;
-	border: solid 3px black;
-}
-.whiteKing {
-	background-color: white;
-	width: 80%;
-	height: 80%;
-	margin: 10%;
-	border-radius: 50%;
-	border: solid 3px black;
-}
-.blackPiece {
-	background-color: rgb(0, 0, 0);
-	width: 80%;
-	height: 80%;
-	margin: 10%;
-	border-radius: 50%;
-}
-.blackKing {
-	background-color: rgb(0, 0, 0);
-	width: 80%;
-	height: 80%;
-	margin: 10%;
-	border-radius: 50%;
-}
-.blackKing.hover,
-.blackPiece.hover,
-.whiteKing.hover,
-.whitePiece.hover {
-	box-shadow: 5px 5px 0px black;
-}
-.square {
+
+.blackSquare, .redSquare {
+	font-size: clamp(2.5rem, -1rem + 10vw, 10rem);
+	display: inline-block;
 	width: 12.5%;
-	height: 12.5%;
+	height: 12.5vw;
+	float: left;
 }
-.light {
-	background-color: rgb(255, 255, 255);
+
+.blackSquare {
+	background: black;
 }
-.dark {
-	background-color: rgb(255, 69, 69);
+
+.redSquare {
+	background: white;
 }
-.piece {
-	display: block;
-	margin: auto;
+
+.status {
+	margin-bottom: 10px;
+}
+.endBtn {
+	margin: 5% 0%;
 }
 /* menu screen styling */
 #menu {
@@ -63,7 +36,8 @@
 }
 #hotseatBtn,
 #hostBtn,
-#joinBtn {
+#joinBtn,
+.endBtn {
 	background-color: white;
 	font-family: "Space Grotesk", normal;
 	font-weight: 700;

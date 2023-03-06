@@ -36,7 +36,7 @@ function App() {
 		<ApolloProvider client={client}>
 			<div className='min-h-screen bg-stone-200'>
 				<Header />
-				<main className='m-4 flex flex-col items-center justify-center'>
+				<main className='flex flex-col items-center justify-center'>
 					<Routes>
 						<Route path='/' element={<Menu />} />
 						<Route path='/game' element={<Checkers />} />
