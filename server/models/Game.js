@@ -51,7 +51,9 @@ const gameSchema = new Schema(
         players: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'User'
+                ref: 'User',
+                // limit the number of players to 2
+                max: 2
             }
         ]
     },
