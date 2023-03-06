@@ -47,8 +47,31 @@ const resolvers = {
 
             const token = signToken(user);
             return { token, user };
+},
 
-    }
+        updateWins: async (parent, { _id }, context) => {
+            if (context.user) {
+                const updatedUser = await User.findOneAndUpdate(
+                    { _id: context.user._id },
+                    { $inc: { wins: 1 } },
+                    { new: true }
+                );
+                return updatedUser;
+            }
+            throw new AuthenticationError('Not logged in');
+        },
+
+        updateLosses: async (parent, { _id }, context) => {
+            if (context.user) {
+                const updatedUser = await User.findOneAndUpdate(
+                    { _id: context.user._id },
+                    { $inc: { losses: 1 } },
+                    { new: true }
+                );
+                return updatedUser;
+            }
+            throw new AuthenticationError('Not logged in');
+        },
 }}
 
 
