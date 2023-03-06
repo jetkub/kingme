@@ -1,5 +1,3 @@
-// Thinking space
-
 import { useState } from "react";
 
 const initialRedCount = 12;
