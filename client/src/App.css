@@ -1,10 +1,4 @@
 /* checkers board styling */
-#board {
-	border: solid 3px black;
-	width: 100vw;
-	height: 100vw;
-}
-depricated
 /* depricated */
 /*.whitePiece {
 	background-color: white;
@@ -63,15 +57,17 @@ width: 100vw;
 }
 
 .blackSquare {
+	display: inline-block;
 	background: black;
-	width: 12.5rem;
-	height: 12.5rem;
+	width: 12.5%;
+	height: 12.5vw;
 }
 
 .redSquare {
+	display: inline-block;
 	background: white;
-	width: 12.5rem;
-	height: 12.5rem;
+	width: 12.5%;
+	height: 12.5vw;
 }
 
 .status {
