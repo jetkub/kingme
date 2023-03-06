@@ -40,16 +40,14 @@ const Login = () => {
 
 		console.log(data);
 
-		// clear form values
-		// setLoginState(fieldsState);
-
-		// redirect to homepage
-		// window.location.assign('/');
 	};
+
 
 	return (
 		<form className='mt-8 space-y-6' onSubmit={handleSubmit}>
-			<div className='-space-y-px'>
+			<div className='-space-y-px'> 
+			{ error && <div className="text-red-500 text-center">{error.message}</div>
+			}
 				{fields.map((field) => (
 					<Input
 						key={field.id}
