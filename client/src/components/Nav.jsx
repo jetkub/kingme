@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useMatch, useResolvedPath } from 'react-router-dom';
-import Auth from '../utils/auth'
+import Auth from '../utils/auth';
+import UserMenu from './UserMenu';
 
 const stlyeClasses = {
 	navBtn:
@@ -10,23 +11,13 @@ const stlyeClasses = {
 };
 
 const Navigation = () => {
-	const logout = (event) => {
-		event.preventDefault();
-		Auth.logout();
-	};
 	return (
 		<nav className='m-2 flex justify-between'>
 			<ul className='flex gap-1 sm:gap-3'>
 				{/* placeholder links. eventually the login buton will trigger a modal w/ a login form */}
 				{/* the /game link is just a way to switch pages from the menu to the game. we can change this up later */}
 				<CustomLink to='/game'>game</CustomLink>
-				{Auth.loggedIn() ? (
-					<button className={stlyeClasses.navBtn} onClick={logout}>
-						logout
-					</button>
-				) : (
-					<CustomLink to='/login'>log in</CustomLink>
-				)}
+				{Auth.loggedIn() ? <UserMenu /> : <CustomLink to='/login'>log in</CustomLink>}
 			</ul>
 		</nav>
 	);
