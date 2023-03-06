@@ -20,6 +20,14 @@ const resolvers = {
       const params = _id ? { _id } : {};
       return User.findOne(params).select("-__v -password").populate("games");
     },
+    games: async () => {
+      return Game.find().select("-__v").populate("players");
+    },
+    game: async (parent, { gameid }) => {
+        const params = gameid ? { gameId: gameid } : {};
+        return Game.findOne(params).select("-__v").populate("players");
+        },
+
   },
   Mutation: {
     addUser: async (parent, args) => {

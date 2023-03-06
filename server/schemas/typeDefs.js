@@ -39,7 +39,7 @@ type Query {
     users: [User]
     user(_id: ID!): User
     games: [Game]
-    game(_id: ID!): Game
+    game(gameid: String): Game
 }
 
 type Mutation {
@@ -47,6 +47,7 @@ type Mutation {
     login(email: String!, password: String!): Auth
     updateWins(_id: ID!): User
     updateLosses(_id: ID!): User
+    
 }
 
 `;
