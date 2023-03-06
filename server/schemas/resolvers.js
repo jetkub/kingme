@@ -48,7 +48,7 @@ const resolvers = {
     updateWins: async (parent, { _id }) => {
       const updatedUser = await User.findOneAndUpdate(
         { _id: _id },
-        { $inc: { wins: 1 } },
+        { $inc: { wins: 1, totalGames: 1 } },
         { new: true }
       );
       return updatedUser;
@@ -57,7 +57,7 @@ const resolvers = {
     updateLosses: async (parent, { _id }) => {
       const updatedUser = await User.findOneAndUpdate(
         { _id: _id },
-        { $inc: { losses: 1 } },
+        { $inc: { losses: 1, totalGames: 1 } },
         { new: true }
       );
       return updatedUser;
