@@ -23,3 +23,23 @@ export const LOGIN = gql`
         }
     }
 `;
+export const UPDATE_WINS = gql`
+    mutation updateWins($id: ID!) {
+        updateWins(_id: $id) {
+            _id
+            wins
+        }
+    }
+`;
+
+export const UPDATE_LOSSES = gql`
+    mutation updateLosses($id: ID!) {
+        updateLosses(_id: $id) {
+            _id
+            losses
+        }
+    }
+`;
+
+
+
