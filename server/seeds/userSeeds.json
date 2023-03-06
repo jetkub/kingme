@@ -3,24 +3,24 @@
       "username": "Addy Adminson",
       "email": "Admin@test.com",
       "password": "Winter24",
+      "totalGames": 0,
       "wins": 0,
-      "losses": 0,
-      "draws": 0
+      "losses": 0
     },
     {
       "username": "Timmy Turner",
       "email": "Test@test.com",
       "password": "apple3",
+      "totalGames": 8,
       "wins": 2,
-      "losses": 6,
-      "draws": 2
+      "losses": 6
     },
     {
       "username": "Walter White",
       "email": "Testy@test.com",
       "password": "twitter34",
+      "totalGames": 6,
       "wins": 4,
-      "losses": 2,
-      "draws": 1
+      "losses": 2
     }
   ]
