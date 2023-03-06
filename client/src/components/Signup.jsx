@@ -3,6 +3,11 @@ import { signupFields } from '../constants/formFields';
 import FormAction from './FormAction';
 import Input from './Input';
 
+import { useMutation } from '@apollo/client';
+import { ADD_USER } from '../utils/mutation';
+
+import Auth from '../utils/auth';
+
 const fields = signupFields;
 let fieldsState = {};
 
@@ -13,6 +18,7 @@ fields.forEach((field) => (fieldsState[field.id] = ''));
 
 const Signup = () => {
 	const [signupState, setSignupState] = useState(fieldsState);
+	const [addUser, { error, data }] = useMutation(ADD_USER);
 
 	const handleChange = (e) => setSignupState({ ...signupState, [e.target.id]: e.target.value });
 
@@ -23,7 +29,25 @@ const Signup = () => {
 	};
 
 	// handle signup here through api
-	const createAccount = () => {};
+	const createAccount = async () => {
+		try {
+			const { data } = await addUser({
+				variables: { ...signupState },
+			});
+
+			Auth.login(data.addUser.token);
+		} catch (err) {
+			console.error(err);
+		}
+
+		console.log(data);
+
+		// clear form values
+		// setSignupState(fieldsState);
+
+		// redirect to homepage
+		// window.location.assign('/');
+	};
 
 	return (
 		<form className='mt-8 space-y-6' onSubmit={handleSubmit}>
@@ -43,6 +67,9 @@ const Signup = () => {
 					/>
 				))}
 				<FormAction handleSubmit={handleSubmit} text='signup' />
+				{error && (
+					<div className='bg-red-600 my-3 p-3 font-base text-white'>Signup failed with error: {error.message}</div>
+				)}
 			</div>
 		</form>
 	);
