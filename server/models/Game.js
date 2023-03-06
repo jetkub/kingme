@@ -2,6 +2,12 @@ const { Schema, model } = require('mongoose');
 
 const gameSchema = new Schema(
     {
+        gameId: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true
+        },
         gameName: {
             type: String,
             required: true,
@@ -32,12 +38,6 @@ const gameSchema = new Schema(
             unique: true,
             trim: true
         },
-        gameDraw: {
-            type: String,
-            required: true,
-            unique: true,
-            trim: true
-        },
         gameDate: {
             type: Date,
             default: Date.now
@@ -48,18 +48,12 @@ const gameSchema = new Schema(
             unique: true,
             trim: true
         },
-        gamePlayer1: {
-            type: String,
-            required: true,
-            unique: true,
-            trim: true
-        },
-        gamePlayer2: {
-            type: String,
-            required: true,
-            unique: true,
-            trim: true
-        }
+        players: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        ]
     },
     {
         toJSON: {
