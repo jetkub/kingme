@@ -18,7 +18,7 @@ function RedSquare({ value, onSquareClick }) {
 
 function EndTurnButton({ onEndTurnClick }) {
   return (
-    <button onClick={onEndTurnClick}>
+    <button className="endBtn" onClick={onEndTurnClick}>
       End Turn
     </button>
   );
