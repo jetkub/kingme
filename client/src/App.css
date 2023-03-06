@@ -4,7 +4,9 @@
 	width: 100vw;
 	height: 100vw;
 }
-.whitePiece {
+depricated
+/* depricated */
+/*.whitePiece {
 	background-color: white;
 	width: 80%;
 	height: 80%;
@@ -54,6 +56,70 @@
 	display: block;
 	margin: auto;
 }
+*/
+/* game board styling */
+
+body {
+	font-family: sans-serif;
+	margin: 20px;
+	padding: 0;
+  }
+  
+  /* .blackSquare {
+	background: black;
+	border: 1px solid #999;
+	float: left;
+	font-size: 24px;
+	font-weight: bold;
+	line-height: 34px;
+	height: 34px;
+	margin-right: -1px;
+	margin-top: -1px;
+	padding: 0;
+	text-align: center;
+	width: 34px;
+  } */
+
+  .blackSquare {
+	background: black;
+	width: 12.5vw;
+
+  }
+  
+  /* .redSquare {
+	background: white;
+	border: 1px solid #999;
+	float: left;
+	font-size: 24px;
+	font-weight: bold;
+	line-height: 34px;
+	height: 34px;
+	margin-right: -1px;
+	margin-top: -1px;
+	padding: 0;
+	text-align: center;
+	width: 34px;
+  } */
+  
+  .board-row:after {
+	clear: both;
+	content: '';
+	display: table;
+  }
+  
+  .status {
+	margin-bottom: 10px;
+  }
+  .game {
+	display: flex;
+	flex-direction: row;
+  }
+  
+  .game-info {
+	margin-left: 20px;
+  }
+  */
+
 /* menu screen styling */
 #menu {
 	background-color: rgb(255, 69, 69);
