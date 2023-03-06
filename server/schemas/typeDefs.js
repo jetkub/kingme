@@ -24,6 +24,9 @@ type Game {
     gameDate: String
     gameMoves: [String]
     players: [User]
+    userTurn: String
+    turnMessage: String
+    boardState: String
 }
 
 type Auth {
