@@ -15,16 +15,15 @@ type User {
 
 type Game {
     _id: ID
+    gameId: String
     gameName: String
     gameType: String
     gameStatus: String
     gameWinner: String
     gameLoser: String
-    gameDraw: String
     gameDate: String
     gameMoves: [String]
-    gamePlayer1: String
-    gamePlayer2: String
+    players: [User]
 }
 
 type Auth {
@@ -43,6 +42,8 @@ type Query {
 type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
+    updateWins(_id: ID!): User
+    updateLosses(_id: ID!): User
 }
 
 `;
