@@ -28,7 +28,7 @@ const userSchema = new Schema(
             type: Number,
             default: 0
         },
-        draws: {
+        totalGames: {
             type: Number,
             default: 0
         },

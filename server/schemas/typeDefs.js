@@ -7,9 +7,9 @@ type User {
     username: String
     email: String
     password: String
+    totalGames: Int
     wins: Int
     losses: Int
-    draws: Int
     games: [Game]
 }
 

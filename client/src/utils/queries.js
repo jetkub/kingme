@@ -8,7 +8,7 @@ export const QUERY_USERS = gql`
       email
       wins
       losses
-      draws
+      totalGames
     }
   }
 `;
@@ -21,7 +21,7 @@ export const QUERY_ME = gql`
       email
       wins
       losses
-      draws
+      totalGames
     }
   }
 `;
@@ -33,7 +33,7 @@ export const QUERY_SINGLE_USER = gql`
       email
       wins
       losses
-      draws
+      totalGames
     }
   }
 `;
