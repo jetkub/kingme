@@ -37,3 +37,57 @@ export const QUERY_SINGLE_USER = gql`
     }
   }
 `;
+
+export const QUERY_GAMES = gql`
+  query allGames {
+    games {
+      _id
+      gameId
+      gameName
+      gameType
+      gameStatus
+      gameWinner
+      gameLoser
+      gameDate
+      gameMoves
+      players {
+        _id
+        username
+        email
+        wins
+        losses
+        totalGames
+      }
+      userTurn
+      turnMessage
+      boardState
+    }
+  }
+`;
+
+export const QUERY_SINGLE_GAME = gql`
+  query singleGame($gameid: String!) {
+    game(gameid: $gameid) {
+      _id
+      gameId
+      gameName
+      gameType
+      gameStatus
+      gameWinner
+      gameLoser
+      gameDate
+      gameMoves
+      players {
+        _id
+        username
+        email
+        wins
+        losses
+        totalGames
+      }
+      userTurn
+      turnMessage
+      boardState
+    }
+  }
+`;

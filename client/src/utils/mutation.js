@@ -28,6 +28,7 @@ export const UPDATE_WINS = gql`
         updateWins(_id: $id) {
             _id
             wins
+            totalGames
         }
     }
 `;
@@ -37,6 +38,7 @@ export const UPDATE_LOSSES = gql`
         updateLosses(_id: $id) {
             _id
             losses
+            totalGames
         }
     }
 `;

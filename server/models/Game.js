@@ -55,7 +55,25 @@ const gameSchema = new Schema(
                 // limit the number of players to 2
                 max: 2
             }
-        ]
+        ],
+        userTurn: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true
+        },
+        turnMessage: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true
+        },
+        boardState: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true
+        }
     },
     {
         toJSON: {
