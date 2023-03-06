@@ -21,7 +21,11 @@ const UserMenu = () => {
   const { loading, data } = useQuery(QUERY_ME);
   const user = data?.me || {};
 
-
+  // auth check
+  if (!Auth.loggedIn()) {
+	return null;
+	  }
+	  
   // if there's no user data, return null
   if (!user) {
 	return null;
