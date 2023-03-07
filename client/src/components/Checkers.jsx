@@ -2760,6 +2760,9 @@ export default function Board() {
       }
       // check if the game has been won
       tallyPieces();
+
+      // OPTIONAL PLACE TO INTERECT WITH DATABASE FOR BOARD UPDATE
+
     // else if ((the tile clicked on is empty OR occupied by a ghost piece) AND it is red's turn) then
     } else if (((nextSquares[i] === null) || (nextSquares[i] === '⚪') || (nextSquares[i] === '🤍')) && !blackIsNext) {
       // check if a valid move was made and, if so, place the selectedPiece
@@ -2784,8 +2787,14 @@ export default function Board() {
       }
       // check if the game has been won      
       tallyPieces();
+
+      // OPTIONAL PLACE TO INTERECT WITH DATABASE FOR BOARD UPDATE
+
     }
     setSquares(nextSquares);
+
+    // OPTIONAL PLACE TO INTERECT WITH DATABASE FOR BOARD UPDATE
+
   }
 
   // This function handles whether blackIsNext or not to determine whose turn it is
