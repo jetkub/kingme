@@ -6,14 +6,7 @@ const Scoreboard = (props) => {
 	let textContent = props.status;
 	return (
 		<div className="my-5">
-			{textContent === "Black's Turn" ? (
-				<h1
-					style={{ color: "black" }}
-					className="font-hero text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
-				>
-					{textContent}
-				</h1>
-			) : textContent === "Black Wins!" ? (
+			{textContent === "Black Wins!" ? (
 				<h1
 					style={{ color: "black" }}
 					className="font-hero text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
@@ -23,6 +16,13 @@ const Scoreboard = (props) => {
 			) : textContent === "Red Wins!" ? (
 				<h1
 					style={{ color: "red" }}
+					className="font-hero text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+				>
+					{textContent}
+				</h1>
+			) : textContent === "Black's Turn" ? (
+				<h1
+					style={{ color: "black" }}
 					className="font-hero text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
 				>
 					{textContent}
