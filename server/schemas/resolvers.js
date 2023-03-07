@@ -88,9 +88,15 @@ const resolvers = {
                     players: context.user._id,
                     userTurn: context.user.username,
                     turnMessage: `${context.user.username}'s turn`,
-                    boardState: '000000000',
-                    gameId: Math.random().toString(36).substr(2, 9)
-                 });
+                    boardState: `${context.user.username}'s board state`,
+                    gameId: Math.random().toString(36).substr(2, 9),
+                    gameName: `${context.user.username}'s game`,
+                    gameType: `${context.user.username}'s single/multiplayer`,
+                    gameStatus: `${context.user.username}'s in progress`,
+                    gameWinner: `${context.user.username}'s Game winner`,
+                    gameLoser: `${context.user.username}'s Game loser`,
+                    gameDate: new Date().toLocaleString(),
+                });
                  console.log(context.user);
 
                 return game;
