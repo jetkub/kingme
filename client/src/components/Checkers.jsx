@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import Scoreboard from './Scoreboard'
+
+
 
 function BlackSquare({ value, onSquareClick }) {
   return (
@@ -37,7 +40,6 @@ export default function Board() {
 
   const statusMessage = ["Black's Turn", "Red's Turn", "Black Wins!", "Red Wins!"]
   const [status, setStatus] = useState(statusMessage[0]);
-
   const [ghostPosition, setGhostPosition] = useState();
 
   function handleClick(i) {
@@ -2550,6 +2552,7 @@ export default function Board() {
 
   return (
     <>
+    <Scoreboard status={status}/>
     <div className="board">
       <div className="status">{status}</div>
       <div className="board-row">

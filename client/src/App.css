@@ -21,6 +21,8 @@
 }
 .redSquare {
 	background: white;
+	text-align: center;
+	vertical-align: middle;
 }
 .status {
 	margin-bottom: 10px;
