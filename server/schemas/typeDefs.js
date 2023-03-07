@@ -49,8 +49,9 @@ type Mutation {
     updateLosses(_id: ID!): User
     addGame( _id:ID! ): Game
     addPlayerToGame( _id:ID!, gameId: String! ): Game
-}
+    deleteGame( _id:ID! ): Game
 
+}
 `;
 
 module.exports = typeDefs;
