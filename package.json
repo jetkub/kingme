@@ -13,7 +13,7 @@
 		"heroku-postbuild": "npm install && npm run build"
 	},
 	"engines": {
-		"node": "16.x",
+		"node": "v16.18.0",
 		"npm": "8.19.2"
 	},
 	"author": "",
