@@ -131,14 +131,22 @@ const resolvers = {
                     );
                     return updatedGame;
                 }
-
-
-            
         },
 
-           
+        // delete game and remove game from users games array
+        deleteGame: async (parent, { _id }, context) => {
+                if (context.user) {
+                    const deletedGame = await Game.findByIdAndDelete({ _id });
+                    const user = await User.findByIdAndUpdate(
+                        { _id: context.user._id },
+                        { $pull: { games: _id } },
+                        { new: true }
+                    );
+                    return deletedGame, user;
+                }
+                throw new AuthenticationError('You need to be logged in!');
+        },
 
-       
     }
 
 

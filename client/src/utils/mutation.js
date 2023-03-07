@@ -90,3 +90,26 @@ export const ADD_PLAYER_TO_GAME = gql`
     }
 `;
 
+export const END_GAME = gql`
+    mutation deleteGame($id: ID!) {
+        deleteGame(_id: $id) {
+            gameId
+            gameType
+            gameStatus
+            gameWinner
+            gameLoser
+            gameDate
+            gameMoves
+            players {
+                _id
+                username
+                wins
+                losses
+            }
+            userTurn
+            turnMessage
+            boardState
+        }
+    }
+`;
+
