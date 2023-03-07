@@ -108,10 +108,7 @@ const resolvers = {
                 if (context.user) {
                     const updatedGame = await Game.findOneAndUpdate(
                         { gameId: gameId },
-                        { $push: { players: context.user._id }, 
-                            userTurn: context.user.username,
-                            turnMessage: `${context.user.username}'s turn`,
-                            boardState: '000000000'
+                        { $push: { players: context.user._id } 
                         },
                         { new: true }
                     );
