@@ -43,5 +43,73 @@ export const UPDATE_LOSSES = gql`
     }
 `;
 
+export const CREATE_GAME = gql`
+    mutation addGame ($id: ID!) {
+        addGame(_id: $id) {
+            gameId
+            gameName
+            gameType
+            gameStatus
+            gameWinner
+            gameLoser
+            gameDate
+            gameMoves
+            players {
+                _id
+                username
+                wins
+                losses
+            }
+            userTurn
+            turnMessage
+            boardState
+        }
+    }
+`;
 
+export const ADD_PLAYER_TO_GAME = gql`
+    mutation addPlayerToGame($id: ID!, $gameId: String!) {
+        addPlayerToGame(_id: $id, gameId: $gameId) {
+            gameId
+            gameType
+            gameStatus
+            gameWinner
+            gameLoser
+            gameDate
+            gameMoves
+            players {
+                _id
+                username
+                wins
+                losses
+            }
+            userTurn
+            turnMessage
+            boardState
+        }
+    }
+`;
+
+export const END_GAME = gql`
+    mutation deleteGame($id: ID!) {
+        deleteGame(_id: $id) {
+            gameId
+            gameType
+            gameStatus
+            gameWinner
+            gameLoser
+            gameDate
+            gameMoves
+            players {
+                _id
+                username
+                wins
+                losses
+            }
+            userTurn
+            turnMessage
+            boardState
+        }
+    }
+`;
 

@@ -2,40 +2,38 @@ const { Schema, model } = require('mongoose');
 
 const gameSchema = new Schema(
     {
+        _id: {
+            type: Schema.Types.ObjectId,
+            default: () => new Types.ObjectId()
+        },
         gameId: {
             type: String,
-            required: true,
             unique: true,
             trim: true
         },
         gameName: {
             type: String,
-            required: true,
-            unique: true,
+            unique: false,
             trim: true
         },
         gameType: {
             type: String,
-            required: true,
-            unique: true,
+            unique: false,
             trim: true
         },
         gameStatus: {
             type: String,
-            required: true,
-            unique: true,
+            unique: false,
             trim: true
         },
         gameWinner: {
             type: String,
-            required: true,
-            unique: true,
+            unique: false,
             trim: true
         },
         gameLoser: {
             type: String,
-            required: true,
-            unique: true,
+            unique: false,
             trim: true
         },
         gameDate: {
@@ -44,8 +42,7 @@ const gameSchema = new Schema(
         },
         gameMoves: {
             type: String,
-            required: true,
-            unique: true,
+            unique: false,
             trim: true
         },
         players: [
@@ -58,20 +55,17 @@ const gameSchema = new Schema(
         ],
         userTurn: {
             type: String,
-            required: true,
-            unique: true,
+            unique: false,
             trim: true
         },
         turnMessage: {
             type: String,
-            required: true,
-            unique: true,
+            unique: false,
             trim: true
         },
         boardState: {
             type: String,
-            required: true,
-            unique: true,
+            unique: false,
             trim: true
         }
     },

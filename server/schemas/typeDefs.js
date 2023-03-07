@@ -47,9 +47,11 @@ type Mutation {
     login(email: String!, password: String!): Auth
     updateWins(_id: ID!): User
     updateLosses(_id: ID!): User
-    
-}
+    addGame( _id:ID! ): Game
+    addPlayerToGame( _id:ID!, gameId: String! ): Game
+    deleteGame( _id:ID! ): Game
 
+}
 `;
 
 module.exports = typeDefs;

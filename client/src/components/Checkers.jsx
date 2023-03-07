@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import Scoreboard from './Scoreboard'
 
-
-
 function BlackSquare({ value, onSquareClick }) {
   return (
     <button className="blackSquare" onClick={onSquareClick}>
@@ -31,20 +29,26 @@ export default function Board() {
   let redCount = 0;
   let blackCount = 0;
   
+  // blackIsNext tracks whether it is black's turn or red's turn
   const [blackIsNext, setBlackIsNext] = useState(true);
   
+  // This is the starting board layout
   const [squares, setSquares] = useState([undefined, '⚫', undefined, '⚫', undefined, '⚫', undefined, '⚫', '⚫', undefined, '⚫', undefined, '⚫', undefined, '⚫', undefined, undefined, '⚫', undefined, '⚫', undefined, '⚫', undefined, '⚫', null, undefined, null, undefined, null, undefined, null, undefined, undefined, null, undefined, null, undefined, null, undefined, null, '🔴', undefined, '🔴', undefined, '🔴', undefined, '🔴', undefined, undefined, '🔴', undefined, '🔴', undefined, '🔴', undefined, '🔴', '🔴', undefined, '🔴', undefined, '🔴', undefined, '🔴', undefined]);
   
+  // selectedPiece tracks which piece the payer has picked up so the same piece can be placed on the next click
   const [selectedPiece, setSelectedPiece] = useState('⚫');
   const savedPiece = ['🔴', '❤️', '⚫', '🖤']
 
   const statusMessage = ["Black's Turn", "Red's Turn", "Black Wins!", "Red Wins!"]
   const [status, setStatus] = useState(statusMessage[0]);
+
+  // ghostPosition tracks where the player picked up a piece from
   const [ghostPosition, setGhostPosition] = useState();
 
   function handleClick(i) {
     const nextSquares = squares.slice();
 
+    // This function sets the selectedPiece based on what piece is on the tile the user clicked
     function changeSelectedPiece() {
       if (nextSquares[i] === '🔴') {
         setSelectedPiece(savedPiece[0]);
@@ -56,7 +60,8 @@ export default function Board() {
         setSelectedPiece(savedPiece[3]);
       } 
     }
-      
+    
+    // This function tallies up the number of pieces of each color are on the board in order to determine if either side has been reduced to 0 pieces
     function tallyPieces() { 
       for (let index = 0; index < nextSquares.length; index++) {
         if ((nextSquares[index] === '🔴') || nextSquares[index] === '❤️') {
@@ -78,36 +83,55 @@ export default function Board() {
 
     function removeGhostPieces() {
       for (let index = 0; index < nextSquares.length; index++) {
-        if ((nextSquares[index] === '🔵') || (nextSquares[index] === '🟠') || (nextSquares[index] === '💙') || (nextSquares[index] === '🧡')) {
+        if ((nextSquares[index] === '⚪') || (nextSquares[index] === '🤍')) {
           nextSquares[index] = null;          
         }
       }
     }
 
+    // This function sets the location of the ghost piece based on which tile the player clicked to select which piece to move
     function getGhostPosition() {
       for (let index = 0; index < nextSquares.length; index++) {
-        if ((nextSquares[index] === '🔵') || (nextSquares[index] === '🟠') || (nextSquares[index] === '💙') || (nextSquares[index] === '🧡')) {
+        if ((nextSquares[index] === '⚪') || (nextSquares[index] === '🤍')) {
           setGhostPosition(index);
         }
       }
     }
 
+    // This function determines which spaces the player is allowed to move their piece to based on where they are moving from and if there is an opponent piece to jump
     function movementRules() {
+
       // Single Black Piece Move Set
+
+      // if (the player picked the piece up from B1 AND it is black's turn AND the piece the player picked up is a single black piece) then
       if ((ghostPosition === 1) && blackIsNext && (selectedPiece === '⚫')) {
-        // Ex. "B1" to ("A2" || ("C2" || "D3")
+        // if (A2 is empty AND the player clicks to place the piece in A2) then
         if ((nextSquares[8] === null) && (i === 8)) {
+          // set the selected destination (A2) to a single black piece
           nextSquares[i] = selectedPiece;
+          // remove the ghostPiece from the board
           removeGhostPieces();
+        // else if (C2 is empty AND the player clicks to place the piece in C2) then
         } else if ((nextSquares[10] === null) && (i === 10)) {
+          // set the selected destination (C2) to a single black piece
           nextSquares[i] = selectedPiece;
+          // remove the ghostPiece from the board
           removeGhostPieces();
+        // else if (D3 is empty AND C2 is occupied by a red piece (single or kinged) AND the player clicks to place the piece in D3) then
         } else if ((nextSquares[19] === null) && ((nextSquares[10] === '🔴') || (nextSquares[10] === '❤️')) && (i === 19)) {
+          // set the selected destination (D3) to a single black piece
           nextSquares[i] = selectedPiece;
+          // remove the red piece from the board
+          nextSquares[10] = null;
+          // remove the ghostPiece from the board
           removeGhostPieces();
+        // else if (the player clicks to return their piece to where they picked it up from (B1)) then
         } else if (i === 1) {
+          // set the original square (B1) back to a single black piece
           nextSquares[i] = selectedPiece;
+        // else
         } else {
+          // the move is invalid
           console.log('Invalid Move');
         }
       }
@@ -120,9 +144,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[17] === null) && ((nextSquares[10] === '🔴') || (nextSquares[10] === '❤️')) && (i === 17)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[10] = null;
           removeGhostPieces();
         } else if ((nextSquares[21] === null) && ((nextSquares[12] === '🔴') || (nextSquares[12] === '❤️')) && (i === 21)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[12] = null;
           removeGhostPieces();
         } else if (i === 3) {
           nextSquares[i] = selectedPiece;
@@ -139,9 +165,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[19] === null) && ((nextSquares[12] === '🔴') || (nextSquares[12] === '❤️')) && (i === 19)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[12] = null;
           removeGhostPieces();
         } else if ((nextSquares[23] === null) && ((nextSquares[14] === '🔴') || (nextSquares[14] === '❤️')) && (i === 23)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[14] = null;
           removeGhostPieces();
         } else if (i === 5) {
           nextSquares[i] = selectedPiece;
@@ -155,6 +183,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[21] === null) && ((nextSquares[14] === '🔴') || (nextSquares[14] === '❤️')) && (i === 21)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[14] = null;
           removeGhostPieces();
         } else if (i === 7) {
           nextSquares[i] = selectedPiece;
@@ -168,6 +197,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[26] === null) && ((nextSquares[17] === '🔴') || (nextSquares[17] === '❤️')) && (i === 26)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[17] = null;
           removeGhostPieces();
         } else if (i === 8) {
           nextSquares[i] = selectedPiece;
@@ -184,9 +214,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[24] === null) && ((nextSquares[17] === '🔴') || (nextSquares[17] === '❤️')) && (i === 24)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[17] = null;
           removeGhostPieces();
         } else if ((nextSquares[28] === null) && ((nextSquares[19] === '🔴') || (nextSquares[19] === '❤️')) && (i === 28)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[19] = null;
           removeGhostPieces();
         } else if (i === 10) {
           nextSquares[i] = selectedPiece;
@@ -203,12 +235,14 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[26] === null) && ((nextSquares[19] === '🔴') || (nextSquares[19] === '❤️')) && (i === 26)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[19] = null;
           removeGhostPieces();
         } else if ((nextSquares[30] === null) && ((nextSquares[21] === '🔴') || (nextSquares[21] === '❤️')) && (i === 30)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
         } else if (i === 12) {
           nextSquares[i] = selectedPiece;
+          nextSquares[21] = null;
         } else {
           console.log('Invalid Move');
         }
@@ -222,6 +256,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[28] === null) && ((nextSquares[21] === '🔴') || (nextSquares[21] === '❤️')) && (i === 28)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[21] = null;
           removeGhostPieces();
         } else if (i === 14) {
           nextSquares[i] = selectedPiece;
@@ -238,6 +273,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[35] === null) && ((nextSquares[26] === '🔴') || (nextSquares[26] === '❤️')) && (i === 35)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[26] = null;
           removeGhostPieces();
         } else if (i === 17) {
           nextSquares[i] = selectedPiece;
@@ -254,9 +290,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[33] === null) && ((nextSquares[26] === '🔴') || (nextSquares[26] === '❤️')) && (i === 33)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[26] = null;
           removeGhostPieces();
         } else if ((nextSquares[37] === null) && ((nextSquares[28] === '🔴') || (nextSquares[28] === '❤️')) && (i === 37)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[28] = null;
           removeGhostPieces();
         } else if (i === 19) {
           nextSquares[i] = selectedPiece;
@@ -273,9 +311,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[35] === null) && ((nextSquares[28] === '🔴') || (nextSquares[28] === '❤️')) && (i === 35)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[28] = null;
           removeGhostPieces();
         } else if ((nextSquares[39] === null) && ((nextSquares[30] === '🔴') || (nextSquares[30] === '❤️')) && (i === 39)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[30] = null;
           removeGhostPieces();
         } else if (i === 21) {
           nextSquares[i] = selectedPiece;
@@ -289,6 +329,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[37] === null) && ((nextSquares[30] === '🔴') || (nextSquares[30] === '❤️')) && (i === 37)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[30] = null;
           removeGhostPieces();
         } else if (i === 23) {
           nextSquares[i] = selectedPiece;
@@ -302,6 +343,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[42] === null) && ((nextSquares[33] === '🔴') || (nextSquares[33] === '❤️')) && (i === 42)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[33] = null;
           removeGhostPieces();
         } else if (i === 24) {
           nextSquares[i] = selectedPiece;
@@ -318,9 +360,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[40] === null) && ((nextSquares[33] === '🔴') || (nextSquares[33] === '❤️')) && (i === 40)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[33] = null;
           removeGhostPieces();
         } else if ((nextSquares[44] === null) && ((nextSquares[35] === '🔴') || (nextSquares[35] === '❤️')) && (i === 44)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[35] = null;
           removeGhostPieces();
         } else if (i === 26) {
           nextSquares[i] = selectedPiece;
@@ -337,9 +381,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[42] === null) && ((nextSquares[35] === '🔴') || (nextSquares[35] === '❤️')) && (i === 42)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[35] = null;
           removeGhostPieces();
         } else if ((nextSquares[46] === null) && ((nextSquares[37] === '🔴') || (nextSquares[37] === '❤️')) && (i === 46)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[37] = null;
           removeGhostPieces();
         } else if (i === 28) {
           nextSquares[i] = selectedPiece;
@@ -356,6 +402,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[44] === null) && ((nextSquares[37] === '🔴') || (nextSquares[37] === '❤️')) && (i === 44)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[37] = null;
           removeGhostPieces();
         } else if (i === 30) {
           nextSquares[i] = selectedPiece;
@@ -372,6 +419,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[51] === null) && ((nextSquares[42] === '🔴') || (nextSquares[42] === '❤️')) && (i === 51)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[42] = null;
           removeGhostPieces();
         } else if (i === 33) {
           nextSquares[i] = selectedPiece;
@@ -388,9 +436,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[49] === null) && ((nextSquares[42] === '🔴') || (nextSquares[42] === '❤️')) && (i === 49)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[42] = null;
           removeGhostPieces();
         } else if ((nextSquares[53] === null) && ((nextSquares[44] === '🔴') || (nextSquares[44] === '❤️')) && (i === 53)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[44] = null;
           removeGhostPieces();
         } else if (i === 35) {
           nextSquares[i] = selectedPiece;
@@ -407,9 +457,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[51] === null) && ((nextSquares[44] === '🔴') || (nextSquares[44] === '❤️')) && (i === 51)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[44] = null;
           removeGhostPieces();
         } else if ((nextSquares[55] === null) && ((nextSquares[46] === '🔴') || (nextSquares[46] === '❤️')) && (i === 55)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[46] = null;
           removeGhostPieces();
         } else if (i === 37) {
           nextSquares[i] = selectedPiece;
@@ -423,6 +475,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[53] === null) && ((nextSquares[46] === '🔴') || (nextSquares[46] === '❤️')) && (i === 53)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[46] = null;
           removeGhostPieces();
         } else if (i === 39) {
           nextSquares[i] = selectedPiece;
@@ -436,6 +489,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[58] === null) && ((nextSquares[49] === '🔴') || (nextSquares[49] === '❤️')) && (i === 58)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[49] = null;
           removeGhostPieces();
         } else if (i === 40) {
           nextSquares[i] = selectedPiece;
@@ -452,9 +506,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[56] === null) && ((nextSquares[49] === '🔴') || (nextSquares[49] === '❤️')) && (i === 56)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[49] = null;
           removeGhostPieces();
         } else if ((nextSquares[60] === null) && ((nextSquares[51] === '🔴') || (nextSquares[51] === '❤️')) && (i === 60)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[51] = null;
           removeGhostPieces();
         } else if (i === 42) {
           nextSquares[i] = selectedPiece;
@@ -471,9 +527,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[58] === null) && ((nextSquares[51] === '🔴') || (nextSquares[51] === '❤️')) && (i === 58)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[51] = null;
           removeGhostPieces();
         } else if ((nextSquares[62] === null) && ((nextSquares[53] === '🔴') || (nextSquares[53] === '❤️')) && (i === 62)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[53] = null;
           removeGhostPieces();
         } else if (i === 44) {
           nextSquares[i] = selectedPiece;
@@ -490,6 +548,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[60] === null) && ((nextSquares[53] === '🔴') || (nextSquares[53] === '❤️')) && (i === 60)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[53] = null;
           removeGhostPieces();
         } else if (i === 46) {
           nextSquares[i] = selectedPiece;
@@ -557,6 +616,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[19] === null) && ((nextSquares[10] === '🔴') || (nextSquares[10] === '❤️')) && (i === 19)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[10] = null;
             removeGhostPieces();
         } else if (i === 1) {
             nextSquares[i] = selectedPiece;
@@ -573,9 +633,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[17] === null) && ((nextSquares[10] === '🔴') || (nextSquares[10] === '❤️')) && (i === 17)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[10] = null;
             removeGhostPieces();
         } else if ((nextSquares[21] === null) && ((nextSquares[12] === '🔴') || (nextSquares[12] === '❤️')) && (i === 21)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[12] = null;
             removeGhostPieces();
         } else if (i === 3) {
             nextSquares[i] = selectedPiece;
@@ -592,9 +654,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[19] === null) && ((nextSquares[12] === '🔴') || (nextSquares[12] === '❤️')) && (i === 19)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[12] = null;
             removeGhostPieces();
         } else if ((nextSquares[23] === null) && ((nextSquares[14] === '🔴') || (nextSquares[14] === '❤️')) && (i === 23)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[14] = null;
             removeGhostPieces();
         } else if (i === 5) {
             nextSquares[i] = selectedPiece;
@@ -608,6 +672,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[21] === null) && ((nextSquares[14] === '🔴') || (nextSquares[14] === '❤️')) && (i === 21)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[14] = null;
             removeGhostPieces();
         } else if (i === 7) {
             nextSquares[i] = selectedPiece;
@@ -624,6 +689,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[26] === null) && ((nextSquares[17] === '🔴') || (nextSquares[17] === '❤️')) && (i === 26)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[17] = null;
             removeGhostPieces();
         } else if (i === 8) {
             nextSquares[i] = selectedPiece;
@@ -646,9 +712,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[24] === null) && ((nextSquares[17] === '🔴') || (nextSquares[17] === '❤️')) && (i === 24)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[17] = null;
             removeGhostPieces();
         } else if ((nextSquares[28] === null) && ((nextSquares[19] === '🔴') || (nextSquares[19] === '❤️')) && (i === 28)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[19] = null;
             removeGhostPieces();
         } else if (i === 10) {
             nextSquares[i] = selectedPiece;
@@ -671,9 +739,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[26] === null) && ((nextSquares[19] === '🔴') || (nextSquares[19] === '❤️')) && (i === 26)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[19] = null;
             removeGhostPieces();
         } else if ((nextSquares[30] === null) && ((nextSquares[21] === '🔴') || (nextSquares[21] === '❤️')) && (i === 30)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[21] = null;
             removeGhostPieces();
         } else if (i === 12) {
             nextSquares[i] = selectedPiece;
@@ -696,6 +766,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[28] === null) && ((nextSquares[21] === '🔴') || (nextSquares[21] === '❤️')) && (i === 28)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[21] = null;
             removeGhostPieces();
         } else if (i === 14) {
             nextSquares[i] = selectedPiece;
@@ -712,6 +783,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[3] === null) && ((nextSquares[10] === '🔴') || (nextSquares[10] === '❤️')) && (i === 3)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[10] = null;
             removeGhostPieces();
         } else if ((nextSquares[24] === null) && (i === 24)) {
             nextSquares[i] = selectedPiece;
@@ -721,6 +793,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[35] === null) && ((nextSquares[26] === '🔴') || (nextSquares[26] === '❤️')) && (i === 35)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[26] = null;
             removeGhostPieces();
         } else if (i === 17) {
             nextSquares[i] = selectedPiece;
@@ -737,9 +810,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[1] === null) && ((nextSquares[10] === '🔴') || (nextSquares[10] === '❤️')) && (i === 1)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[10] = null;
             removeGhostPieces();
         } else if ((nextSquares[5] === null) && ((nextSquares[12] === '🔴') || (nextSquares[12] === '❤️')) && (i === 5)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[12] = null;
             removeGhostPieces();
         } else if ((nextSquares[26] === null) && (i === 26)) {
             nextSquares[i] = selectedPiece;
@@ -749,9 +824,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[33] === null) && ((nextSquares[26] === '🔴') || (nextSquares[26] === '❤️')) && (i === 33)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[26] = null;
             removeGhostPieces();
         } else if ((nextSquares[37] === null) && ((nextSquares[28] === '🔴') || (nextSquares[28] === '❤️')) && (i === 37)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[28] = null;
             removeGhostPieces();
         } else if (i === 19) {
             nextSquares[i] = selectedPiece;
@@ -768,9 +845,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[3] === null) && ((nextSquares[12] === '🔴') || (nextSquares[12] === '❤️')) && (i === 3)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[12] = null;
             removeGhostPieces();
         } else if ((nextSquares[7] === null) && ((nextSquares[14] === '🔴') || (nextSquares[14] === '❤️')) && (i === 7)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[14] = null;
             removeGhostPieces();
         } else if ((nextSquares[28] === null) && (i === 28)) {
             nextSquares[i] = selectedPiece;
@@ -780,9 +859,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[35] === null) && ((nextSquares[28] === '🔴') || (nextSquares[28] === '❤️')) && (i === 35)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[28] = null;
             removeGhostPieces();
         } else if ((nextSquares[39] === null) && ((nextSquares[30] === '🔴') || (nextSquares[30] === '❤️')) && (i === 39)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[30] = null;
             removeGhostPieces();
         } else if (i === 21) {
             nextSquares[i] = selectedPiece;
@@ -796,12 +877,14 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[5] === null) && ((nextSquares[14] === '🔴') || (nextSquares[14] === '❤️')) && (i === 5)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[14] = null;
             removeGhostPieces();
         } else if ((nextSquares[30] === null) && (i === 30)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
         } else if ((nextSquares[37] === null) && ((nextSquares[30] === '🔴') || (nextSquares[30] === '❤️')) && (i === 37)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[30] = null;
             removeGhostPieces();
         } else if (i === 23) {
             nextSquares[i] = selectedPiece;
@@ -815,12 +898,14 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[10] === null) && ((nextSquares[17] === '🔴') || (nextSquares[17] === '❤️')) && (i === 10)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[17] = null;
             removeGhostPieces();
         } else if ((nextSquares[33] === null) && (i === 33)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
         } else if ((nextSquares[42] === null) && ((nextSquares[33] === '🔴') || (nextSquares[33] === '❤️')) && (i === 42)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[33] = null;
             removeGhostPieces();
         } else if (i === 24) {
             nextSquares[i] = selectedPiece;
@@ -837,9 +922,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[8] === null) && ((nextSquares[17] === '🔴') || (nextSquares[17] === '❤️')) && (i === 8)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[17] = null;
             removeGhostPieces();
         } else if ((nextSquares[12] === null) && ((nextSquares[19] === '🔴') || (nextSquares[19] === '❤️')) && (i === 12)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[19] = null;
             removeGhostPieces();
         } else if ((nextSquares[33] === null) && (i === 33)) {
             nextSquares[i] = selectedPiece;
@@ -849,9 +936,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[40] === null) && ((nextSquares[33] === '🔴') || (nextSquares[33] === '❤️')) && (i === 40)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[33] = null;
             removeGhostPieces();
         } else if ((nextSquares[44] === null) && ((nextSquares[35] === '🔴') || (nextSquares[35] === '❤️')) && (i === 44)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[35] = null;
             removeGhostPieces();
         } else if (i === 26) {
             nextSquares[i] = selectedPiece;
@@ -868,9 +957,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[10] === null) && ((nextSquares[19] === '🔴') || (nextSquares[19] === '❤️')) && (i === 10)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[19] = null;
             removeGhostPieces();
         } else if ((nextSquares[14] === null) && ((nextSquares[21] === '🔴') || (nextSquares[21] === '❤️')) && (i === 14)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[21] = null;
             removeGhostPieces();
         } else if ((nextSquares[35] === null) && (i === 35)) {
             nextSquares[i] = selectedPiece;
@@ -880,9 +971,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[42] === null) && ((nextSquares[35] === '🔴') || (nextSquares[35] === '❤️')) && (i === 42)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[35] = null;
             removeGhostPieces();
         } else if ((nextSquares[46] === null) && ((nextSquares[37] === '🔴') || (nextSquares[37] === '❤️')) && (i === 46)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[37] = null;
             removeGhostPieces();
         } else if (i === 28) {
             nextSquares[i] = selectedPiece;
@@ -899,6 +992,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[12] === null) && ((nextSquares[21] === '🔴') || (nextSquares[21] === '❤️')) && (i === 12)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[21] = null;
             removeGhostPieces();
         } else if ((nextSquares[37] === null) && (i === 37)) {
             nextSquares[i] = selectedPiece;
@@ -908,6 +1002,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[44] === null) && ((nextSquares[37] === '🔴') || (nextSquares[37] === '❤️')) && (i === 44)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[37] = null;
             removeGhostPieces();
         } else if (i === 30) {
             nextSquares[i] = selectedPiece;
@@ -924,6 +1019,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[19] === null) && ((nextSquares[26] === '🔴') || (nextSquares[26] === '❤️')) && (i === 19)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[26] = null;
             removeGhostPieces();
         } else if ((nextSquares[40] === null) && (i === 40)) {
             nextSquares[i] = selectedPiece;
@@ -933,6 +1029,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[51] === null) && ((nextSquares[42] === '🔴') || (nextSquares[42] === '❤️')) && (i === 51)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[42] = null;
             removeGhostPieces();
         } else if (i === 33) {
             nextSquares[i] = selectedPiece;
@@ -949,9 +1046,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[17] === null) && ((nextSquares[26] === '🔴') || (nextSquares[26] === '❤️')) && (i === 17)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[26] = null;
             removeGhostPieces();
         } else if ((nextSquares[21] === null) && ((nextSquares[28] === '🔴') || (nextSquares[28] === '❤️')) && (i === 21)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[28] = null;
             removeGhostPieces();
         } else if ((nextSquares[42] === null) && (i === 42)) {
             nextSquares[i] = selectedPiece;
@@ -961,9 +1060,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[49] === null) && ((nextSquares[42] === '🔴') || (nextSquares[42] === '❤️')) && (i === 49)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[42] = null;
             removeGhostPieces();
         } else if ((nextSquares[53] === null) && ((nextSquares[44] === '🔴') || (nextSquares[44] === '❤️')) && (i === 53)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[44] = null;
             removeGhostPieces();
         } else if (i === 35) {
             nextSquares[i] = selectedPiece;
@@ -980,9 +1081,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[19] === null) && ((nextSquares[28] === '🔴') || (nextSquares[28] === '❤️')) && (i === 19)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[28] = null;
             removeGhostPieces();
         } else if ((nextSquares[23] === null) && ((nextSquares[30] === '🔴') || (nextSquares[30] === '❤️')) && (i === 23)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[30] = null;
             removeGhostPieces();
         } else if ((nextSquares[44] === null) && (i === 44)) {
             nextSquares[i] = selectedPiece;
@@ -992,9 +1095,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[51] === null) && ((nextSquares[44] === '🔴') || (nextSquares[44] === '❤️')) && (i === 51)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[44] = null;
             removeGhostPieces();
         } else if ((nextSquares[55] === null) && ((nextSquares[46] === '🔴') || (nextSquares[46] === '❤️')) && (i === 55)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[46] = null;
             removeGhostPieces();
         } else if (i === 37) {
             nextSquares[i] = selectedPiece;
@@ -1008,12 +1113,14 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[21] === null) && ((nextSquares[30] === '🔴') || (nextSquares[30] === '❤️')) && (i === 21)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[30] = null;
             removeGhostPieces();
         } else if ((nextSquares[46] === null) && (i === 46)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
         } else if ((nextSquares[53] === null) && ((nextSquares[46] === '🔴') || (nextSquares[46] === '❤️')) && (i === 53)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[46] = null;
             removeGhostPieces();
         } else if (i === 39) {
             nextSquares[i] = selectedPiece;
@@ -1027,12 +1134,14 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[26] === null) && ((nextSquares[33] === '🔴') || (nextSquares[33] === '❤️')) && (i === 26)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[33] = null;
             removeGhostPieces();
         } else if ((nextSquares[49] === null) && (i === 49)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
         } else if ((nextSquares[58] === null) && ((nextSquares[49] === '🔴') || (nextSquares[49] === '❤️')) && (i === 58)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[49] = null;
             removeGhostPieces();
         } else if (i === 40) {
             nextSquares[i] = selectedPiece;
@@ -1049,9 +1158,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[24] === null) && ((nextSquares[33] === '🔴') || (nextSquares[33] === '❤️')) && (i === 24)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[33] = null;
             removeGhostPieces();
         } else if ((nextSquares[28] === null) && ((nextSquares[35] === '🔴') || (nextSquares[35] === '❤️')) && (i === 28)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[35] = null;
             removeGhostPieces();
         } else if ((nextSquares[49] === null) && (i === 49)) {
             nextSquares[i] = selectedPiece;
@@ -1061,9 +1172,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[56] === null) && ((nextSquares[49] === '🔴') || (nextSquares[49] === '❤️')) && (i === 56)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[49] = null;
             removeGhostPieces();
         } else if ((nextSquares[60] === null) && ((nextSquares[51] === '🔴') || (nextSquares[51] === '❤️')) && (i === 60)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[51] = null;
             removeGhostPieces();
         } else if (i === 42) {
             nextSquares[i] = selectedPiece;
@@ -1080,9 +1193,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[26] === null) && ((nextSquares[35] === '🔴') || (nextSquares[35] === '❤️')) && (i === 26)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[35] = null;
             removeGhostPieces();
         } else if ((nextSquares[30] === null) && ((nextSquares[37] === '🔴') || (nextSquares[37] === '❤️')) && (i === 30)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[37] = null;
             removeGhostPieces();
         } else if ((nextSquares[51] === null) && (i === 51)) {
             nextSquares[i] = selectedPiece;
@@ -1092,9 +1207,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[58] === null) && ((nextSquares[51] === '🔴') || (nextSquares[51] === '❤️')) && (i === 58)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[51] = null;
             removeGhostPieces();
         } else if ((nextSquares[62] === null) && ((nextSquares[53] === '🔴') || (nextSquares[53] === '❤️')) && (i === 62)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[53] = null;
             removeGhostPieces();
         } else if (i === 44) {
             nextSquares[i] = selectedPiece;
@@ -1111,6 +1228,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[28] === null) && ((nextSquares[37] === '🔴') || (nextSquares[37] === '❤️')) && (i === 28)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[37] = null;
             removeGhostPieces();
         } else if ((nextSquares[53] === null) && (i === 53)) {
             nextSquares[i] = selectedPiece;
@@ -1120,6 +1238,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[60] === null) && ((nextSquares[53] === '🔴') || (nextSquares[53] === '❤️')) && (i === 60)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[53] = null;
             removeGhostPieces();
         } else if (i === 46) {
             nextSquares[i] = selectedPiece;
@@ -1136,6 +1255,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[35] === null) && ((nextSquares[42] === '🔴') || (nextSquares[42] === '❤️')) && (i === 35)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[42] = null;
             removeGhostPieces();
         } else if ((nextSquares[56] === null) && (i === 56)) {
             nextSquares[i] = selectedPiece;
@@ -1158,9 +1278,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[33] === null) && ((nextSquares[42] === '🔴') || (nextSquares[42] === '❤️')) && (i === 33)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[42] = null;
             removeGhostPieces();
         } else if ((nextSquares[37] === null) && ((nextSquares[44] === '🔴') || (nextSquares[44] === '❤️')) && (i === 37)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[44] = null;
             removeGhostPieces();
         } else if ((nextSquares[58] === null) && (i === 58)) {
             nextSquares[i] = selectedPiece;
@@ -1183,9 +1305,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[35] === null) && ((nextSquares[44] === '🔴') || (nextSquares[44] === '❤️')) && (i === 35)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[44] = null;
             removeGhostPieces();
         } else if ((nextSquares[39] === null) && ((nextSquares[46] === '🔴') || (nextSquares[46] === '❤️')) && (i === 39)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[46] = null;
             removeGhostPieces();
         } else if ((nextSquares[60] === null) && (i === 60)) {
             nextSquares[i] = selectedPiece;
@@ -1205,6 +1329,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[37] === null) && ((nextSquares[46] === '🔴') || (nextSquares[46] === '❤️')) && (i === 37)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[46] = null;
             removeGhostPieces();
         } else if ((nextSquares[62] === null) && (i === 62)) {
             nextSquares[i] = selectedPiece;
@@ -1221,6 +1346,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[42] === null) && ((nextSquares[49] === '🔴') || (nextSquares[49] === '❤️')) && (i === 42)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[49] = null;
             removeGhostPieces();
         } else if (i === 56) {
             nextSquares[i] = selectedPiece;
@@ -1237,9 +1363,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[40] === null) && ((nextSquares[49] === '🔴') || (nextSquares[49] === '❤️')) && (i === 40)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[49] = null;
             removeGhostPieces();
         } else if ((nextSquares[44] === null) && ((nextSquares[51] === '🔴') || (nextSquares[51] === '❤️')) && (i === 44)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[51] = null;
             removeGhostPieces();
         } else if (i === 58) {
             nextSquares[i] = selectedPiece;
@@ -1256,9 +1384,11 @@ export default function Board() {
             removeGhostPieces();
           } else if ((nextSquares[42] === null) && ((nextSquares[51] === '🔴') || (nextSquares[51] === '❤️')) && (i === 42)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[51] = null;
             removeGhostPieces();
           } else if ((nextSquares[46] === null) && ((nextSquares[53] === '🔴') || (nextSquares[53] === '❤️')) && (i === 46)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[53] = null;
             removeGhostPieces();
           } else if (i === 60) {
             nextSquares[i] = selectedPiece;
@@ -1275,6 +1405,7 @@ export default function Board() {
             removeGhostPieces();
           } else if ((nextSquares[44] === null) && ((nextSquares[53] === '🔴') || (nextSquares[53] === '❤️')) && (i === 44)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[53] = null;
             removeGhostPieces();
           } else if (i === 62) {
             nextSquares[i] = selectedPiece;
@@ -1342,6 +1473,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[3] === null) && ((nextSquares[10] === '⚫') || (nextSquares[10] === '🖤')) && (i === 3)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[10] = null;
           removeGhostPieces();
         } else if (i === 17) {
           nextSquares[i] = selectedPiece;
@@ -1358,9 +1490,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[1] === null) && ((nextSquares[10] === '⚫') || (nextSquares[10] === '🖤')) && (i === 1)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[10] = null;
           removeGhostPieces();
         } else if ((nextSquares[5] === null) && ((nextSquares[12] === '⚫') || (nextSquares[12] === '🖤')) && (i === 5)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[12] = null;
           removeGhostPieces();
         } else if (i === 19) {
           nextSquares[i] = selectedPiece;
@@ -1377,9 +1511,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[3] === null) && ((nextSquares[12] === '⚫') || (nextSquares[12] === '🖤')) && (i === 3)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[12] = null;
           removeGhostPieces();
         } else if ((nextSquares[7] === null) && ((nextSquares[14] === '⚫') || (nextSquares[14] === '🖤')) && (i === 7)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[14] = null;
           removeGhostPieces();
         } else if (i === 21) {
           nextSquares[i] = selectedPiece;
@@ -1393,6 +1529,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[5] === null) && ((nextSquares[14] === '⚫') || (nextSquares[14] === '🖤')) && (i === 5)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[14] = null;
           removeGhostPieces();
         } else if (i === 23) {
           nextSquares[i] = selectedPiece;
@@ -1406,6 +1543,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[10] === null) && ((nextSquares[17] === '⚫') || (nextSquares[17] === '🖤')) && (i === 10)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[17] = null;
           removeGhostPieces();
         } else if (i === 24) {
           nextSquares[i] = selectedPiece;
@@ -1422,9 +1560,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[8] === null) && ((nextSquares[17] === '⚫') || (nextSquares[17] === '🖤')) && (i === 8)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[17] = null;
           removeGhostPieces();
         } else if ((nextSquares[12] === null) && ((nextSquares[19] === '⚫') || (nextSquares[19] === '🖤')) && (i === 12)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[19] = null;
           removeGhostPieces();
         } else if (i === 26) {
           nextSquares[i] = selectedPiece;
@@ -1441,9 +1581,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[10] === null) && ((nextSquares[19] === '⚫') || (nextSquares[19] === '🖤')) && (i === 10)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[19] = null;
           removeGhostPieces();
         } else if ((nextSquares[14] === null) && ((nextSquares[21] === '⚫') || (nextSquares[21] === '🖤')) && (i === 14)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[21] = null;
           removeGhostPieces();
         } else if (i === 28) {
           nextSquares[i] = selectedPiece;
@@ -1460,6 +1602,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[12] === null) && ((nextSquares[21] === '⚫') || (nextSquares[21] === '🖤')) && (i === 12)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[21] = null;
           removeGhostPieces();
         } else if (i === 30) {
           nextSquares[i] = selectedPiece;
@@ -1476,6 +1619,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[19] === null) && ((nextSquares[26] === '⚫') || (nextSquares[26] === '🖤')) && (i === 19)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[26] = null;
           removeGhostPieces();
         } else if (i === 33) {
           nextSquares[i] = selectedPiece;
@@ -1492,9 +1636,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[17] === null) && ((nextSquares[26] === '⚫') || (nextSquares[26] === '🖤')) && (i === 17)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[26] = null;
           removeGhostPieces();
         } else if ((nextSquares[21] === null) && ((nextSquares[28] === '⚫') || (nextSquares[28] === '🖤')) && (i === 21)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[28] = null;
           removeGhostPieces();
         } else if (i === 35) {
           nextSquares[i] = selectedPiece;
@@ -1511,9 +1657,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[19] === null) && ((nextSquares[28] === '⚫') || (nextSquares[28] === '🖤')) && (i === 19)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[28] = null;
           removeGhostPieces();
         } else if ((nextSquares[23] === null) && ((nextSquares[30] === '⚫') || (nextSquares[30] === '🖤')) && (i === 23)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[30] = null;
           removeGhostPieces();
         } else if (i === 37) {
           nextSquares[i] = selectedPiece;
@@ -1527,6 +1675,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[21] === null) && ((nextSquares[30] === '⚫') || (nextSquares[30] === '🖤')) && (i === 21)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[30] = null;
           removeGhostPieces();
         } else if (i === 39) {
           nextSquares[i] = selectedPiece;
@@ -1540,6 +1689,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[26] === null) && ((nextSquares[33] === '⚫') || (nextSquares[33] === '🖤')) && (i === 26)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[33] = null;
           removeGhostPieces();
         } else if (i === 40) {
           nextSquares[i] = selectedPiece;
@@ -1556,9 +1706,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[24] === null) && ((nextSquares[33] === '⚫') || (nextSquares[33] === '🖤')) && (i === 24)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[33] = null;
           removeGhostPieces();
         } else if ((nextSquares[28] === null) && ((nextSquares[35] === '⚫') || (nextSquares[35] === '🖤')) && (i === 28)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[35] = null;
           removeGhostPieces();
         } else if (i === 42) {
           nextSquares[i] = selectedPiece;
@@ -1575,9 +1727,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[26] === null) && ((nextSquares[35] === '⚫') || (nextSquares[35] === '🖤')) && (i === 26)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[35] = null;
           removeGhostPieces();
         } else if ((nextSquares[30] === null) && ((nextSquares[37] === '⚫') || (nextSquares[37] === '🖤')) && (i === 30)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[37] = null;
           removeGhostPieces();
         } else if (i === 44) {
           nextSquares[i] = selectedPiece;
@@ -1594,6 +1748,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[28] === null) && ((nextSquares[37] === '⚫') || (nextSquares[37] === '🖤')) && (i === 28)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[37] = null;
           removeGhostPieces();
         } else if (i === 46) {
           nextSquares[i] = selectedPiece;
@@ -1610,6 +1765,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[35] === null) && ((nextSquares[42] === '⚫') || (nextSquares[42] === '🖤')) && (i === 35)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[42] = null;
           removeGhostPieces();
         } else if (i === 49) {
           nextSquares[i] = selectedPiece;
@@ -1626,9 +1782,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[33] === null) && ((nextSquares[42] === '⚫') || (nextSquares[42] === '🖤')) && (i === 33)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[42] = null;
           removeGhostPieces();
         } else if ((nextSquares[37] === null) && ((nextSquares[44] === '⚫') || (nextSquares[44] === '🖤')) && (i === 37)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[44] = null;
           removeGhostPieces();
         } else if (i === 51) {
           nextSquares[i] = selectedPiece;
@@ -1645,9 +1803,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[35] === null) && ((nextSquares[44] === '⚫') || (nextSquares[44] === '🖤')) && (i === 35)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[44] = null;
           removeGhostPieces();
         } else if ((nextSquares[39] === null) && ((nextSquares[46] === '⚫') || (nextSquares[46] === '🖤')) && (i === 39)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[46] = null;
           removeGhostPieces();
         } else if (i === 53) {
           nextSquares[i] = selectedPiece;
@@ -1661,6 +1821,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[37] === null) && ((nextSquares[46] === '⚫') || (nextSquares[46] === '🖤')) && (i === 37)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[46] = null;
           removeGhostPieces();
         } else if (i === 55) {
           nextSquares[i] = selectedPiece;
@@ -1674,6 +1835,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[42] === null) && ((nextSquares[49] === '⚫') || (nextSquares[49] === '🖤')) && (i === 42)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[49] = null;
           removeGhostPieces();
         } else if (i === 56) {
           nextSquares[i] = selectedPiece;
@@ -1690,9 +1852,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[40] === null) && ((nextSquares[49] === '⚫') || (nextSquares[49] === '🖤')) && (i === 40)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[49] = null;
           removeGhostPieces();
         } else if ((nextSquares[44] === null) && ((nextSquares[51] === '⚫') || (nextSquares[51] === '🖤')) && (i === 44)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[51] = null;
           removeGhostPieces();
         } else if (i === 58) {
           nextSquares[i] = selectedPiece;
@@ -1709,9 +1873,11 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[42] === null) && ((nextSquares[51] === '⚫') || (nextSquares[51] === '🖤')) && (i === 42)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[51] = null;
           removeGhostPieces();
         } else if ((nextSquares[46] === null) && ((nextSquares[53] === '⚫') || (nextSquares[53] === '🖤')) && (i === 46)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[53] = null;
           removeGhostPieces();
         } else if (i === 60) {
           nextSquares[i] = selectedPiece;
@@ -1728,6 +1894,7 @@ export default function Board() {
           removeGhostPieces();
         } else if ((nextSquares[44] === null) && ((nextSquares[53] === '⚫') || (nextSquares[53] === '🖤')) && (i === 44)) {
           nextSquares[i] = selectedPiece;
+          nextSquares[53] = null;
           removeGhostPieces();
         } else if (i === 62) {
           nextSquares[i] = selectedPiece;
@@ -1746,6 +1913,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[19] === null) && ((nextSquares[10] === '⚫') || (nextSquares[10] === '🖤')) && (i === 19)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[10] = null;
             removeGhostPieces();
         } else if (i === 1) {
             nextSquares[i] = selectedPiece;
@@ -1762,9 +1930,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[17] === null) && ((nextSquares[10] === '⚫') || (nextSquares[10] === '🖤')) && (i === 17)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[10] = null;
             removeGhostPieces();
         } else if ((nextSquares[21] === null) && ((nextSquares[12] === '⚫') || (nextSquares[12] === '🖤')) && (i === 21)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[12] = null;
             removeGhostPieces();
         } else if (i === 3) {
             nextSquares[i] = selectedPiece;
@@ -1781,9 +1951,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[19] === null) && ((nextSquares[12] === '⚫') || (nextSquares[12] === '🖤')) && (i === 19)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[12] = null;
             removeGhostPieces();
         } else if ((nextSquares[23] === null) && ((nextSquares[14] === '⚫') || (nextSquares[14] === '🖤')) && (i === 23)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[14] = null;
             removeGhostPieces();
         } else if (i === 5) {
             nextSquares[i] = selectedPiece;
@@ -1797,6 +1969,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[21] === null) && ((nextSquares[14] === '⚫') || (nextSquares[14] === '🖤')) && (i === 21)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[14] = null;
             removeGhostPieces();
         } else if (i === 7) {
             nextSquares[i] = selectedPiece;
@@ -1813,6 +1986,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[26] === null) && ((nextSquares[17] === '⚫') || (nextSquares[17] === '🖤')) && (i === 26)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[17] = null;
             removeGhostPieces();
         } else if (i === 8) {
             nextSquares[i] = selectedPiece;
@@ -1835,9 +2009,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[24] === null) && ((nextSquares[17] === '⚫') || (nextSquares[17] === '🖤')) && (i === 24)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[17] = null;
             removeGhostPieces();
         } else if ((nextSquares[28] === null) && ((nextSquares[19] === '⚫') || (nextSquares[19] === '🖤')) && (i === 28)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[19] = null;
             removeGhostPieces();
         } else if (i === 10) {
             nextSquares[i] = selectedPiece;
@@ -1860,9 +2036,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[26] === null) && ((nextSquares[19] === '⚫') || (nextSquares[19] === '🖤')) && (i === 26)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[19] = null;
             removeGhostPieces();
         } else if ((nextSquares[30] === null) && ((nextSquares[21] === '⚫') || (nextSquares[21] === '🖤')) && (i === 30)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[21] = null;
             removeGhostPieces();
         } else if (i === 12) {
             nextSquares[i] = selectedPiece;
@@ -1885,6 +2063,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[28] === null) && ((nextSquares[21] === '⚫') || (nextSquares[21] === '🖤')) && (i === 28)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[21] = null;
             removeGhostPieces();
         } else if (i === 14) {
             nextSquares[i] = selectedPiece;
@@ -1901,6 +2080,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[3] === null) && ((nextSquares[10] === '⚫') || (nextSquares[10] === '🖤')) && (i === 3)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[10] = null;
             removeGhostPieces();
         } else if ((nextSquares[24] === null) && (i === 24)) {
             nextSquares[i] = selectedPiece;
@@ -1910,6 +2090,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[35] === null) && ((nextSquares[26] === '⚫') || (nextSquares[26] === '🖤')) && (i === 35)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[26] = null;
             removeGhostPieces();
         } else if (i === 17) {
             nextSquares[i] = selectedPiece;
@@ -1926,9 +2107,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[1] === null) && ((nextSquares[10] === '⚫') || (nextSquares[10] === '🖤')) && (i === 1)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[10] = null;
             removeGhostPieces();
         } else if ((nextSquares[5] === null) && ((nextSquares[12] === '⚫') || (nextSquares[12] === '🖤')) && (i === 5)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[12] = null;
             removeGhostPieces();
         } else if ((nextSquares[26] === null) && (i === 26)) {
             nextSquares[i] = selectedPiece;
@@ -1938,9 +2121,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[33] === null) && ((nextSquares[26] === '⚫') || (nextSquares[26] === '🖤')) && (i === 33)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[26] = null;
             removeGhostPieces();
         } else if ((nextSquares[37] === null) && ((nextSquares[28] === '⚫') || (nextSquares[28] === '🖤')) && (i === 37)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[28] = null;
             removeGhostPieces();
         } else if (i === 19) {
             nextSquares[i] = selectedPiece;
@@ -1957,9 +2142,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[3] === null) && ((nextSquares[12] === '⚫') || (nextSquares[12] === '🖤')) && (i === 3)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[12] = null;
             removeGhostPieces();
         } else if ((nextSquares[7] === null) && ((nextSquares[14] === '⚫') || (nextSquares[14] === '🖤')) && (i === 7)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[14] = null;
             removeGhostPieces();
         } else if ((nextSquares[28] === null) && (i === 28)) {
             nextSquares[i] = selectedPiece;
@@ -1969,9 +2156,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[35] === null) && ((nextSquares[28] === '⚫') || (nextSquares[28] === '🖤')) && (i === 35)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[28] = null;
             removeGhostPieces();
         } else if ((nextSquares[39] === null) && ((nextSquares[30] === '⚫') || (nextSquares[30] === '🖤')) && (i === 39)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[30] = null;
             removeGhostPieces();
         } else if (i === 21) {
             nextSquares[i] = selectedPiece;
@@ -1985,12 +2174,14 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[5] === null) && ((nextSquares[14] === '⚫') || (nextSquares[14] === '🖤')) && (i === 5)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[14] = null;
             removeGhostPieces();
         } else if ((nextSquares[30] === null) && (i === 30)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
         } else if ((nextSquares[37] === null) && ((nextSquares[30] === '⚫') || (nextSquares[30] === '🖤')) && (i === 37)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[30] = null;
             removeGhostPieces();
         } else if (i === 23) {
             nextSquares[i] = selectedPiece;
@@ -2004,12 +2195,14 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[10] === null) && ((nextSquares[17] === '⚫') || (nextSquares[17] === '🖤')) && (i === 10)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[17] = null;
             removeGhostPieces();
         } else if ((nextSquares[33] === null) && (i === 33)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
         } else if ((nextSquares[42] === null) && ((nextSquares[33] === '⚫') || (nextSquares[33] === '🖤')) && (i === 42)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[33] = null;
             removeGhostPieces();
         } else if (i === 24) {
             nextSquares[i] = selectedPiece;
@@ -2026,9 +2219,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[8] === null) && ((nextSquares[17] === '⚫') || (nextSquares[17] === '🖤')) && (i === 8)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[17] = null;
             removeGhostPieces();
         } else if ((nextSquares[12] === null) && ((nextSquares[19] === '⚫') || (nextSquares[19] === '🖤')) && (i === 12)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[19] = null;
             removeGhostPieces();
         } else if ((nextSquares[33] === null) && (i === 33)) {
             nextSquares[i] = selectedPiece;
@@ -2038,9 +2233,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[40] === null) && ((nextSquares[33] === '⚫') || (nextSquares[33] === '🖤')) && (i === 40)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[33] = null;
             removeGhostPieces();
         } else if ((nextSquares[44] === null) && ((nextSquares[35] === '⚫') || (nextSquares[35] === '🖤')) && (i === 44)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[35] = null;
             removeGhostPieces();
         } else if (i === 26) {
             nextSquares[i] = selectedPiece;
@@ -2057,9 +2254,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[10] === null) && ((nextSquares[19] === '⚫') || (nextSquares[19] === '🖤')) && (i === 10)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[19] = null;
             removeGhostPieces();
         } else if ((nextSquares[14] === null) && ((nextSquares[21] === '⚫') || (nextSquares[21] === '🖤')) && (i === 14)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[21] = null;
             removeGhostPieces();
         } else if ((nextSquares[35] === null) && (i === 35)) {
             nextSquares[i] = selectedPiece;
@@ -2069,9 +2268,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[42] === null) && ((nextSquares[35] === '⚫') || (nextSquares[35] === '🖤')) && (i === 42)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[35] = null;
             removeGhostPieces();
         } else if ((nextSquares[46] === null) && ((nextSquares[37] === '⚫') || (nextSquares[37] === '🖤')) && (i === 46)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[37] = null;
             removeGhostPieces();
         } else if (i === 28) {
             nextSquares[i] = selectedPiece;
@@ -2088,6 +2289,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[12] === null) && ((nextSquares[21] === '⚫') || (nextSquares[21] === '🖤')) && (i === 12)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[21] = null;
             removeGhostPieces();
         } else if ((nextSquares[37] === null) && (i === 37)) {
             nextSquares[i] = selectedPiece;
@@ -2097,6 +2299,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[44] === null) && ((nextSquares[37] === '⚫') || (nextSquares[37] === '🖤')) && (i === 44)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[37] = null;
             removeGhostPieces();
         } else if (i === 30) {
             nextSquares[i] = selectedPiece;
@@ -2113,6 +2316,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[19] === null) && ((nextSquares[26] === '⚫') || (nextSquares[26] === '🖤')) && (i === 19)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[26] = null;
             removeGhostPieces();
         } else if ((nextSquares[40] === null) && (i === 40)) {
             nextSquares[i] = selectedPiece;
@@ -2122,6 +2326,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[51] === null) && ((nextSquares[42] === '⚫') || (nextSquares[42] === '🖤')) && (i === 51)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[42] = null;
             removeGhostPieces();
         } else if (i === 33) {
             nextSquares[i] = selectedPiece;
@@ -2138,9 +2343,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[17] === null) && ((nextSquares[26] === '⚫') || (nextSquares[26] === '🖤')) && (i === 17)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[26] = null;
             removeGhostPieces();
         } else if ((nextSquares[21] === null) && ((nextSquares[28] === '⚫') || (nextSquares[28] === '🖤')) && (i === 21)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[28] = null;
             removeGhostPieces();
         } else if ((nextSquares[42] === null) && (i === 42)) {
             nextSquares[i] = selectedPiece;
@@ -2150,9 +2357,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[49] === null) && ((nextSquares[42] === '⚫') || (nextSquares[42] === '🖤')) && (i === 49)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[42] = null;
             removeGhostPieces();
         } else if ((nextSquares[53] === null) && ((nextSquares[44] === '⚫') || (nextSquares[44] === '🖤')) && (i === 53)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[44] = null;
             removeGhostPieces();
         } else if (i === 35) {
             nextSquares[i] = selectedPiece;
@@ -2169,9 +2378,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[19] === null) && ((nextSquares[28] === '⚫') || (nextSquares[28] === '🖤')) && (i === 19)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[28] = null;
             removeGhostPieces();
         } else if ((nextSquares[23] === null) && ((nextSquares[30] === '⚫') || (nextSquares[30] === '🖤')) && (i === 23)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[30] = null;
             removeGhostPieces();
         } else if ((nextSquares[44] === null) && (i === 44)) {
             nextSquares[i] = selectedPiece;
@@ -2181,9 +2392,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[51] === null) && ((nextSquares[44] === '⚫') || (nextSquares[44] === '🖤')) && (i === 51)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[44] = null;
             removeGhostPieces();
         } else if ((nextSquares[55] === null) && ((nextSquares[46] === '⚫') || (nextSquares[46] === '🖤')) && (i === 55)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[46] = null;
             removeGhostPieces();
         } else if (i === 37) {
             nextSquares[i] = selectedPiece;
@@ -2197,12 +2410,14 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[21] === null) && ((nextSquares[30] === '⚫') || (nextSquares[30] === '🖤')) && (i === 21)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[30] = null;
             removeGhostPieces();
         } else if ((nextSquares[46] === null) && (i === 46)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
         } else if ((nextSquares[53] === null) && ((nextSquares[46] === '⚫') || (nextSquares[46] === '🖤')) && (i === 53)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[46] = null;
             removeGhostPieces();
         } else if (i === 39) {
             nextSquares[i] = selectedPiece;
@@ -2216,12 +2431,14 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[26] === null) && ((nextSquares[33] === '⚫') || (nextSquares[33] === '🖤')) && (i === 26)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[33] = null;
             removeGhostPieces();
         } else if ((nextSquares[49] === null) && (i === 49)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
         } else if ((nextSquares[58] === null) && ((nextSquares[49] === '⚫') || (nextSquares[49] === '🖤')) && (i === 58)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[49] = null;
             removeGhostPieces();
         } else if (i === 40) {
             nextSquares[i] = selectedPiece;
@@ -2238,9 +2455,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[24] === null) && ((nextSquares[33] === '⚫') || (nextSquares[33] === '🖤')) && (i === 24)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[33] = null;
             removeGhostPieces();
         } else if ((nextSquares[28] === null) && ((nextSquares[35] === '⚫') || (nextSquares[35] === '🖤')) && (i === 28)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[35] = null;
             removeGhostPieces();
         } else if ((nextSquares[49] === null) && (i === 49)) {
             nextSquares[i] = selectedPiece;
@@ -2250,9 +2469,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[56] === null) && ((nextSquares[49] === '⚫') || (nextSquares[49] === '🖤')) && (i === 56)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[49] = null;
             removeGhostPieces();
         } else if ((nextSquares[60] === null) && ((nextSquares[51] === '⚫') || (nextSquares[51] === '🖤')) && (i === 60)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[51] = null;
             removeGhostPieces();
         } else if (i === 42) {
             nextSquares[i] = selectedPiece;
@@ -2269,9 +2490,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[26] === null) && ((nextSquares[35] === '⚫') || (nextSquares[35] === '🖤')) && (i === 26)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[35] = null;
             removeGhostPieces();
         } else if ((nextSquares[30] === null) && ((nextSquares[37] === '⚫') || (nextSquares[37] === '🖤')) && (i === 30)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[37] = null;
             removeGhostPieces();
         } else if ((nextSquares[51] === null) && (i === 51)) {
             nextSquares[i] = selectedPiece;
@@ -2281,9 +2504,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[58] === null) && ((nextSquares[51] === '⚫') || (nextSquares[51] === '🖤')) && (i === 58)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[51] = null;
             removeGhostPieces();
         } else if ((nextSquares[62] === null) && ((nextSquares[53] === '⚫') || (nextSquares[53] === '🖤')) && (i === 62)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[53] = null;
             removeGhostPieces();
         } else if (i === 44) {
             nextSquares[i] = selectedPiece;
@@ -2300,6 +2525,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[28] === null) && ((nextSquares[37] === '⚫') || (nextSquares[37] === '🖤')) && (i === 28)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[37] = null;
             removeGhostPieces();
         } else if ((nextSquares[53] === null) && (i === 53)) {
             nextSquares[i] = selectedPiece;
@@ -2309,6 +2535,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[60] === null) && ((nextSquares[53] === '⚫') || (nextSquares[53] === '🖤')) && (i === 60)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[53] = null;
             removeGhostPieces();
         } else if (i === 46) {
             nextSquares[i] = selectedPiece;
@@ -2325,6 +2552,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[35] === null) && ((nextSquares[42] === '⚫') || (nextSquares[42] === '🖤')) && (i === 35)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[42] = null;
             removeGhostPieces();
         } else if ((nextSquares[56] === null) && (i === 56)) {
             nextSquares[i] = selectedPiece;
@@ -2347,9 +2575,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[33] === null) && ((nextSquares[42] === '⚫') || (nextSquares[42] === '🖤')) && (i === 33)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[42] = null;
             removeGhostPieces();
         } else if ((nextSquares[37] === null) && ((nextSquares[44] === '⚫') || (nextSquares[44] === '🖤')) && (i === 37)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[44] = null;
             removeGhostPieces();
         } else if ((nextSquares[58] === null) && (i === 58)) {
             nextSquares[i] = selectedPiece;
@@ -2372,9 +2602,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[35] === null) && ((nextSquares[44] === '⚫') || (nextSquares[44] === '🖤')) && (i === 35)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[44] = null;
             removeGhostPieces();
         } else if ((nextSquares[39] === null) && ((nextSquares[46] === '⚫') || (nextSquares[46] === '🖤')) && (i === 39)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[46] = null;
             removeGhostPieces();
         } else if ((nextSquares[60] === null) && (i === 60)) {
             nextSquares[i] = selectedPiece;
@@ -2394,6 +2626,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[37] === null) && ((nextSquares[46] === '⚫') || (nextSquares[46] === '🖤')) && (i === 37)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[46] = null;
             removeGhostPieces();
         } else if ((nextSquares[62] === null) && (i === 62)) {
             nextSquares[i] = selectedPiece;
@@ -2410,6 +2643,7 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[42] === null) && ((nextSquares[49] === '⚫') || (nextSquares[49] === '🖤')) && (i === 42)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[49] = null;
             removeGhostPieces();
         } else if (i === 56) {
             nextSquares[i] = selectedPiece;
@@ -2426,9 +2660,11 @@ export default function Board() {
             removeGhostPieces();
         } else if ((nextSquares[40] === null) && ((nextSquares[49] === '⚫') || (nextSquares[49] === '🖤')) && (i === 40)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[49] = null;
             removeGhostPieces();
         } else if ((nextSquares[44] === null) && ((nextSquares[51] === '⚫') || (nextSquares[51] === '🖤')) && (i === 44)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[51] = null;
             removeGhostPieces();
         } else if (i === 58) {
             nextSquares[i] = selectedPiece;
@@ -2445,9 +2681,11 @@ export default function Board() {
             removeGhostPieces();
           } else if ((nextSquares[42] === null) && ((nextSquares[51] === '⚫') || (nextSquares[51] === '🖤')) && (i === 42)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[51] = null;
             removeGhostPieces();
           } else if ((nextSquares[46] === null) && ((nextSquares[53] === '⚫') || (nextSquares[53] === '🖤')) && (i === 46)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[53] = null;
             removeGhostPieces();
           } else if (i === 60) {
             nextSquares[i] = selectedPiece;
@@ -2464,6 +2702,7 @@ export default function Board() {
             removeGhostPieces();
           } else if ((nextSquares[44] === null) && ((nextSquares[53] === '⚫') || (nextSquares[53] === '🖤')) && (i === 44)) {
             nextSquares[i] = selectedPiece;
+            nextSquares[53] = null;
             removeGhostPieces();
           } else if (i === 62) {
             nextSquares[i] = selectedPiece;
@@ -2472,34 +2711,38 @@ export default function Board() {
           }
       }
     }
-  
+    
+    // if (the tile clicked on is a single red piece AND it is red's turn) then 
     if ((nextSquares[i] === '🔴') && !blackIsNext) {
+      // set the selectedPiece to a single red piece
       changeSelectedPiece();
-      nextSquares[i] = '🟠';
+      // set the tile to display a single ghost piece
+      nextSquares[i] = '⚪';
+      // set the ghostPosition to the tile clicked
       getGhostPosition();
-      tallyPieces();
+      // tallyPieces();
     } else if ((nextSquares[i] === '❤️') && !blackIsNext) {
       changeSelectedPiece();
-      nextSquares[i] = '🧡';
+      nextSquares[i] = '🤍';
       getGhostPosition();
-      tallyPieces();
+      // tallyPieces();
     } else if ((nextSquares[i] === '⚫') && blackIsNext) {
       changeSelectedPiece();
-      nextSquares[i] = '🔵';
+      nextSquares[i] = '⚪';
       getGhostPosition();
-      tallyPieces();
+      // tallyPieces();
     } else if ((nextSquares[i] === '🖤') && blackIsNext) {
       changeSelectedPiece();
-      nextSquares[i] = '💙';
+      nextSquares[i] = '🤍';
       getGhostPosition();
-      tallyPieces();
-    } else if ((nextSquares[i] === '🔴') || (nextSquares[i] === '❤️') || (nextSquares[i] === '⚫') || (nextSquares[i] === '🖤')) {
-      changeSelectedPiece();
-      nextSquares[i] = null;
-      tallyPieces();
-    } else if (((nextSquares[i] === null) || (nextSquares[i] === '🔵') || (nextSquares[i] === '💙'))  && blackIsNext) {
+      // tallyPieces();
+    // else if ((the tile clicked on is empty OR occupied by a ghost piece) AND it is black's turn) then
+    } else if (((nextSquares[i] === null) || (nextSquares[i] === '⚪') || (nextSquares[i] === '🤍'))  && blackIsNext) {
+      // check if a valid move was made and, if so, place the selectedPiece
       movementRules();
+      // if (tile A8 is a single black piece) then
       if (nextSquares[56] === '⚫') {
+        // change it to a kinged black piece
         (nextSquares[56] = '🖤')
         // TODO Add 1 to black's kinged piece stat
       }
@@ -2515,10 +2758,15 @@ export default function Board() {
         (nextSquares[62] = '🖤')
         // TODO Add 1 to black's kinged piece stat
       }
+      // check if the game has been won
       tallyPieces();
-    } else if (((nextSquares[i] === null) || (nextSquares[i] === '🟠') || (nextSquares[i] === '🧡')) && !blackIsNext) {
+    // else if ((the tile clicked on is empty OR occupied by a ghost piece) AND it is red's turn) then
+    } else if (((nextSquares[i] === null) || (nextSquares[i] === '⚪') || (nextSquares[i] === '🤍')) && !blackIsNext) {
+      // check if a valid move was made and, if so, place the selectedPiece
       movementRules();
+      // if (tile B1 is a single red piece) then 
       if (nextSquares[1] === '🔴') {
+        // change it to a kinged red piece
         (nextSquares[1] = '❤️')
         // TODO Add 1 to red's kinged piece stat
       }
@@ -2533,12 +2781,14 @@ export default function Board() {
       if (nextSquares[7] === '🔴') {
         (nextSquares[7] = '❤️')
         // TODO Add 1 to red's kinged piece stat
-      }      
+      }
+      // check if the game has been won      
       tallyPieces();
     }
     setSquares(nextSquares);
   }
 
+  // This function handles whether blackIsNext or not to determine whose turn it is
   function handleEndTurnClick() {
     setBlackIsNext(!blackIsNext);
     if (!blackIsNext) {
