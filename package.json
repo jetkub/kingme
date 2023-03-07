@@ -9,7 +9,11 @@
 		"install": "cd server && npm i && cd ../client && npm i",
 		"seed": "cd server && npm run seed",
 		"build": "cd client && npm run build",
-		"preview": "cd client && npm run preview"
+		"preview": "cd client && npm run preview",
+		"heroku-postbuild": "npm install && npm run build"
+	},
+	"engines": {
+		"node": "16.x"
 	},
 	"author": "",
 	"license": "ISC",
