@@ -2554,7 +2554,6 @@ export default function Board() {
     <>
     <Scoreboard status={status}/>
     <div className="board">
-      <div className="status">{status}</div>
       <div className="board-row">
         <BlackSquare value={squares[0]} onSquareClick={() => handleClick(0)} />
         <RedSquare value={squares[1]} onSquareClick={() => handleClick(1)} />

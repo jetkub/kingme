@@ -5,7 +5,7 @@ const Scoreboard = (props) => {
 	console.log(props);
 	let textContent = props.status;
 	return (
-		<>
+		<div className="my-5">
 			{textContent === "Black's Turn" ? (
 				<h1
 					style={{ color: "black" }}
@@ -35,7 +35,7 @@ const Scoreboard = (props) => {
 					{textContent}
 				</h1>
 			)}
-		</>
+		</div>
 	);
 };
 
