@@ -65,12 +65,10 @@ export default function Board() {
       }
       if ((redCount === 0) && blackIsNext) {
         setStatus(statusMessage[2]);
-        // console.log('Black wins!');
         // TODO Add 1 to Black Player's Win Stat
         // TODO Add 1 to Red Player's Loss Stat
       } else if ((blackCount === 0) && !blackIsNext) {
         setStatus(statusMessage[3]);
-        // console.log('Red wins!');
         // TODO Add 1 to Red Player's Win Stat
         // TODO Add 1 to Black Player's Loss Stat
       }
@@ -78,7 +76,7 @@ export default function Board() {
 
     function removeGhostPieces() {
       for (let index = 0; index < nextSquares.length; index++) {
-        if ((nextSquares[index] === 'B') || (nextSquares[index] === 'R') || (nextSquares[index] === 'BK') || (nextSquares[index] === 'RK')) {
+        if ((nextSquares[index] === '🔵') || (nextSquares[index] === '🟠') || (nextSquares[index] === '💙') || (nextSquares[index] === '🧡')) {
           nextSquares[index] = null;          
         }
       }
@@ -86,7 +84,7 @@ export default function Board() {
 
     function getGhostPosition() {
       for (let index = 0; index < nextSquares.length; index++) {
-        if ((nextSquares[index] === 'B') || (nextSquares[index] === 'R') || (nextSquares[index] === 'BK') || (nextSquares[index] === 'RK')) {
+        if ((nextSquares[index] === '🔵') || (nextSquares[index] === '🟠') || (nextSquares[index] === '💙') || (nextSquares[index] === '🧡')) {
           setGhostPosition(index);
         }
       }
@@ -2475,29 +2473,29 @@ export default function Board() {
   
     if ((nextSquares[i] === '🔴') && !blackIsNext) {
       changeSelectedPiece();
-      nextSquares[i] = 'R';
+      nextSquares[i] = '🟠';
       getGhostPosition();
       tallyPieces();
     } else if ((nextSquares[i] === '❤️') && !blackIsNext) {
       changeSelectedPiece();
-      nextSquares[i] = 'RK';
+      nextSquares[i] = '🧡';
       getGhostPosition();
       tallyPieces();
     } else if ((nextSquares[i] === '⚫') && blackIsNext) {
       changeSelectedPiece();
-      nextSquares[i] = 'B';
+      nextSquares[i] = '🔵';
       getGhostPosition();
       tallyPieces();
     } else if ((nextSquares[i] === '🖤') && blackIsNext) {
       changeSelectedPiece();
-      nextSquares[i] = 'BK';
+      nextSquares[i] = '💙';
       getGhostPosition();
       tallyPieces();
     } else if ((nextSquares[i] === '🔴') || (nextSquares[i] === '❤️') || (nextSquares[i] === '⚫') || (nextSquares[i] === '🖤')) {
       changeSelectedPiece();
       nextSquares[i] = null;
       tallyPieces();
-    } else if (((nextSquares[i] === null) || (nextSquares[i] === 'B') || (nextSquares[i] === 'BK'))  && blackIsNext) {
+    } else if (((nextSquares[i] === null) || (nextSquares[i] === '🔵') || (nextSquares[i] === '💙'))  && blackIsNext) {
       movementRules();
       if (nextSquares[56] === '⚫') {
         (nextSquares[56] = '🖤')
@@ -2516,7 +2514,7 @@ export default function Board() {
         // TODO Add 1 to black's kinged piece stat
       }
       tallyPieces();
-    } else if (((nextSquares[i] === null) || (nextSquares[i] === 'R') || (nextSquares[i] === 'RK')) && !blackIsNext) {
+    } else if (((nextSquares[i] === null) || (nextSquares[i] === '🟠') || (nextSquares[i] === '🧡')) && !blackIsNext) {
       movementRules();
       if (nextSquares[1] === '🔴') {
         (nextSquares[1] = '❤️')
