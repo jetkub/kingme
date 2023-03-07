@@ -8,7 +8,8 @@ import Checkers from './components/Checkers';
 import Menu from './pages/Menu';
 import LoginPage from './pages/Login';
 import SignupPage from './pages/Signup';
-
+import Auth from './utils/auth';
+import Login from './components/Login';
 
 const httpLink = createHttpLink({
 	uri: '/graphql',
@@ -32,21 +33,38 @@ const client = new ApolloClient({
 });
 
 function App() {
-	return (
-		<ApolloProvider client={client}>
-			<div className='min-h-screen bg-stone-200'>
-				<Header />
-				<main className='flex flex-col items-center justify-center'>
-					<Routes>
-						<Route path='/' element={<Menu />} />
-						<Route path='/game' element={<Checkers />} />
-						<Route path='/login' element={<LoginPage />} />
-						<Route path='/signup' element={<SignupPage />} />
-					</Routes>
-				</main>
-			</div>
-		</ApolloProvider>
-	);
+	// if not logged in, redirect to login page
+	if (!Auth.loggedIn()) {
+		return (
+			<ApolloProvider client={client}>
+				<div className='min-h-screen bg-stone-200'>
+					<main className='flex flex-col items-center justify-center'>
+						<Routes>
+							<Route path='/' element={<LoginPage />} />
+							<Route path='/login' element={<LoginPage />} />
+							<Route path='/signup' element={<SignupPage />} />
+						</Routes>
+					</main>
+				</div>
+			</ApolloProvider>
+		);
+	} else {
+		return (
+			<ApolloProvider client={client}>
+				<div className='min-h-screen bg-stone-200'>
+					<Header />
+					<main className='flex flex-col items-center justify-center'>
+						<Routes>
+							<Route path='/' element={<Menu />} />
+							<Route path='/game' element={<Checkers />} />
+							<Route path='/login' element={<LoginPage />} />
+							<Route path='/signup' element={<SignupPage />} />
+						</Routes>
+					</main>
+				</div>
+			</ApolloProvider>
+		);
+	}
 }
 
 export default App;
