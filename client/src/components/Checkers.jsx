@@ -29,20 +29,26 @@ export default function Board() {
   let redCount = 0;
   let blackCount = 0;
   
+  // blackIsNext tracks whether it is black's turn or red's turn
   const [blackIsNext, setBlackIsNext] = useState(true);
   
+  // This is the starting board layout
   const [squares, setSquares] = useState([undefined, '⚫', undefined, '⚫', undefined, '⚫', undefined, '⚫', '⚫', undefined, '⚫', undefined, '⚫', undefined, '⚫', undefined, undefined, '⚫', undefined, '⚫', undefined, '⚫', undefined, '⚫', null, undefined, null, undefined, null, undefined, null, undefined, undefined, null, undefined, null, undefined, null, undefined, null, '🔴', undefined, '🔴', undefined, '🔴', undefined, '🔴', undefined, undefined, '🔴', undefined, '🔴', undefined, '🔴', undefined, '🔴', '🔴', undefined, '🔴', undefined, '🔴', undefined, '🔴', undefined]);
   
+  // selectedPiece tracks which piece the payer has picked up so the same piece can be placed on the next click
   const [selectedPiece, setSelectedPiece] = useState('⚫');
   const savedPiece = ['🔴', '❤️', '⚫', '🖤']
 
   const statusMessage = ["Black's Turn", "Red's Turn", "Black Wins!", "Red Wins!"]
   const [status, setStatus] = useState(statusMessage[0]);
+
+  // ghostPosition tracks where the player picked up a piece from
   const [ghostPosition, setGhostPosition] = useState();
 
   function handleClick(i) {
     const nextSquares = squares.slice();
 
+    // This function sets the selectedPiece based on what piece is on the tile the user clicked
     function changeSelectedPiece() {
       if (nextSquares[i] === '🔴') {
         setSelectedPiece(savedPiece[0]);
@@ -54,7 +60,8 @@ export default function Board() {
         setSelectedPiece(savedPiece[3]);
       } 
     }
-      
+    
+    // This function tallies up the number of pieces of each color are on the board in order to determine if either side has been reduced to 0 pieces
     function tallyPieces() { 
       for (let index = 0; index < nextSquares.length; index++) {
         if ((nextSquares[index] === '🔴') || nextSquares[index] === '❤️') {
@@ -76,37 +83,55 @@ export default function Board() {
 
     function removeGhostPieces() {
       for (let index = 0; index < nextSquares.length; index++) {
-        if ((nextSquares[index] === '🔵') || (nextSquares[index] === '🟠') || (nextSquares[index] === '💙') || (nextSquares[index] === '🧡')) {
+        if ((nextSquares[index] === '⚪') || (nextSquares[index] === '🤍')) {
           nextSquares[index] = null;          
         }
       }
     }
 
+    // This function sets the location of the ghost piece based on which tile the player clicked to select which piece to move
     function getGhostPosition() {
       for (let index = 0; index < nextSquares.length; index++) {
-        if ((nextSquares[index] === '🔵') || (nextSquares[index] === '🟠') || (nextSquares[index] === '💙') || (nextSquares[index] === '🧡')) {
+        if ((nextSquares[index] === '⚪') || (nextSquares[index] === '🤍')) {
           setGhostPosition(index);
         }
       }
     }
 
+    // This function determines which spaces the player is allowed to move their piece to based on where they are moving from and if there is an opponent piece to jump
     function movementRules() {
+
       // Single Black Piece Move Set
+
+      // if (the player picked the piece up from B1 AND it is black's turn AND the piece the player picked up is a single black piece) then
       if ((ghostPosition === 1) && blackIsNext && (selectedPiece === '⚫')) {
-        // Ex. "B1" to ("A2" || ("C2" || "D3")
+        // if (A2 is empty AND the player clicks to place the piece in A2) then
         if ((nextSquares[8] === null) && (i === 8)) {
+          // set the selected destination (A2) to a single black piece
           nextSquares[i] = selectedPiece;
+          // remove the ghostPiece from the board
           removeGhostPieces();
+        // else if (C2 is empty AND the player clicks to place the piece in C2) then
         } else if ((nextSquares[10] === null) && (i === 10)) {
+          // set the selected destination (C2) to a single black piece
           nextSquares[i] = selectedPiece;
+          // remove the ghostPiece from the board
           removeGhostPieces();
+        // else if (D3 is empty AND C2 is occupied by a red piece (single or kinged) AND the player clicks to place the piece in D3) then
         } else if ((nextSquares[19] === null) && ((nextSquares[10] === '🔴') || (nextSquares[10] === '❤️')) && (i === 19)) {
+          // set the selected destination (D3) to a single black piece
           nextSquares[i] = selectedPiece;
+          // remove the red piece from the board
           nextSquares[10] = null;
+          // remove the ghostPiece from the board
           removeGhostPieces();
+        // else if (the player clicks to return their piece to where they picked it up from (B1)) then
         } else if (i === 1) {
+          // set the original square (B1) back to a single black piece
           nextSquares[i] = selectedPiece;
+        // else
         } else {
+          // the move is invalid
           console.log('Invalid Move');
         }
       }
@@ -2686,34 +2711,38 @@ export default function Board() {
           }
       }
     }
-  
+    
+    // if (the tile clicked on is a single red piece AND it is red's turn) then 
     if ((nextSquares[i] === '🔴') && !blackIsNext) {
+      // set the selectedPiece to a single red piece
       changeSelectedPiece();
-      nextSquares[i] = '🟠';
+      // set the tile to display a single ghost piece
+      nextSquares[i] = '⚪';
+      // set the ghostPosition to the tile clicked
       getGhostPosition();
-      tallyPieces();
+      // tallyPieces();
     } else if ((nextSquares[i] === '❤️') && !blackIsNext) {
       changeSelectedPiece();
-      nextSquares[i] = '🧡';
+      nextSquares[i] = '🤍';
       getGhostPosition();
-      tallyPieces();
+      // tallyPieces();
     } else if ((nextSquares[i] === '⚫') && blackIsNext) {
       changeSelectedPiece();
-      nextSquares[i] = '🔵';
+      nextSquares[i] = '⚪';
       getGhostPosition();
-      tallyPieces();
+      // tallyPieces();
     } else if ((nextSquares[i] === '🖤') && blackIsNext) {
       changeSelectedPiece();
-      nextSquares[i] = '💙';
+      nextSquares[i] = '🤍';
       getGhostPosition();
-      tallyPieces();
-    } else if ((nextSquares[i] === '🔴') || (nextSquares[i] === '❤️') || (nextSquares[i] === '⚫') || (nextSquares[i] === '🖤')) {
-      changeSelectedPiece();
-      nextSquares[i] = null;
-      tallyPieces();
-    } else if (((nextSquares[i] === null) || (nextSquares[i] === '🔵') || (nextSquares[i] === '💙'))  && blackIsNext) {
+      // tallyPieces();
+    // else if ((the tile clicked on is empty OR occupied by a ghost piece) AND it is black's turn) then
+    } else if (((nextSquares[i] === null) || (nextSquares[i] === '⚪') || (nextSquares[i] === '🤍'))  && blackIsNext) {
+      // check if a valid move was made and, if so, place the selectedPiece
       movementRules();
+      // if (tile A8 is a single black piece) then
       if (nextSquares[56] === '⚫') {
+        // change it to a kinged black piece
         (nextSquares[56] = '🖤')
         // TODO Add 1 to black's kinged piece stat
       }
@@ -2729,10 +2758,15 @@ export default function Board() {
         (nextSquares[62] = '🖤')
         // TODO Add 1 to black's kinged piece stat
       }
+      // check if the game has been won
       tallyPieces();
-    } else if (((nextSquares[i] === null) || (nextSquares[i] === '🟠') || (nextSquares[i] === '🧡')) && !blackIsNext) {
+    // else if ((the tile clicked on is empty OR occupied by a ghost piece) AND it is red's turn) then
+    } else if (((nextSquares[i] === null) || (nextSquares[i] === '⚪') || (nextSquares[i] === '🤍')) && !blackIsNext) {
+      // check if a valid move was made and, if so, place the selectedPiece
       movementRules();
+      // if (tile B1 is a single red piece) then 
       if (nextSquares[1] === '🔴') {
+        // change it to a kinged red piece
         (nextSquares[1] = '❤️')
         // TODO Add 1 to red's kinged piece stat
       }
@@ -2747,12 +2781,14 @@ export default function Board() {
       if (nextSquares[7] === '🔴') {
         (nextSquares[7] = '❤️')
         // TODO Add 1 to red's kinged piece stat
-      }      
+      }
+      // check if the game has been won      
       tallyPieces();
     }
     setSquares(nextSquares);
   }
 
+  // This function handles whether blackIsNext or not to determine whose turn it is
   function handleEndTurnClick() {
     setBlackIsNext(!blackIsNext);
     if (!blackIsNext) {
