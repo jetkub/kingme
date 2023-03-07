@@ -1,6 +1,9 @@
 const { AuthenticationError } = require('apollo-server-express');
 const { User, Game } = require('../models');
 const { signToken } = require('../utils/auth');
+const { ObjectId } = require('mongodb');
+
+const newObjectId = () => new ObjectId().toHexString();
 
 
 const resolvers = {
@@ -85,6 +88,7 @@ const resolvers = {
         addGame: async (parent, args, context) => {
             if (context.user) {
                 const game = await Game.create({...args, 
+                    _id: newObjectId(),
                     players: context.user._id,
                     userTurn: context.user.username,
                     turnMessage: `${context.user.username}'s turn`,
@@ -97,9 +101,16 @@ const resolvers = {
                     gameLoser: `${context.user.username}'s Game loser`,
                     gameDate: new Date().toLocaleString(),
                 });
+                // update the games array in the user model
+                const user = await User.findByIdAndUpdate(
+                    { _id: context.user._id },
+                    { $push: { games: game._id } },
+                    { new: true }
+                );
+            
                  console.log(context.user);
 
-                return game;
+                return game, user;
             }
             throw new AuthenticationError('You need to be logged in!');
         },
