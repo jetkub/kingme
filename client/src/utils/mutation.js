@@ -47,6 +47,7 @@ export const CREATE_GAME = gql`
     mutation addGame ($id: ID!) {
         addGame(_id: $id) {
             gameId
+            gameName
             gameType
             gameStatus
             gameWinner

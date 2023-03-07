@@ -16,6 +16,7 @@ type User {
 type Game {
     _id: ID
     gameId: String
+    gameName: String
     gameType: String
     gameStatus: String
     gameWinner: String
