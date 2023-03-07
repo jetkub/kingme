@@ -19,7 +19,7 @@ const Menu = () => {
 	const user = data?.me || {};
 
 	const input = document.getElementById("joinInput");
-	console.log(input.value);
+	// console.log(input.value);
 
 console.log(user);
 
@@ -43,7 +43,7 @@ console.log(user);
 				const { data } = await addPlayerToGame(
 					{
 						variables: { id: user._id,
-									gameid: input.value
+									gameId: input.value
 								},
 					}
 				);
