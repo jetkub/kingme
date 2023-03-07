@@ -43,7 +43,7 @@ export const UPDATE_LOSSES = gql`
     }
 `;
 
-export const ADD_GAME = gql`
+export const CREATE_GAME = gql`
     mutation addGame ($id: ID!) {
         addGame(_id: $id) {
             gameId
