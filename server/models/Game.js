@@ -2,6 +2,10 @@ const { Schema, model } = require('mongoose');
 
 const gameSchema = new Schema(
     {
+        _id: {
+            type: Schema.Types.ObjectId,
+            default: () => new Types.ObjectId()
+        },
         gameId: {
             type: String,
             unique: true,
