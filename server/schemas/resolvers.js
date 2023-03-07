@@ -123,6 +123,12 @@ const resolvers = {
                         },
                         { new: true }
                     );
+                    // update the games array in the user model
+                    const user = await User.findByIdAndUpdate(
+                        { _id: context.user._id },
+                        { $push: { games: updatedGame._id } },
+                        { new: true }
+                    );
                     return updatedGame;
                 }
 
