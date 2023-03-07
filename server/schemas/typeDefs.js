@@ -16,7 +16,6 @@ type User {
 type Game {
     _id: ID
     gameId: String
-    gameName: String
     gameType: String
     gameStatus: String
     gameWinner: String
@@ -47,7 +46,8 @@ type Mutation {
     login(email: String!, password: String!): Auth
     updateWins(_id: ID!): User
     updateLosses(_id: ID!): User
-    
+    addGame( _id:ID! ): Game
+    addPlayerToGame( _id:ID!, gameId: String! ): Game
 }
 
 `;

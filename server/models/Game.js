@@ -4,37 +4,31 @@ const gameSchema = new Schema(
     {
         gameId: {
             type: String,
-            required: true,
             unique: true,
             trim: true
         },
         gameName: {
             type: String,
-            required: true,
             unique: true,
             trim: true
         },
         gameType: {
             type: String,
-            required: true,
             unique: true,
             trim: true
         },
         gameStatus: {
             type: String,
-            required: true,
             unique: true,
             trim: true
         },
         gameWinner: {
             type: String,
-            required: true,
             unique: true,
             trim: true
         },
         gameLoser: {
             type: String,
-            required: true,
             unique: true,
             trim: true
         },
@@ -44,7 +38,6 @@ const gameSchema = new Schema(
         },
         gameMoves: {
             type: String,
-            required: true,
             unique: true,
             trim: true
         },
@@ -58,19 +51,16 @@ const gameSchema = new Schema(
         ],
         userTurn: {
             type: String,
-            required: true,
             unique: true,
             trim: true
         },
         turnMessage: {
             type: String,
-            required: true,
             unique: true,
             trim: true
         },
         boardState: {
             type: String,
-            required: true,
             unique: true,
             trim: true
         }

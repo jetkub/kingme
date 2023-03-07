@@ -22,7 +22,16 @@ const resolvers = {
         user: async (parent, { _id }) => {
             const params = _id ? { _id } : {};
             return User.findOne(params).select('-__v -password').populate('games');
-    }
+    }, 
+        games: async () => {
+            return Game.find()
+                .select('-__v')
+                .populate('players');
+        },
+        game: async (parent, { gameId }) => {
+            const params = gameId ? { gameId } : {};
+            return Game.findOne(params).select('-__v').populate('players');
+        },
 },
     Mutation: {
         
@@ -63,7 +72,7 @@ const resolvers = {
 
         updateLosses: async (parent, { _id }, context) => {
             if (context.user) {
-                const updatedUser = await User.findOneAndUpdate(
+                const updatedUser = await User.findByIdAndUpdate(
                     { _id: context.user._id },
                     { $inc: { losses: 1, totalGames: 1 } },
                     { new: true }
@@ -72,10 +81,49 @@ const resolvers = {
             }
             throw new AuthenticationError('Not logged in');
         },
-}}
+        // add game then add player to game
+        addGame: async (parent, args, context) => {
+            if (context.user) {
+                const game = await Game.create({...args, 
+                    players: context.user._id,
+                    userTurn: context.user.username,
+                    turnMessage: `${context.user.username}'s turn`,
+                    boardState: '000000000',
+                    gameId: Math.random().toString(36).substr(2, 9)
+                 });
+                 console.log(context.user);
+
+                return game;
+            }
+            throw new AuthenticationError('You need to be logged in!');
+        },
+
+            addPlayerToGame: async (parent, { _id, gameId }, context) => {
+                if (context.user) {
+                    const updatedGame = await Game.findOneAndUpdate(
+                        { gameId: gameId },
+                        { $push: { players: context.user._id }, 
+                            userTurn: context.user.username,
+                            turnMessage: `${context.user.username}'s turn`,
+                            boardState: '000000000'
+                        },
+                        { new: true }
+                    );
+                    return updatedGame;
+                }
+
+
+            
+        },
+
+           
+
+       
+    }
 
 
 
+    };
 
 
 module.exports = resolvers;
