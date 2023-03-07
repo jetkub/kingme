@@ -2550,8 +2550,8 @@ export default function Board() {
 
   return (
     <>
+    <div className="board">
       <div className="status">{status}</div>
-
       <div className="board-row">
         <BlackSquare value={squares[0]} onSquareClick={() => handleClick(0)} />
         <RedSquare value={squares[1]} onSquareClick={() => handleClick(1)} />
@@ -2632,8 +2632,8 @@ export default function Board() {
         <RedSquare value={squares[62]} onSquareClick={() => handleClick(62)} />
         <BlackSquare value={squares[63]} onSquareClick={() => handleClick(63)} />
       </div>
-
-      <EndTurnButton onEndTurnClick={handleEndTurnClick} />
+    </div>
+    <EndTurnButton onEndTurnClick={handleEndTurnClick} />
     </>
   );
 }

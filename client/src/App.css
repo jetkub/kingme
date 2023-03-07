@@ -1,26 +1,27 @@
 /* game board styling */
-.board-row {
-width: 99vw;
-margin: -3px 0px;
-border: 2px solid black;
+.board {
+	width: 99vw;
 }
-
-.blackSquare, .redSquare {
+.board-row {
+	width: 100%;
+}
+.blackSquare,
+.redSquare {
 	font-size: clamp(2.5rem, -1rem + 10vw, 10rem);
 	display: inline-block;
 	width: 12.5%;
 	height: 12.5vw;
 	float: left;
 }
-
+/* .redSquare:focus {
+	opacity: .8;
+} */
 .blackSquare {
 	background: black;
 }
-
 .redSquare {
 	background: white;
 }
-
 .status {
 	margin-bottom: 10px;
 }
