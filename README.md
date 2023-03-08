@@ -51,8 +51,8 @@ https://github.
 <br>
 
 # Usage
-Users land on a page to login
-Users can choose to save the generated image to a personal gallery page.  Users can view recently created AI images on the "Feed" page.
+
+
 <br>
 <br>
 
@@ -64,15 +64,17 @@ Users can choose to save the generated image to a personal gallery page.  Users 
 # Challenges
 During the creation of the website the team encountered these challenges to production:
 <ul>
-<li>Socket.io
+<li>Socket.io:  This is a library we looked into to using for WebSocket protocol, but in the end proved to be too much to learn in the timeframe available.
 <li>refactoring HTML to REACT
-<li>game logic
-<li>Conncurrently, vite, graphql??
+<li>Game Logic: Throughout the build, the game logic had to be constantly updated to produce a full-fledged game. 
+<li>Graphql: 
+<li>Deployment: Deploying to Heroku invloved changing some scripts, and adding engines to the package.json. Also a path to the dist file needed updating in the server.js file.
 
 # Roadmap
 This is a responsive, interactive app using many technologies to.. . Future developments could include:
 <ul>
-<li>
+<li>Adding more game features like choosing your checkers' color, and choosing the board colors as well
+
 
 
 <br>
@@ -91,7 +93,6 @@ This is a responsive, interactive app using many technologies to.. . Future deve
 ## Acknowlegements
 Thanks to:
 <ul>
-<li>Instructor Kris Renaldi for his invaluable help during class sessions.
-<li>Class activities, especially week () as a reference for ().
-<li>Tutors and Ask BCS for their help in troubleshooting different issues.
+<li>Instructor Kris Renaldi for his invaluable help during class sessions and office hours.
+<li>Tutors for their help in troubleshooting different issues.
 <li>(Websties we used)
