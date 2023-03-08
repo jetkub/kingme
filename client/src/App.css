@@ -47,8 +47,12 @@
 	font-size: 25px;
 	width: 200px;
 	height: 70px;
-	border-radius: 10px;
 	border: solid black 3px;
+}
+#hotseatBtn:hover,
+#hostBtn:hover,
+#joinBtn:hover {
+	background-color: rgb(220, 220, 220);
 }
 #hotseatContainer {
 	height: 300px;
@@ -101,6 +105,7 @@
 	background-color: black;
 	height: 300px;
 }
+
 #hostContainer,
 #joinContainer {
 	flex: 1;
@@ -112,15 +117,12 @@
 	font-family: "Space Grotesk", normal;
 	font-weight: 700;
 	font-size: 25px;
-	height: 65px;
+	height: 64px;
 	width: 150px;
 	padding: 0px 20px 0px 0px;
 	margin-top: 120px;
 	margin-right: -4px;
+	transform: translate(-5px, 1px);
 	border: none;
-	border-radius: 10px 0px 0px 10px;
 	text-align: center;
-}
-#joinBtn {
-	border-radius: 0px 10px 10px 0px;
 }
