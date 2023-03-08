@@ -28,9 +28,11 @@ export default function Board() {
   // thereAreGhostPieces tracks whether or not there is a ghost piece on the board
   const [thereAreGhostPieces, setThereAreGhostPieces] = useState(false);
 
-
-  // HERE
+  // startTurnSquares tracks what the board looked like at the start of the turn
   const [startTurnSquares, setStartTurnSquares] = useState(squares);
+
+  // aPieceWasJumped tracks whether or not a piece has been jumped this turn
+  const [aPieceWasJumped, setAPieceWasJumped] = useState(false)
 
 
   function BlackSquare({ value, onSquareClick }) {
@@ -126,7 +128,7 @@ export default function Board() {
       }
     }
 
-    // HERE
+    // This function checks if all of the pieces are in the same position as they were at the start of the turn and prevents the endTurnButton from functioning if they are
     function checkIfPositionMatches() {
       let matchingPositions = 0
 
@@ -142,23 +144,26 @@ export default function Board() {
       }
     }
 
-    // TODO function checkForMultiJumps() {}
+    
+    // TODO function checkForMultiJumps() { landedLocation   checkLandedLocation   if (i !== landedPosition) }
+
+    // TODO function displayMovementOptions() {}
 
     // This function determines which spaces the player is allowed to move their piece to based on where they are moving from and if there is an opponent piece to jump
     function movementRules() {
       // Single Black Piece Move Set
       // if (the player picked the piece up from B1 AND it is black's turn AND the piece the player picked up is a single black piece) then
       if ((ghostPosition === 1) && blackIsNext && (selectedPiece === '⚫')) {
-        // if (A2 is empty AND the player clicks to place the piece in A2) then
-        if ((nextSquares[8] === null) && (i === 8)) {
+        // if (A2 is empty AND the player clicks to place the piece in A2 AND no piece has been jumped this turn) then
+        if ((nextSquares[8] === null) && (i === 8) && (!aPieceWasJumped)) {
           // set the selected destination (A2) to a single black piece
           nextSquares[i] = selectedPiece;
           // remove the ghostPiece from the board
           removeGhostPieces();
           // prevent the player from moving another piece this turn
           setDisablePieceClick(true);
-        // else if (C2 is empty AND the player clicks to place the piece in C2) then
-        } else if ((nextSquares[10] === null) && (i === 10)) {
+        // else if (C2 is empty AND the player clicks to place the piece in C2 AND no piece has been jumped this turn) then
+        } else if ((nextSquares[10] === null) && (i === 10) && (!aPieceWasJumped)) {
           // set the selected destination (C2) to a single black piece
           nextSquares[i] = selectedPiece;
           // remove the ghostPiece from the board
@@ -173,6 +178,8 @@ export default function Board() {
           nextSquares[10] = null;
           // remove the ghostPiece from the board
           removeGhostPieces();
+          // record that a piece has been jumped this turn
+          setAPieceWasJumped(true);
         // else if (the player clicks to return their piece to where they picked it up from (B1)) then
         } else if (i === 1) {
           // set the original square (B1) back to a single black piece
@@ -186,11 +193,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 3) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[10] === null) && (i === 10)) {
+        if ((nextSquares[10] === null) && (i === 10) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[12] === null) && (i === 12)) {
+        } else if ((nextSquares[12] === null) && (i === 12) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -198,10 +205,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[10] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[21] === null) && ((nextSquares[12] === '🔴') || (nextSquares[12] === '❤️')) && (i === 21)) {
           nextSquares[i] = selectedPiece;
           nextSquares[12] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 3) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -210,11 +219,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 5) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[12] === null) && (i === 12)) {
+        if ((nextSquares[12] === null) && (i === 12) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[14] === null) && (i === 14)) {
+        } else if ((nextSquares[14] === null) && (i === 14) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -222,10 +231,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[12] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[23] === null) && ((nextSquares[14] === '🔴') || (nextSquares[14] === '❤️')) && (i === 23)) {
           nextSquares[i] = selectedPiece;
           nextSquares[14] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 5) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -234,7 +245,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 7) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[14] === null) && (i === 14)) {
+        if ((nextSquares[14] === null) && (i === 14) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -242,6 +253,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[14] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 7) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -250,7 +262,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 8) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[17] === null) && (i === 17)) {
+        if ((nextSquares[17] === null) && (i === 17) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -258,6 +270,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[17] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 8) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -266,11 +279,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 10) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[17] === null) && (i === 17)) {
+        if ((nextSquares[17] === null) && (i === 17) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[19] === null) && (i === 19)) {
+        } else if ((nextSquares[19] === null) && (i === 19) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -278,10 +291,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[17] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[28] === null) && ((nextSquares[19] === '🔴') || (nextSquares[19] === '❤️')) && (i === 28)) {
           nextSquares[i] = selectedPiece;
           nextSquares[19] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 10) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -290,11 +305,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 12) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[19] === null) && (i === 19)) {
+        if ((nextSquares[19] === null) && (i === 19) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[21] === null) && (i === 21)) {
+        } else if ((nextSquares[21] === null) && (i === 21) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -302,9 +317,11 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[19] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[30] === null) && ((nextSquares[21] === '🔴') || (nextSquares[21] === '❤️')) && (i === 30)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 12) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -313,11 +330,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 14) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[21] === null) && (i === 21)) {
+        if ((nextSquares[21] === null) && (i === 21) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[23] === null) && (i === 23)) {
+        } else if ((nextSquares[23] === null) && (i === 23) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -325,6 +342,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[21] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 14) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -333,11 +351,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 17) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[24] === null) && (i === 24)) {
+        if ((nextSquares[24] === null) && (i === 24) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[26] === null) && (i === 26)) {
+        } else if ((nextSquares[26] === null) && (i === 26) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -345,6 +363,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[26] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 17) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);          
@@ -353,11 +372,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 19) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[26] === null) && (i === 26)) {
+        if ((nextSquares[26] === null) && (i === 26) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[28] === null) && (i === 28)) {
+        } else if ((nextSquares[28] === null) && (i === 28) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -365,10 +384,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[26] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[37] === null) && ((nextSquares[28] === '🔴') || (nextSquares[28] === '❤️')) && (i === 37)) {
           nextSquares[i] = selectedPiece;
           nextSquares[28] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 19) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -377,11 +398,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 21) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[28] === null) && (i === 28)) {
+        if ((nextSquares[28] === null) && (i === 28) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[30] === null) && (i === 30)) {
+        } else if ((nextSquares[30] === null) && (i === 30) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -389,10 +410,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[28] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[39] === null) && ((nextSquares[30] === '🔴') || (nextSquares[30] === '❤️')) && (i === 39)) {
           nextSquares[i] = selectedPiece;
           nextSquares[30] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 21) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -401,7 +424,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 23) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[30] === null) && (i === 30)) {
+        if ((nextSquares[30] === null) && (i === 30) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -409,6 +432,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[30] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 23) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -417,7 +441,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 24) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[33] === null) && (i === 33)) {
+        if ((nextSquares[33] === null) && (i === 33) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -425,6 +449,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[33] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 24) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -433,11 +458,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 26) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[33] === null) && (i === 33)) {
+        if ((nextSquares[33] === null) && (i === 33) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[35] === null) && (i === 35)) {
+        } else if ((nextSquares[35] === null) && (i === 35) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -445,10 +470,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[33] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[44] === null) && ((nextSquares[35] === '🔴') || (nextSquares[35] === '❤️')) && (i === 44)) {
           nextSquares[i] = selectedPiece;
           nextSquares[35] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 26) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -457,11 +484,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 28) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[35] === null) && (i === 35)) {
+        if ((nextSquares[35] === null) && (i === 35) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[37] === null) && (i === 37)) {
+        } else if ((nextSquares[37] === null) && (i === 37) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -469,10 +496,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[35] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[46] === null) && ((nextSquares[37] === '🔴') || (nextSquares[37] === '❤️')) && (i === 46)) {
           nextSquares[i] = selectedPiece;
           nextSquares[37] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 28) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -481,11 +510,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 30) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[37] === null) && (i === 37)) {
+        if ((nextSquares[37] === null) && (i === 37) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[39] === null) && (i === 39)) {
+        } else if ((nextSquares[39] === null) && (i === 39) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -493,6 +522,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[37] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 30) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -501,11 +531,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 33) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[40] === null) && (i === 40)) {
+        if ((nextSquares[40] === null) && (i === 40) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[42] === null) && (i === 42)) {
+        } else if ((nextSquares[42] === null) && (i === 42) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -513,6 +543,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[42] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 33) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -521,11 +552,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 35) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[42] === null) && (i === 42)) {
+        if ((nextSquares[42] === null) && (i === 42) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[44] === null) && (i === 44)) {
+        } else if ((nextSquares[44] === null) && (i === 44) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -533,10 +564,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[42] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[53] === null) && ((nextSquares[44] === '🔴') || (nextSquares[44] === '❤️')) && (i === 53)) {
           nextSquares[i] = selectedPiece;
           nextSquares[44] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 35) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -545,11 +578,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 37) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[44] === null) && (i === 44)) {
+        if ((nextSquares[44] === null) && (i === 44) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[46] === null) && (i === 46)) {
+        } else if ((nextSquares[46] === null) && (i === 46) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -557,10 +590,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[44] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[55] === null) && ((nextSquares[46] === '🔴') || (nextSquares[46] === '❤️')) && (i === 55)) {
           nextSquares[i] = selectedPiece;
           nextSquares[46] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 37) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -569,7 +604,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 39) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[46] === null) && (i === 46)) {
+        if ((nextSquares[46] === null) && (i === 46) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -577,6 +612,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[46] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 39) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -585,7 +621,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 40) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[49] === null) && (i === 49)) {
+        if ((nextSquares[49] === null) && (i === 49) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -593,6 +629,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[49] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 40) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -601,11 +638,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 42) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[49] === null) && (i === 49)) {
+        if ((nextSquares[49] === null) && (i === 49) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[51] === null) && (i === 51)) {
+        } else if ((nextSquares[51] === null) && (i === 51) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -613,10 +650,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[49] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[60] === null) && ((nextSquares[51] === '🔴') || (nextSquares[51] === '❤️')) && (i === 60)) {
           nextSquares[i] = selectedPiece;
           nextSquares[51] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 42) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -625,11 +664,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 44) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[51] === null) && (i === 51)) {
+        if ((nextSquares[51] === null) && (i === 51) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[53] === null) && (i === 53)) {
+        } else if ((nextSquares[53] === null) && (i === 53) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -637,10 +676,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[51] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[62] === null) && ((nextSquares[53] === '🔴') || (nextSquares[53] === '❤️')) && (i === 62)) {
           nextSquares[i] = selectedPiece;
           nextSquares[53] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 44) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -649,11 +690,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 46) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[53] === null) && (i === 53)) {
+        if ((nextSquares[53] === null) && (i === 53) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[55] === null) && (i === 55)) {
+        } else if ((nextSquares[55] === null) && (i === 55) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -661,6 +702,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[53] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 46) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -669,11 +711,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 49) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[56] === null) && (i === 56)) {
+        if ((nextSquares[56] === null) && (i === 56) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[58] === null) && (i === 58)) {
+        } else if ((nextSquares[58] === null) && (i === 58) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -685,11 +727,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 51) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[58] === null) && (i === 58)) {
+        if ((nextSquares[58] === null) && (i === 58) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[60] === null) && (i === 60)) {
+        } else if ((nextSquares[60] === null) && (i === 60) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -701,11 +743,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 53) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[60] === null) && (i === 60)) {
+        if ((nextSquares[60] === null) && (i === 60) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[62] === null) && (i === 62)) {
+        } else if ((nextSquares[62] === null) && (i === 62) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -717,7 +759,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 55) && blackIsNext && (selectedPiece === '⚫')) {
-        if ((nextSquares[62] === null) && (i === 62)) {
+        if ((nextSquares[62] === null) && (i === 62) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -731,11 +773,11 @@ export default function Board() {
       
       // Kinged Black Piece Move Set
       if ((ghostPosition === 1) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[8] === null) && (i === 8)) {
+        if ((nextSquares[8] === null) && (i === 8) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[10] === null) && (i === 10)) {
+        } else if ((nextSquares[10] === null) && (i === 10) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -743,6 +785,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[10] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 1) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -751,11 +794,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 3) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[10] === null) && (i === 10)) {
+        if ((nextSquares[10] === null) && (i === 10) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[12] === null) && (i === 12)) {
+        } else if ((nextSquares[12] === null) && (i === 12) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -763,10 +806,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[10] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[21] === null) && ((nextSquares[12] === '🔴') || (nextSquares[12] === '❤️')) && (i === 21)) {
             nextSquares[i] = selectedPiece;
             nextSquares[12] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 3) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -775,11 +820,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 5) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[12] === null) && (i === 12)) {
+        if ((nextSquares[12] === null) && (i === 12) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[14] === null) && (i === 14)) {
+        } else if ((nextSquares[14] === null) && (i === 14) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -787,10 +832,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[12] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[23] === null) && ((nextSquares[14] === '🔴') || (nextSquares[14] === '❤️')) && (i === 23)) {
             nextSquares[i] = selectedPiece;
             nextSquares[14] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 5) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -799,7 +846,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 7) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[14] === null) && (i === 14)) {
+        if ((nextSquares[14] === null) && (i === 14) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -807,6 +854,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[14] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 7) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -815,11 +863,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 8) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[1] === null) && (i === 1)) {
+        if ((nextSquares[1] === null) && (i === 1) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[17] === null) && (i === 17)) {
+        } else if ((nextSquares[17] === null) && (i === 17) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -827,6 +875,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[17] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 8) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -835,19 +884,19 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 10) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[1] === null) && (i === 1)) {
+        if ((nextSquares[1] === null) && (i === 1) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[3] === null) && (i === 3)) {
+        } else if ((nextSquares[3] === null) && (i === 3) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[17] === null) && (i === 17)) {
+        } else if ((nextSquares[17] === null) && (i === 17) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[19] === null) && (i === 19)) {
+        } else if ((nextSquares[19] === null) && (i === 19) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -855,10 +904,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[17] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[28] === null) && ((nextSquares[19] === '🔴') || (nextSquares[19] === '❤️')) && (i === 28)) {
             nextSquares[i] = selectedPiece;
             nextSquares[19] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 10) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -867,19 +918,19 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 12) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[3] === null) && (i === 3)) {
+        if ((nextSquares[3] === null) && (i === 3) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[5] === null) && (i === 5)) {
+        } else if ((nextSquares[5] === null) && (i === 5) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[19] === null) && (i === 19)) {
+        } else if ((nextSquares[19] === null) && (i === 19) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[21] === null) && (i === 21)) {
+        } else if ((nextSquares[21] === null) && (i === 21) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -887,10 +938,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[19] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[30] === null) && ((nextSquares[21] === '🔴') || (nextSquares[21] === '❤️')) && (i === 30)) {
             nextSquares[i] = selectedPiece;
             nextSquares[21] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 12) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -899,19 +952,19 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 14) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[5] === null) && (i === 5)) {
+        if ((nextSquares[5] === null) && (i === 5) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[7] === null) && (i === 7)) {
+        } else if ((nextSquares[7] === null) && (i === 7) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[21] === null) && (i === 21)) {
+        } else if ((nextSquares[21] === null) && (i === 21) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[23] === null) && (i === 23)) {
+        } else if ((nextSquares[23] === null) && (i === 23) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -919,6 +972,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[21] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 14) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -927,11 +981,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 17) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[8] === null) && (i === 8)) {
+        if ((nextSquares[8] === null) && (i === 8) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[10] === null) && (i === 10)) {
+        } else if ((nextSquares[10] === null) && (i === 10) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -939,11 +993,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[10] = null;
             removeGhostPieces();
-        } else if ((nextSquares[24] === null) && (i === 24)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[24] === null) && (i === 24) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[26] === null) && (i === 26)) {
+        } else if ((nextSquares[26] === null) && (i === 26) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -951,6 +1006,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[26] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 17) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -959,11 +1015,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 19) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[10] === null) && (i === 10)) {
+        if ((nextSquares[10] === null) && (i === 10) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[12] === null) && (i === 12)) {
+        } else if ((nextSquares[12] === null) && (i === 12) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -971,15 +1027,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[10] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[5] === null) && ((nextSquares[12] === '🔴') || (nextSquares[12] === '❤️')) && (i === 5)) {
             nextSquares[i] = selectedPiece;
             nextSquares[12] = null;
             removeGhostPieces();
-        } else if ((nextSquares[26] === null) && (i === 26)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[26] === null) && (i === 26) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[28] === null) && (i === 28)) {
+        } else if ((nextSquares[28] === null) && (i === 28) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -987,10 +1045,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[26] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[37] === null) && ((nextSquares[28] === '🔴') || (nextSquares[28] === '❤️')) && (i === 37)) {
             nextSquares[i] = selectedPiece;
             nextSquares[28] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 19) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -999,11 +1059,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 21) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[12] === null) && (i === 12)) {
+        if ((nextSquares[12] === null) && (i === 12) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[14] === null) && (i === 14)) {
+        } else if ((nextSquares[14] === null) && (i === 14) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1011,15 +1071,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[12] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[7] === null) && ((nextSquares[14] === '🔴') || (nextSquares[14] === '❤️')) && (i === 7)) {
             nextSquares[i] = selectedPiece;
             nextSquares[14] = null;
             removeGhostPieces();
-        } else if ((nextSquares[28] === null) && (i === 28)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[28] === null) && (i === 28) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[30] === null) && (i === 30)) {
+        } else if ((nextSquares[30] === null) && (i === 30) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1027,10 +1089,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[28] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[39] === null) && ((nextSquares[30] === '🔴') || (nextSquares[30] === '❤️')) && (i === 39)) {
             nextSquares[i] = selectedPiece;
             nextSquares[30] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 21) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1039,7 +1103,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 23) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[14] === null) && (i === 14)) {
+        if ((nextSquares[14] === null) && (i === 14) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1047,7 +1111,8 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[14] = null;
             removeGhostPieces();
-        } else if ((nextSquares[30] === null) && (i === 30)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[30] === null) && (i === 30) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1055,6 +1120,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[30] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 23) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1063,7 +1129,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 24) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[17] === null) && (i === 17)) {
+        if ((nextSquares[17] === null) && (i === 17) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1071,7 +1137,8 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[17] = null;
             removeGhostPieces();
-        } else if ((nextSquares[33] === null) && (i === 33)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[33] === null) && (i === 33) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1079,6 +1146,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[33] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 24) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1087,11 +1155,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 26) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[17] === null) && (i === 17)) {
+        if ((nextSquares[17] === null) && (i === 17) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[19] === null) && (i === 19)) {
+        } else if ((nextSquares[19] === null) && (i === 19) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1099,15 +1167,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[17] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[12] === null) && ((nextSquares[19] === '🔴') || (nextSquares[19] === '❤️')) && (i === 12)) {
             nextSquares[i] = selectedPiece;
             nextSquares[19] = null;
             removeGhostPieces();
-        } else if ((nextSquares[33] === null) && (i === 33)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[33] === null) && (i === 33) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[35] === null) && (i === 35)) {
+        } else if ((nextSquares[35] === null) && (i === 35) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1115,10 +1185,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[33] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[44] === null) && ((nextSquares[35] === '🔴') || (nextSquares[35] === '❤️')) && (i === 44)) {
             nextSquares[i] = selectedPiece;
             nextSquares[35] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 26) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1127,11 +1199,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 28) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[19] === null) && (i === 19)) {
+        if ((nextSquares[19] === null) && (i === 19) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[21] === null) && (i === 21)) {
+        } else if ((nextSquares[21] === null) && (i === 21) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1139,15 +1211,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[19] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[14] === null) && ((nextSquares[21] === '🔴') || (nextSquares[21] === '❤️')) && (i === 14)) {
             nextSquares[i] = selectedPiece;
             nextSquares[21] = null;
             removeGhostPieces();
-        } else if ((nextSquares[35] === null) && (i === 35)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[35] === null) && (i === 35) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[37] === null) && (i === 37)) {
+        } else if ((nextSquares[37] === null) && (i === 37) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1155,10 +1229,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[35] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[46] === null) && ((nextSquares[37] === '🔴') || (nextSquares[37] === '❤️')) && (i === 46)) {
             nextSquares[i] = selectedPiece;
             nextSquares[37] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 28) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1167,11 +1243,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 30) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[21] === null) && (i === 21)) {
+        if ((nextSquares[21] === null) && (i === 21) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[23] === null) && (i === 23)) {
+        } else if ((nextSquares[23] === null) && (i === 23) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1179,11 +1255,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[21] = null;
             removeGhostPieces();
-        } else if ((nextSquares[37] === null) && (i === 37)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[37] === null) && (i === 37) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[39] === null) && (i === 39)) {
+        } else if ((nextSquares[39] === null) && (i === 39) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1191,6 +1268,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[37] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 30) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1199,11 +1277,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 33) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[24] === null) && (i === 24)) {
+        if ((nextSquares[24] === null) && (i === 24) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[26] === null) && (i === 26)) {
+        } else if ((nextSquares[26] === null) && (i === 26) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1211,11 +1289,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[26] = null;
             removeGhostPieces();
-        } else if ((nextSquares[40] === null) && (i === 40)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[40] === null) && (i === 40) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[42] === null) && (i === 42)) {
+        } else if ((nextSquares[42] === null) && (i === 42) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1223,6 +1302,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[42] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 33) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1231,11 +1311,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 35) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[26] === null) && (i === 26)) {
+        if ((nextSquares[26] === null) && (i === 26) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[28] === null) && (i === 28)) {
+        } else if ((nextSquares[28] === null) && (i === 28) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1243,15 +1323,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[26] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[21] === null) && ((nextSquares[28] === '🔴') || (nextSquares[28] === '❤️')) && (i === 21)) {
             nextSquares[i] = selectedPiece;
             nextSquares[28] = null;
             removeGhostPieces();
-        } else if ((nextSquares[42] === null) && (i === 42)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[42] === null) && (i === 42) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[44] === null) && (i === 44)) {
+        } else if ((nextSquares[44] === null) && (i === 44) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1259,10 +1341,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[42] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[53] === null) && ((nextSquares[44] === '🔴') || (nextSquares[44] === '❤️')) && (i === 53)) {
             nextSquares[i] = selectedPiece;
             nextSquares[44] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 35) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1271,11 +1355,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 37) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[28] === null) && (i === 28)) {
+        if ((nextSquares[28] === null) && (i === 28) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[30] === null) && (i === 30)) {
+        } else if ((nextSquares[30] === null) && (i === 30) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1283,15 +1367,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[28] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[23] === null) && ((nextSquares[30] === '🔴') || (nextSquares[30] === '❤️')) && (i === 23)) {
             nextSquares[i] = selectedPiece;
             nextSquares[30] = null;
             removeGhostPieces();
-        } else if ((nextSquares[44] === null) && (i === 44)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[44] === null) && (i === 44) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[46] === null) && (i === 46)) {
+        } else if ((nextSquares[46] === null) && (i === 46) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1299,10 +1385,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[44] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[55] === null) && ((nextSquares[46] === '🔴') || (nextSquares[46] === '❤️')) && (i === 55)) {
             nextSquares[i] = selectedPiece;
             nextSquares[46] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 37) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1311,7 +1399,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 39) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[30] === null) && (i === 30)) {
+        if ((nextSquares[30] === null) && (i === 30) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1319,7 +1407,8 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[30] = null;
             removeGhostPieces();
-        } else if ((nextSquares[46] === null) && (i === 46)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[46] === null) && (i === 46) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1327,6 +1416,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[46] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 39) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1335,7 +1425,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 40) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[33] === null) && (i === 33)) {
+        if ((nextSquares[33] === null) && (i === 33) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1343,7 +1433,8 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[33] = null;
             removeGhostPieces();
-        } else if ((nextSquares[49] === null) && (i === 49)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[49] === null) && (i === 49) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1351,6 +1442,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[49] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 40) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1359,11 +1451,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 42) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[33] === null) && (i === 33)) {
+        if ((nextSquares[33] === null) && (i === 33) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[35] === null) && (i === 35)) {
+        } else if ((nextSquares[35] === null) && (i === 35) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1371,15 +1463,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[33] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[28] === null) && ((nextSquares[35] === '🔴') || (nextSquares[35] === '❤️')) && (i === 28)) {
             nextSquares[i] = selectedPiece;
             nextSquares[35] = null;
             removeGhostPieces();
-        } else if ((nextSquares[49] === null) && (i === 49)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[49] === null) && (i === 49) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[51] === null) && (i === 51)) {
+        } else if ((nextSquares[51] === null) && (i === 51) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1387,10 +1481,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[49] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[60] === null) && ((nextSquares[51] === '🔴') || (nextSquares[51] === '❤️')) && (i === 60)) {
             nextSquares[i] = selectedPiece;
             nextSquares[51] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 42) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1399,11 +1495,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 44) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[35] === null) && (i === 35)) {
+        if ((nextSquares[35] === null) && (i === 35) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[37] === null) && (i === 37)) {
+        } else if ((nextSquares[37] === null) && (i === 37) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1411,15 +1507,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[35] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[30] === null) && ((nextSquares[37] === '🔴') || (nextSquares[37] === '❤️')) && (i === 30)) {
             nextSquares[i] = selectedPiece;
             nextSquares[37] = null;
             removeGhostPieces();
-        } else if ((nextSquares[51] === null) && (i === 51)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[51] === null) && (i === 51) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[53] === null) && (i === 53)) {
+        } else if ((nextSquares[53] === null) && (i === 53) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1427,10 +1525,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[51] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[62] === null) && ((nextSquares[53] === '🔴') || (nextSquares[53] === '❤️')) && (i === 62)) {
             nextSquares[i] = selectedPiece;
             nextSquares[53] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 44) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1439,11 +1539,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 46) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[37] === null) && (i === 37)) {
+        if ((nextSquares[37] === null) && (i === 37) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[39] === null) && (i === 39)) {
+        } else if ((nextSquares[39] === null) && (i === 39) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1451,11 +1551,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[37] = null;
             removeGhostPieces();
-        } else if ((nextSquares[53] === null) && (i === 53)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[53] === null) && (i === 53) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[55] === null) && (i === 55)) {
+        } else if ((nextSquares[55] === null) && (i === 55) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1463,6 +1564,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[53] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 46) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1471,11 +1573,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 49) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[40] === null) && (i === 40)) {
+        if ((nextSquares[40] === null) && (i === 40) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[42] === null) && (i === 42)) {
+        } else if ((nextSquares[42] === null) && (i === 42) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1483,11 +1585,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[42] = null;
             removeGhostPieces();
-        } else if ((nextSquares[56] === null) && (i === 56)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[56] === null) && (i === 56) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[58] === null) && (i === 58)) {
+        } else if ((nextSquares[58] === null) && (i === 58) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1499,11 +1602,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 51) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[42] === null) && (i === 42)) {
+        if ((nextSquares[42] === null) && (i === 42) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[44] === null) && (i === 44)) {
+        } else if ((nextSquares[44] === null) && (i === 44) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1511,15 +1614,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[42] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[37] === null) && ((nextSquares[44] === '🔴') || (nextSquares[44] === '❤️')) && (i === 37)) {
             nextSquares[i] = selectedPiece;
             nextSquares[44] = null;
             removeGhostPieces();
-        } else if ((nextSquares[58] === null) && (i === 58)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[58] === null) && (i === 58) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[60] === null) && (i === 60)) {
+        } else if ((nextSquares[60] === null) && (i === 60) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1531,11 +1636,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 53) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[44] === null) && (i === 44)) {
+        if ((nextSquares[44] === null) && (i === 44) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[46] === null) && (i === 46)) {
+        } else if ((nextSquares[46] === null) && (i === 46) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1543,15 +1648,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[44] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[39] === null) && ((nextSquares[46] === '🔴') || (nextSquares[46] === '❤️')) && (i === 39)) {
             nextSquares[i] = selectedPiece;
             nextSquares[46] = null;
             removeGhostPieces();
-        } else if ((nextSquares[60] === null) && (i === 60)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[60] === null) && (i === 60) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[62] === null) && (i === 62)) {
+        } else if ((nextSquares[62] === null) && (i === 62) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1563,7 +1670,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 55) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[46] === null) && (i === 46)) {
+        if ((nextSquares[46] === null) && (i === 46) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1571,7 +1678,8 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[46] = null;
             removeGhostPieces();
-        } else if ((nextSquares[62] === null) && (i === 62)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[62] === null) && (i === 62) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1583,7 +1691,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 56) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[49] === null) && (i === 49)) {
+        if ((nextSquares[49] === null) && (i === 49) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1591,6 +1699,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[49] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 56) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1599,11 +1708,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 58) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[49] === null) && (i === 49)) {
+        if ((nextSquares[49] === null) && (i === 49) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[51] === null) && (i === 51)) {
+        } else if ((nextSquares[51] === null) && (i === 51) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1611,10 +1720,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[49] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[44] === null) && ((nextSquares[51] === '🔴') || (nextSquares[51] === '❤️')) && (i === 44)) {
             nextSquares[i] = selectedPiece;
             nextSquares[51] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 58) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1623,11 +1734,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 60) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[51] === null) && (i === 51)) {
+        if ((nextSquares[51] === null) && (i === 51) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-          } else if ((nextSquares[53] === null) && (i === 53)) {
+          } else if ((nextSquares[53] === null) && (i === 53) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1635,10 +1746,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[51] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
           } else if ((nextSquares[46] === null) && ((nextSquares[53] === '🔴') || (nextSquares[53] === '❤️')) && (i === 46)) {
             nextSquares[i] = selectedPiece;
             nextSquares[53] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
           } else if (i === 60) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1647,11 +1760,11 @@ export default function Board() {
           }
       }
       if ((ghostPosition === 62) && blackIsNext && (selectedPiece === '🖤')) {
-        if ((nextSquares[53] === null) && (i === 53)) {
+        if ((nextSquares[53] === null) && (i === 53) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-          } else if ((nextSquares[55] === null) && (i === 55)) {
+          } else if ((nextSquares[55] === null) && (i === 55) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -1659,6 +1772,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[53] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
           } else if (i === 62) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1669,7 +1783,7 @@ export default function Board() {
 
       // Single Red Piece Move Set
       if ((ghostPosition === 8) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[1] === null) && (i === 1)) {
+        if ((nextSquares[1] === null) && (i === 1) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -1681,11 +1795,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 10) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[1] === null) && (i === 1)) {
+        if ((nextSquares[1] === null) && (i === 1) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[3] === null) && (i === 3)) {
+        } else if ((nextSquares[3] === null) && (i === 3) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -1697,11 +1811,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 12) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[3] === null) && (i === 3)) {
+        if ((nextSquares[3] === null) && (i === 3) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[5] === null) && (i === 5)) {
+        } else if ((nextSquares[5] === null) && (i === 5) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -1713,11 +1827,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 14) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[5] === null) && (i === 5)) {
+        if ((nextSquares[5] === null) && (i === 5) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[7] === null) && (i === 7)) {
+        } else if ((nextSquares[7] === null) && (i === 7) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -1729,11 +1843,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 17) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[8] === null) && (i === 8)) {
+        if ((nextSquares[8] === null) && (i === 8) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[10] === null) && (i === 10)) {
+        } else if ((nextSquares[10] === null) && (i === 10) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -1741,6 +1855,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[10] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 17) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1749,11 +1864,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 19) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[10] === null) && (i === 10)) {
+        if ((nextSquares[10] === null) && (i === 10) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[12] === null) && (i === 12)) {
+        } else if ((nextSquares[12] === null) && (i === 12) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -1761,10 +1876,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[10] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[5] === null) && ((nextSquares[12] === '⚫') || (nextSquares[12] === '🖤')) && (i === 5)) {
           nextSquares[i] = selectedPiece;
           nextSquares[12] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 19) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1773,11 +1890,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 21) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[12] === null) && (i === 12)) {
+        if ((nextSquares[12] === null) && (i === 12) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[14] === null) && (i === 14)) {
+        } else if ((nextSquares[14] === null) && (i === 14) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -1785,10 +1902,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[12] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[7] === null) && ((nextSquares[14] === '⚫') || (nextSquares[14] === '🖤')) && (i === 7)) {
           nextSquares[i] = selectedPiece;
           nextSquares[14] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 21) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1797,14 +1916,15 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 23) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[14] === null) && (i === 14)) {
+        if ((nextSquares[14] === null) && (i === 14) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[5] === null) && ((nextSquares[14] === '⚫') || (nextSquares[14] === '🖤')) && (i === 5)) {
+        } else if ((nextSquares[5] === null) && ((nextSquares[14] === '⚫') || (nextSquares[14] === '🖤')) && (i === 5) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           nextSquares[14] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 23) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1813,7 +1933,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 24) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[17] === null) && (i === 17)) {
+        if ((nextSquares[17] === null) && (i === 17) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -1821,6 +1941,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[17] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 24) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1829,11 +1950,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 26) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[17] === null) && (i === 17)) {
+        if ((nextSquares[17] === null) && (i === 17) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[19] === null) && (i === 19)) {
+        } else if ((nextSquares[19] === null) && (i === 19) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -1841,10 +1962,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[17] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[12] === null) && ((nextSquares[19] === '⚫') || (nextSquares[19] === '🖤')) && (i === 12)) {
           nextSquares[i] = selectedPiece;
           nextSquares[19] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 26) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1853,11 +1976,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 28) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[19] === null) && (i === 19)) {
+        if ((nextSquares[19] === null) && (i === 19) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[21] === null) && (i === 21)) {
+        } else if ((nextSquares[21] === null) && (i === 21) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -1865,10 +1988,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[19] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[14] === null) && ((nextSquares[21] === '⚫') || (nextSquares[21] === '🖤')) && (i === 14)) {
           nextSquares[i] = selectedPiece;
           nextSquares[21] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 28) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1877,11 +2002,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 30) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[21] === null) && (i === 21)) {
+        if ((nextSquares[21] === null) && (i === 21) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[23] === null) && (i === 23)) {
+        } else if ((nextSquares[23] === null) && (i === 23) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -1889,6 +2014,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[21] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 30) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1897,11 +2023,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 33) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[24] === null) && (i === 24)) {
+        if ((nextSquares[24] === null) && (i === 24) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[26] === null) && (i === 26)) {
+        } else if ((nextSquares[26] === null) && (i === 26) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -1909,6 +2035,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[26] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 33) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1917,11 +2044,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 35) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[26] === null) && (i === 26)) {
+        if ((nextSquares[26] === null) && (i === 26) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[28] === null) && (i === 28)) {
+        } else if ((nextSquares[28] === null) && (i === 28) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -1929,10 +2056,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[26] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[21] === null) && ((nextSquares[28] === '⚫') || (nextSquares[28] === '🖤')) && (i === 21)) {
           nextSquares[i] = selectedPiece;
           nextSquares[28] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 35) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1941,11 +2070,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 37) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[28] === null) && (i === 28)) {
+        if ((nextSquares[28] === null) && (i === 28) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[30] === null) && (i === 30)) {
+        } else if ((nextSquares[30] === null) && (i === 30) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -1953,10 +2082,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[28] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[23] === null) && ((nextSquares[30] === '⚫') || (nextSquares[30] === '🖤')) && (i === 23)) {
           nextSquares[i] = selectedPiece;
           nextSquares[30] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 37) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1965,7 +2096,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 39) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[30] === null) && (i === 30)) {
+        if ((nextSquares[30] === null) && (i === 30) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -1973,6 +2104,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[30] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 39) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1981,7 +2113,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 40) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[33] === null) && (i === 33)) {
+        if ((nextSquares[33] === null) && (i === 33) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -1989,6 +2121,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[33] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 40) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1997,11 +2130,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 42) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[33] === null) && (i === 33)) {
+        if ((nextSquares[33] === null) && (i === 33) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[35] === null) && (i === 35)) {
+        } else if ((nextSquares[35] === null) && (i === 35) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -2009,10 +2142,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[33] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[28] === null) && ((nextSquares[35] === '⚫') || (nextSquares[35] === '🖤')) && (i === 28)) {
           nextSquares[i] = selectedPiece;
           nextSquares[35] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 42) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2021,11 +2156,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 44) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[35] === null) && (i === 35)) {
+        if ((nextSquares[35] === null) && (i === 35) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[37] === null) && (i === 37)) {
+        } else if ((nextSquares[37] === null) && (i === 37) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -2033,10 +2168,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[35] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[30] === null) && ((nextSquares[37] === '⚫') || (nextSquares[37] === '🖤')) && (i === 30)) {
           nextSquares[i] = selectedPiece;
           nextSquares[37] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 44) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2045,11 +2182,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 46) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[37] === null) && (i === 37)) {
+        if ((nextSquares[37] === null) && (i === 37) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[39] === null) && (i === 39)) {
+        } else if ((nextSquares[39] === null) && (i === 39) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -2057,6 +2194,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[37] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 46) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2065,11 +2203,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 49) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[40] === null) && (i === 40)) {
+        if ((nextSquares[40] === null) && (i === 40) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[42] === null) && (i === 42)) {
+        } else if ((nextSquares[42] === null) && (i === 42) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -2077,6 +2215,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[42] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 49) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2085,11 +2224,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 51) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[42] === null) && (i === 42)) {
+        if ((nextSquares[42] === null) && (i === 42) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[44] === null) && (i === 44)) {
+        } else if ((nextSquares[44] === null) && (i === 44) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -2097,10 +2236,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[42] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[37] === null) && ((nextSquares[44] === '⚫') || (nextSquares[44] === '🖤')) && (i === 37)) {
           nextSquares[i] = selectedPiece;
           nextSquares[44] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 51) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2109,11 +2250,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 53) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[44] === null) && (i === 44)) {
+        if ((nextSquares[44] === null) && (i === 44) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[46] === null) && (i === 46)) {
+        } else if ((nextSquares[46] === null) && (i === 46) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -2121,10 +2262,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[44] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[39] === null) && ((nextSquares[46] === '⚫') || (nextSquares[46] === '🖤')) && (i === 39)) {
           nextSquares[i] = selectedPiece;
           nextSquares[46] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 53) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2133,7 +2276,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 55) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[46] === null) && (i === 46)) {
+        if ((nextSquares[46] === null) && (i === 46) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -2141,6 +2284,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[46] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 55) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2149,7 +2293,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 56) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[49] === null) && (i === 49)) {
+        if ((nextSquares[49] === null) && (i === 49) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -2157,6 +2301,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[49] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 56) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2165,11 +2310,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 58) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[49] === null) && (i === 49)) {
+        if ((nextSquares[49] === null) && (i === 49) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[51] === null) && (i === 51)) {
+        } else if ((nextSquares[51] === null) && (i === 51) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -2177,10 +2322,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[49] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[44] === null) && ((nextSquares[51] === '⚫') || (nextSquares[51] === '🖤')) && (i === 44)) {
           nextSquares[i] = selectedPiece;
           nextSquares[51] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 58) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2189,11 +2336,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 60) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[51] === null) && (i === 51)) {
+        if ((nextSquares[51] === null) && (i === 51) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[53] === null) && (i === 53)) {
+        } else if ((nextSquares[53] === null) && (i === 53) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -2201,10 +2348,12 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[51] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if ((nextSquares[46] === null) && ((nextSquares[53] === '⚫') || (nextSquares[53] === '🖤')) && (i === 46)) {
           nextSquares[i] = selectedPiece;
           nextSquares[53] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 60) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2213,11 +2362,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 62) && !blackIsNext && (selectedPiece === '🔴')) {
-        if ((nextSquares[53] === null) && (i === 53)) {
+        if ((nextSquares[53] === null) && (i === 53) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
-        } else if ((nextSquares[55] === null) && (i === 55)) {
+        } else if ((nextSquares[55] === null) && (i === 55) && (!aPieceWasJumped)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setDisablePieceClick(true);
@@ -2225,6 +2374,7 @@ export default function Board() {
           nextSquares[i] = selectedPiece;
           nextSquares[53] = null;
           removeGhostPieces();
+          setAPieceWasJumped(true);
         } else if (i === 62) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2235,11 +2385,11 @@ export default function Board() {
 
       // Kinged Red Piece Move Set
       if ((ghostPosition === 1) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[8] === null) && (i === 8)) {
+        if ((nextSquares[8] === null) && (i === 8) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[10] === null) && (i === 10)) {
+        } else if ((nextSquares[10] === null) && (i === 10) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2247,6 +2397,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[10] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 1) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2255,11 +2406,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 3) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[10] === null) && (i === 10)) {
+        if ((nextSquares[10] === null) && (i === 10) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[12] === null) && (i === 12)) {
+        } else if ((nextSquares[12] === null) && (i === 12) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2267,10 +2418,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[10] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[21] === null) && ((nextSquares[12] === '⚫') || (nextSquares[12] === '🖤')) && (i === 21)) {
             nextSquares[i] = selectedPiece;
             nextSquares[12] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 3) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2279,11 +2432,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 5) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[12] === null) && (i === 12)) {
+        if ((nextSquares[12] === null) && (i === 12) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[14] === null) && (i === 14)) {
+        } else if ((nextSquares[14] === null) && (i === 14) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2291,10 +2444,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[12] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[23] === null) && ((nextSquares[14] === '⚫') || (nextSquares[14] === '🖤')) && (i === 23)) {
             nextSquares[i] = selectedPiece;
             nextSquares[14] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 5) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2303,7 +2458,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 7) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[14] === null) && (i === 14)) {
+        if ((nextSquares[14] === null) && (i === 14) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2311,6 +2466,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[14] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 7) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2319,11 +2475,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 8) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[1] === null) && (i === 1)) {
+        if ((nextSquares[1] === null) && (i === 1) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[17] === null) && (i === 17)) {
+        } else if ((nextSquares[17] === null) && (i === 17) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2331,6 +2487,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[17] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 8) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2339,19 +2496,19 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 10) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[1] === null) && (i === 1)) {
+        if ((nextSquares[1] === null) && (i === 1) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[3] === null) && (i === 3)) {
+        } else if ((nextSquares[3] === null) && (i === 3) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[17] === null) && (i === 17)) {
+        } else if ((nextSquares[17] === null) && (i === 17) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[19] === null) && (i === 19)) {
+        } else if ((nextSquares[19] === null) && (i === 19) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2359,10 +2516,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[17] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[28] === null) && ((nextSquares[19] === '⚫') || (nextSquares[19] === '🖤')) && (i === 28)) {
             nextSquares[i] = selectedPiece;
             nextSquares[19] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 10) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2371,19 +2530,19 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 12) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[3] === null) && (i === 3)) {
+        if ((nextSquares[3] === null) && (i === 3) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[5] === null) && (i === 5)) {
+        } else if ((nextSquares[5] === null) && (i === 5) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[19] === null) && (i === 19)) {
+        } else if ((nextSquares[19] === null) && (i === 19) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[21] === null) && (i === 21)) {
+        } else if ((nextSquares[21] === null) && (i === 21) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2391,10 +2550,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[19] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[30] === null) && ((nextSquares[21] === '⚫') || (nextSquares[21] === '🖤')) && (i === 30)) {
             nextSquares[i] = selectedPiece;
             nextSquares[21] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 12) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2403,19 +2564,19 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 14) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[5] === null) && (i === 5)) {
+        if ((nextSquares[5] === null) && (i === 5) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[7] === null) && (i === 7)) {
+        } else if ((nextSquares[7] === null) && (i === 7) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[21] === null) && (i === 21)) {
+        } else if ((nextSquares[21] === null) && (i === 21) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[23] === null) && (i === 23)) {
+        } else if ((nextSquares[23] === null) && (i === 23) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2423,6 +2584,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[21] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 14) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2431,11 +2593,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 17) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[8] === null) && (i === 8)) {
+        if ((nextSquares[8] === null) && (i === 8) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[10] === null) && (i === 10)) {
+        } else if ((nextSquares[10] === null) && (i === 10) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2443,11 +2605,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[10] = null;
             removeGhostPieces();
-        } else if ((nextSquares[24] === null) && (i === 24)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[24] === null) && (i === 24) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[26] === null) && (i === 26)) {
+        } else if ((nextSquares[26] === null) && (i === 26) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2455,6 +2618,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[26] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 17) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2463,11 +2627,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 19) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[10] === null) && (i === 10)) {
+        if ((nextSquares[10] === null) && (i === 10) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[12] === null) && (i === 12)) {
+        } else if ((nextSquares[12] === null) && (i === 12) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2475,15 +2639,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[10] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[5] === null) && ((nextSquares[12] === '⚫') || (nextSquares[12] === '🖤')) && (i === 5)) {
             nextSquares[i] = selectedPiece;
             nextSquares[12] = null;
             removeGhostPieces();
-        } else if ((nextSquares[26] === null) && (i === 26)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[26] === null) && (i === 26) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[28] === null) && (i === 28)) {
+        } else if ((nextSquares[28] === null) && (i === 28) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2491,10 +2657,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[26] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[37] === null) && ((nextSquares[28] === '⚫') || (nextSquares[28] === '🖤')) && (i === 37)) {
             nextSquares[i] = selectedPiece;
             nextSquares[28] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 19) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2503,11 +2671,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 21) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[12] === null) && (i === 12)) {
+        if ((nextSquares[12] === null) && (i === 12) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[14] === null) && (i === 14)) {
+        } else if ((nextSquares[14] === null) && (i === 14) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2515,15 +2683,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[12] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[7] === null) && ((nextSquares[14] === '⚫') || (nextSquares[14] === '🖤')) && (i === 7)) {
             nextSquares[i] = selectedPiece;
             nextSquares[14] = null;
             removeGhostPieces();
-        } else if ((nextSquares[28] === null) && (i === 28)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[28] === null) && (i === 28) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[30] === null) && (i === 30)) {
+        } else if ((nextSquares[30] === null) && (i === 30) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2531,10 +2701,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[28] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[39] === null) && ((nextSquares[30] === '⚫') || (nextSquares[30] === '🖤')) && (i === 39)) {
             nextSquares[i] = selectedPiece;
             nextSquares[30] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 21) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2543,7 +2715,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 23) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[14] === null) && (i === 14)) {
+        if ((nextSquares[14] === null) && (i === 14) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2551,7 +2723,8 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[14] = null;
             removeGhostPieces();
-        } else if ((nextSquares[30] === null) && (i === 30)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[30] === null) && (i === 30) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2559,6 +2732,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[30] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 23) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2567,15 +2741,16 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 24) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[17] === null) && (i === 17)) {
+        if ((nextSquares[17] === null) && (i === 17) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[10] === null) && ((nextSquares[17] === '⚫') || (nextSquares[17] === '🖤')) && (i === 10)) {
+        } else if ((nextSquares[10] === null) && ((nextSquares[17] === '⚫') || (nextSquares[17] === '🖤')) && (i === 10) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             nextSquares[17] = null;
             removeGhostPieces();
-        } else if ((nextSquares[33] === null) && (i === 33)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[33] === null) && (i === 33) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2583,6 +2758,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[33] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 24) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2591,11 +2767,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 26) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[17] === null) && (i === 17)) {
+        if ((nextSquares[17] === null) && (i === 17) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[19] === null) && (i === 19)) {
+        } else if ((nextSquares[19] === null) && (i === 19) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2603,15 +2779,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[17] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[12] === null) && ((nextSquares[19] === '⚫') || (nextSquares[19] === '🖤')) && (i === 12)) {
             nextSquares[i] = selectedPiece;
             nextSquares[19] = null;
             removeGhostPieces();
-        } else if ((nextSquares[33] === null) && (i === 33)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[33] === null) && (i === 33) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[35] === null) && (i === 35)) {
+        } else if ((nextSquares[35] === null) && (i === 35) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2619,10 +2797,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[33] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[44] === null) && ((nextSquares[35] === '⚫') || (nextSquares[35] === '🖤')) && (i === 44)) {
             nextSquares[i] = selectedPiece;
             nextSquares[35] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 26) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2631,11 +2811,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 28) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[19] === null) && (i === 19)) {
+        if ((nextSquares[19] === null) && (i === 19) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[21] === null) && (i === 21)) {
+        } else if ((nextSquares[21] === null) && (i === 21) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2643,15 +2823,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[19] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[14] === null) && ((nextSquares[21] === '⚫') || (nextSquares[21] === '🖤')) && (i === 14)) {
             nextSquares[i] = selectedPiece;
             nextSquares[21] = null;
             removeGhostPieces();
-        } else if ((nextSquares[35] === null) && (i === 35)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[35] === null) && (i === 35) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[37] === null) && (i === 37)) {
+        } else if ((nextSquares[37] === null) && (i === 37) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2659,10 +2841,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[35] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[46] === null) && ((nextSquares[37] === '⚫') || (nextSquares[37] === '🖤')) && (i === 46)) {
             nextSquares[i] = selectedPiece;
             nextSquares[37] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 28) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2671,11 +2855,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 30) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[21] === null) && (i === 21)) {
+        if ((nextSquares[21] === null) && (i === 21) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[23] === null) && (i === 23)) {
+        } else if ((nextSquares[23] === null) && (i === 23) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2683,11 +2867,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[21] = null;
             removeGhostPieces();
-        } else if ((nextSquares[37] === null) && (i === 37)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[37] === null) && (i === 37) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[39] === null) && (i === 39)) {
+        } else if ((nextSquares[39] === null) && (i === 39) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2695,6 +2880,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[37] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 30) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2703,11 +2889,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 33) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[24] === null) && (i === 24)) {
+        if ((nextSquares[24] === null) && (i === 24) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[26] === null) && (i === 26)) {
+        } else if ((nextSquares[26] === null) && (i === 26) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2715,11 +2901,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[26] = null;
             removeGhostPieces();
-        } else if ((nextSquares[40] === null) && (i === 40)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[40] === null) && (i === 40) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[42] === null) && (i === 42)) {
+        } else if ((nextSquares[42] === null) && (i === 42) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2727,6 +2914,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[42] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 33) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2735,11 +2923,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 35) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[26] === null) && (i === 26)) {
+        if ((nextSquares[26] === null) && (i === 26) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[28] === null) && (i === 28)) {
+        } else if ((nextSquares[28] === null) && (i === 28) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2747,15 +2935,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[26] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[21] === null) && ((nextSquares[28] === '⚫') || (nextSquares[28] === '🖤')) && (i === 21)) {
             nextSquares[i] = selectedPiece;
             nextSquares[28] = null;
             removeGhostPieces();
-        } else if ((nextSquares[42] === null) && (i === 42)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[42] === null) && (i === 42) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[44] === null) && (i === 44)) {
+        } else if ((nextSquares[44] === null) && (i === 44) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2763,10 +2953,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[42] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[53] === null) && ((nextSquares[44] === '⚫') || (nextSquares[44] === '🖤')) && (i === 53)) {
             nextSquares[i] = selectedPiece;
             nextSquares[44] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 35) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2775,11 +2967,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 37) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[28] === null) && (i === 28)) {
+        if ((nextSquares[28] === null) && (i === 28) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[30] === null) && (i === 30)) {
+        } else if ((nextSquares[30] === null) && (i === 30) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2787,15 +2979,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[28] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[23] === null) && ((nextSquares[30] === '⚫') || (nextSquares[30] === '🖤')) && (i === 23)) {
             nextSquares[i] = selectedPiece;
             nextSquares[30] = null;
             removeGhostPieces();
-        } else if ((nextSquares[44] === null) && (i === 44)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[44] === null) && (i === 44) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[46] === null) && (i === 46)) {
+        } else if ((nextSquares[46] === null) && (i === 46) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2803,10 +2997,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[44] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[55] === null) && ((nextSquares[46] === '⚫') || (nextSquares[46] === '🖤')) && (i === 55)) {
             nextSquares[i] = selectedPiece;
             nextSquares[46] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 37) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2815,7 +3011,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 39) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[30] === null) && (i === 30)) {
+        if ((nextSquares[30] === null) && (i === 30) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2823,7 +3019,8 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[30] = null;
             removeGhostPieces();
-        } else if ((nextSquares[46] === null) && (i === 46)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[46] === null) && (i === 46) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2831,6 +3028,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[46] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 39) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2839,7 +3037,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 40) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[33] === null) && (i === 33)) {
+        if ((nextSquares[33] === null) && (i === 33) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2847,7 +3045,8 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[33] = null;
             removeGhostPieces();
-        } else if ((nextSquares[49] === null) && (i === 49)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[49] === null) && (i === 49) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2855,6 +3054,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[49] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 40) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2863,11 +3063,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 42) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[33] === null) && (i === 33)) {
+        if ((nextSquares[33] === null) && (i === 33) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[35] === null) && (i === 35)) {
+        } else if ((nextSquares[35] === null) && (i === 35) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2875,15 +3075,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[33] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[28] === null) && ((nextSquares[35] === '⚫') || (nextSquares[35] === '🖤')) && (i === 28)) {
             nextSquares[i] = selectedPiece;
             nextSquares[35] = null;
             removeGhostPieces();
-        } else if ((nextSquares[49] === null) && (i === 49)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[49] === null) && (i === 49) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[51] === null) && (i === 51)) {
+        } else if ((nextSquares[51] === null) && (i === 51) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2891,10 +3093,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[49] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[60] === null) && ((nextSquares[51] === '⚫') || (nextSquares[51] === '🖤')) && (i === 60)) {
             nextSquares[i] = selectedPiece;
             nextSquares[51] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 42) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2903,11 +3107,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 44) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[35] === null) && (i === 35)) {
+        if ((nextSquares[35] === null) && (i === 35) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[37] === null) && (i === 37)) {
+        } else if ((nextSquares[37] === null) && (i === 37) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2915,15 +3119,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[35] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[30] === null) && ((nextSquares[37] === '⚫') || (nextSquares[37] === '🖤')) && (i === 30)) {
             nextSquares[i] = selectedPiece;
             nextSquares[37] = null;
             removeGhostPieces();
-        } else if ((nextSquares[51] === null) && (i === 51)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[51] === null) && (i === 51) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[53] === null) && (i === 53)) {
+        } else if ((nextSquares[53] === null) && (i === 53) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2931,10 +3137,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[51] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[62] === null) && ((nextSquares[53] === '⚫') || (nextSquares[53] === '🖤')) && (i === 62)) {
             nextSquares[i] = selectedPiece;
             nextSquares[53] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 44) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2943,11 +3151,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 46) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[37] === null) && (i === 37)) {
+        if ((nextSquares[37] === null) && (i === 37) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[39] === null) && (i === 39)) {
+        } else if ((nextSquares[39] === null) && (i === 39) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2955,11 +3163,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[37] = null;
             removeGhostPieces();
-        } else if ((nextSquares[53] === null) && (i === 53)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[53] === null) && (i === 53) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[55] === null) && (i === 55)) {
+        } else if ((nextSquares[55] === null) && (i === 55) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2967,6 +3176,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[53] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 46) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2975,11 +3185,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 49) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[40] === null) && (i === 40)) {
+        if ((nextSquares[40] === null) && (i === 40) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[42] === null) && (i === 42)) {
+        } else if ((nextSquares[42] === null) && (i === 42) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -2987,11 +3197,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[42] = null;
             removeGhostPieces();
-        } else if ((nextSquares[56] === null) && (i === 56)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[56] === null) && (i === 56) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[58] === null) && (i === 58)) {
+        } else if ((nextSquares[58] === null) && (i === 58) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -3003,11 +3214,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 51) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[42] === null) && (i === 42)) {
+        if ((nextSquares[42] === null) && (i === 42) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[44] === null) && (i === 44)) {
+        } else if ((nextSquares[44] === null) && (i === 44) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -3015,15 +3226,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[42] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[37] === null) && ((nextSquares[44] === '⚫') || (nextSquares[44] === '🖤')) && (i === 37)) {
             nextSquares[i] = selectedPiece;
             nextSquares[44] = null;
             removeGhostPieces();
-        } else if ((nextSquares[58] === null) && (i === 58)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[58] === null) && (i === 58) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[60] === null) && (i === 60)) {
+        } else if ((nextSquares[60] === null) && (i === 60) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -3035,11 +3248,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 53) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[44] === null) && (i === 44)) {
+        if ((nextSquares[44] === null) && (i === 44) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[46] === null) && (i === 46)) {
+        } else if ((nextSquares[46] === null) && (i === 46) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -3047,15 +3260,17 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[44] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[39] === null) && ((nextSquares[46] === '⚫') || (nextSquares[46] === '🖤')) && (i === 39)) {
             nextSquares[i] = selectedPiece;
             nextSquares[46] = null;
             removeGhostPieces();
-        } else if ((nextSquares[60] === null) && (i === 60)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[60] === null) && (i === 60) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[62] === null) && (i === 62)) {
+        } else if ((nextSquares[62] === null) && (i === 62) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -3067,7 +3282,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 55) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[46] === null) && (i === 46)) {
+        if ((nextSquares[46] === null) && (i === 46) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -3075,7 +3290,8 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[46] = null;
             removeGhostPieces();
-        } else if ((nextSquares[62] === null) && (i === 62)) {
+            setAPieceWasJumped(true);
+        } else if ((nextSquares[62] === null) && (i === 62) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -3087,7 +3303,7 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 56) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[49] === null) && (i === 49)) {
+        if ((nextSquares[49] === null) && (i === 49) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -3095,6 +3311,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[49] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 56) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -3103,11 +3320,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 58) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[49] === null) && (i === 49)) {
+        if ((nextSquares[49] === null) && (i === 49) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-        } else if ((nextSquares[51] === null) && (i === 51)) {
+        } else if ((nextSquares[51] === null) && (i === 51) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -3115,10 +3332,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[49] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if ((nextSquares[44] === null) && ((nextSquares[51] === '⚫') || (nextSquares[51] === '🖤')) && (i === 44)) {
             nextSquares[i] = selectedPiece;
             nextSquares[51] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
         } else if (i === 58) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -3127,11 +3346,11 @@ export default function Board() {
         }
       }
       if ((ghostPosition === 60) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[51] === null) && (i === 51)) {
+        if ((nextSquares[51] === null) && (i === 51) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-          } else if ((nextSquares[53] === null) && (i === 53)) {
+          } else if ((nextSquares[53] === null) && (i === 53) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -3139,10 +3358,12 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[51] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
           } else if ((nextSquares[46] === null) && ((nextSquares[53] === '⚫') || (nextSquares[53] === '🖤')) && (i === 46)) {
             nextSquares[i] = selectedPiece;
             nextSquares[53] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
           } else if (i === 60) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -3151,11 +3372,11 @@ export default function Board() {
           }
       }
       if ((ghostPosition === 62) && !blackIsNext && (selectedPiece === '❤️')) {
-        if ((nextSquares[53] === null) && (i === 53)) {
+        if ((nextSquares[53] === null) && (i === 53) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
-          } else if ((nextSquares[55] === null) && (i === 55)) {
+          } else if ((nextSquares[55] === null) && (i === 55) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
             setDisablePieceClick(true);
@@ -3163,6 +3384,7 @@ export default function Board() {
             nextSquares[i] = selectedPiece;
             nextSquares[53] = null;
             removeGhostPieces();
+            setAPieceWasJumped(true);
           } else if (i === 62) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -3205,12 +3427,8 @@ export default function Board() {
     } else if (((nextSquares[i] === null) || (nextSquares[i] === '⚪') || (nextSquares[i] === '🤍'))  && blackIsNext) {
       // check if a valid move was made and, if so, place the selectedPiece
       movementRules();
-
-
-      // HERE
+      // check if any pieces have moved from their starting positions
       checkIfPositionMatches();
-
-
       // if (tile A8 is a single black piece) then
       if (nextSquares[56] === '⚫') {
         // change it to a kinged black piece
@@ -3238,12 +3456,8 @@ export default function Board() {
     } else if (((nextSquares[i] === null) || (nextSquares[i] === '⚪') || (nextSquares[i] === '🤍')) && !blackIsNext) {
       // check if a valid move was made and, if so, place the selectedPiece
       movementRules();
-
-
-      // HERE
+      // check if any pieces have moved from their starting positions
       checkIfPositionMatches();
-
-
       // if (tile B1 is a single red piece) then 
       if (nextSquares[1] === '🔴') {
         // change it to a kinged red piece
@@ -3286,10 +3500,10 @@ export default function Board() {
     setDisableEndTurn(true);
     // allow pieces to be clicked for the start of the next turn
     setDisablePieceClick(false);
-
-
-    // HERE
+    // set startTurnSquares to the current board layout
     setStartTurnSquares(squares);
+    // set aPieceWasJumped to false for the start of the next turn
+    setAPieceWasJumped(false);
   }
 
   return (
