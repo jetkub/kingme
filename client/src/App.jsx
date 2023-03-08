@@ -5,7 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Header from './components/Header';
 import Checkers from './components/Checkers';
-import Checkers2P from './components/Checkers2p'
+import Checkers2P from './components/Checkers2P'
 import Menu from './pages/Menu';
 import LoginPage from './pages/Login';
 import SignupPage from './pages/Signup';
