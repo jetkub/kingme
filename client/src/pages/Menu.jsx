@@ -19,8 +19,7 @@ const Menu = () => {
 
 	console.log(user);
 
-	const handleSolo = async (e) => {
-		e.preventDefault();
+	const handleSolo = async () => {
 		// @ricky we can add these to the db if we want
 		// try {
 		// 	const { data } = await addGame({
@@ -32,8 +31,7 @@ const Menu = () => {
 		// }
 	};
 
-	const handleHost = async (e) => {
-		e.preventDefault();
+	const handleHost = async () => {
 		try {
 			const { data } = await addGame({
 				variables: { id: user._id },
@@ -44,8 +42,7 @@ const Menu = () => {
 		}
 	};
 
-	const handleAddPlayer = async (e) => {
-		e.preventDefault();
+	const handleAddPlayer = async () => {
 		try {
 			const { data } = await addPlayerToGame({
 				variables: { id: user._id, gameId: input.value },
@@ -84,7 +81,7 @@ const Menu = () => {
 						/>
 					</div>
 					<Link to="/hotseat">
-						<button id="hotseatBtn" onClick={handleSolo()}>
+						<button id="hotseatBtn" onClick={handleSolo}>
 							Play Hot-Seat
 						</button>
 					</Link>
@@ -92,7 +89,7 @@ const Menu = () => {
 				<section id="multiplayerContainer">
 					<div id="hostContainer">
 						<Link to="/multiplayer">
-							<button id="hostBtn" onClick={handleHost()}>
+							<button id="hostBtn" onClick={handleHost}>
 								Host a Game
 							</button>
 						</Link>
@@ -100,7 +97,7 @@ const Menu = () => {
 					<div id="joinContainer">
 						<input id="joinInput" maxLength={10} />
 						<Link to="/multiplayer">
-							<button id="joinBtn" onClick={handleAddPlayer()}>
+							<button id="joinBtn" onClick={handleAddPlayer}>
 								Join a Friend
 							</button>
 						</Link>
