@@ -81,21 +81,6 @@ const UserMenu = () => {
                 Losses: {user.losses}
               </p>
             </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <a
-                  href="#"
-                  className={classNames(
-                    active
-                      ? "bg-neutral-5 text-neutral-900"
-                      : "text-neutral-700",
-                    "block px-4 py-2"
-                  )}
-                >
-                  example clickable link item
-                </a>
-              )}
-            </Menu.Item>
           </div>
           <div className="py-1">
             <Menu.Item>
