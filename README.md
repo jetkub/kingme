@@ -1,6 +1,5 @@
 # KINGME - Checkers App
 A fun game to play with a friend
-
 <br>
 <br>
 
@@ -12,15 +11,16 @@ Submitted for evaluation.
 ## Project Deployed
 https://kingme.gg/
 
-<br>
-https://github.
+
+https://github.com/jakubcic/kingme
+
 <br>
 <br>
 
 ## Screenshots of Webpage
-<img src="public/assets/.png" alt="Website Screenshot1">
-<img src="public/assets/.png" alt="Website Screenshot2">
-<img src="public/assets/.png" alt="Website Screenshot3">
+<img src="pics/kingmeUpdatedLandingPage.png" alt="Website Screenshot1">
+<img src="pics/kingmeggLoginPage.png" alt="Website Screenshot2">
+<img src="pics/kingmeFullBoard.png" alt="Website Screenshot3">
 <br>
 <br>
 <br>
@@ -63,6 +63,9 @@ https://github.
 ## User Story
 <ul>
 <li>As a user I want to play checkers with a friend and keep track of my wins and losses.
+</ul>
+<br>
+<br>
 
 
 ## Challenges
@@ -73,11 +76,14 @@ During the creation of the website the team encountered these challenges to prod
 <li>Game Logic: Throughout the build, the game logic had to be constantly updated to produce a full-fledged game. 
 <li>Graphql: 
 <li>Deployment: Deploying to Heroku invloved changing some scripts, and adding engines to the package.json. Also a path to the dist file needed updating in the server.js file.
+</ul>
+<br>
 
 ## Roadmap
 This is a responsive, interactive app using many technologies to.. . Future developments could include:
 <ul>
 <li>Adding more game features like choosing your checkers' color, and choosing the board colors as well.
+</ul>
 <br>
 <br>
 
