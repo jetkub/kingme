@@ -18,9 +18,9 @@ https://github.com/jakubcic/kingme
 <br>
 
 ## Screenshots of Webpage
-<img src="public/assets/.png" alt="Website Screenshot1">
-<img src="public/assets/.png" alt="Website Screenshot2">
-<img src="public/assets/.png" alt="Website Screenshot3">
+<img src="pics/kingmeUpdatedLandingPage.png" alt="Website Screenshot1">
+<img src="pics/kingmeggLoginPage.png" alt="Website Screenshot2">
+<img src="pics/kingmeFullBoard.png" alt="Website Screenshot3">
 <br>
 <br>
 <br>
