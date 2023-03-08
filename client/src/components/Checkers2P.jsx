@@ -1,34 +1,29 @@
 import { useState } from 'react';
 import Scoreboard from './Scoreboard'
 
-function BlackSquare({ value, onSquareClick }) {
-  return (
-    <button className="blackSquare" onClick={onSquareClick}>
-      {value}
-    </button>
-  );
-}
-
-function RedSquare({ value, onSquareClick }) {
-  return (
-    <button className="redSquare" onClick={onSquareClick}>
-      {value}
-    </button>
-  );
-}
-
-function EndTurnButton({ onEndTurnClick }) {
-  return (
-    <button className="endBtn" onClick={onEndTurnClick}>
-      End Turn
-    </button>
-  );
-}
+import { useQuery } from "@apollo/client";
+import { useParams } from 'react-router-dom';
+import { QUERY_SINGLE_GAME } from "../utils/queries";
 
 export default function Board() {
+  
+  const { gameid } = useParams();
+
+  const { loading, data } = useQuery(QUERY_SINGLE_GAME,
+    {
+     variables: { id: gameid }
+    });
+
+    const game = data?.game || {};
+
+    console.log(game);
+
+
+  
   let redCount = 0;
   let blackCount = 0;
-  
+
+
   // blackIsNext tracks whether it is black's turn or red's turn
   const [blackIsNext, setBlackIsNext] = useState(true);
   
@@ -44,6 +39,38 @@ export default function Board() {
 
   // ghostPosition tracks where the player picked up a piece from
   const [ghostPosition, setGhostPosition] = useState();
+  
+  // disableEndTurn tracks whether the endTurnButton is disabled or not
+  const [disableEndTurn, setDisableEndTurn] = useState(true)
+  const [disablePieceClick, setDisablePieceClick] = useState(false)
+
+  function BlackSquare({ value, onSquareClick }) {
+    return (
+      <button className="blackSquare" onClick={onSquareClick}>
+        {value}
+      </button>
+    );
+  }
+  
+  function RedSquare({ value, onSquareClick }) {
+    return (
+      <button className="redSquare" onClick={onSquareClick} disabled={disablePieceClick}>
+        {value}
+      </button>
+    );
+  }
+  
+  function EndTurnButton({ onEndTurnClick }) {
+    return (
+      <button className="endBtn" onClick={onEndTurnClick} disabled={disableEndTurn}>
+        End Turn
+      </button>
+    );
+  }
+
+
+
+
 
   function handleClick(i) {
     const nextSquares = squares.slice();
@@ -84,7 +111,9 @@ export default function Board() {
     function removeGhostPieces() {
       for (let index = 0; index < nextSquares.length; index++) {
         if ((nextSquares[index] === '⚪') || (nextSquares[index] === '🤍')) {
-          nextSquares[index] = null;          
+          nextSquares[index] = null;
+          // Can end turn when there isn't a ghost piece on the board
+          setDisableEndTurn(false)
         }
       }
     }
@@ -94,6 +123,8 @@ export default function Board() {
       for (let index = 0; index < nextSquares.length; index++) {
         if ((nextSquares[index] === '⚪') || (nextSquares[index] === '🤍')) {
           setGhostPosition(index);
+          // Cannot end turn when there is a ghost piece on the board
+          setDisableEndTurn(true)
         }
       }
     }
@@ -2720,22 +2751,18 @@ export default function Board() {
       nextSquares[i] = '⚪';
       // set the ghostPosition to the tile clicked
       getGhostPosition();
-      // tallyPieces();
     } else if ((nextSquares[i] === '❤️') && !blackIsNext) {
       changeSelectedPiece();
       nextSquares[i] = '🤍';
       getGhostPosition();
-      // tallyPieces();
     } else if ((nextSquares[i] === '⚫') && blackIsNext) {
       changeSelectedPiece();
       nextSquares[i] = '⚪';
       getGhostPosition();
-      // tallyPieces();
     } else if ((nextSquares[i] === '🖤') && blackIsNext) {
       changeSelectedPiece();
       nextSquares[i] = '🤍';
       getGhostPosition();
-      // tallyPieces();
     // else if ((the tile clicked on is empty OR occupied by a ghost piece) AND it is black's turn) then
     } else if (((nextSquares[i] === null) || (nextSquares[i] === '⚪') || (nextSquares[i] === '🤍'))  && blackIsNext) {
       // check if a valid move was made and, if so, place the selectedPiece
@@ -2760,6 +2787,9 @@ export default function Board() {
       }
       // check if the game has been won
       tallyPieces();
+
+      // OPTIONAL PLACE TO INTERECT WITH DATABASE FOR BOARD UPDATE
+
     // else if ((the tile clicked on is empty OR occupied by a ghost piece) AND it is red's turn) then
     } else if (((nextSquares[i] === null) || (nextSquares[i] === '⚪') || (nextSquares[i] === '🤍')) && !blackIsNext) {
       // check if a valid move was made and, if so, place the selectedPiece
@@ -2784,8 +2814,14 @@ export default function Board() {
       }
       // check if the game has been won      
       tallyPieces();
+
+      // OPTIONAL PLACE TO INTERECT WITH DATABASE FOR BOARD UPDATE
+
     }
     setSquares(nextSquares);
+
+    // OPTIONAL PLACE TO INTERECT WITH DATABASE FOR BOARD UPDATE
+
   }
 
   // This function handles whether blackIsNext or not to determine whose turn it is
@@ -2796,6 +2832,7 @@ export default function Board() {
     } else if (blackIsNext) {
       setStatus(statusMessage[1])
     }
+    setDisableEndTurn(true)
   }
 
   return (

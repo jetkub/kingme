@@ -31,7 +31,11 @@ const resolvers = {
                 .select('-__v')
                 .populate('players');
         },
-        game: async (parent, { gameId }) => {
+        game: async (parent, { _id }) => {
+            const params = _id ? { _id } : {};
+            return Game.findOne(params).select('-__v').populate('players');
+        },
+        gameByGameId: async (parent, { gameId }) => {
             const params = gameId ? { gameId } : {};
             return Game.findOne(params).select('-__v').populate('players');
         },

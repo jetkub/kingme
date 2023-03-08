@@ -39,7 +39,8 @@ type Query {
     users: [User]
     user(_id: ID!): User
     games: [Game]
-    game(gameid: String): Game
+    game(_id: ID!): Game
+    gameByGameId(gameId: String!): Game
 }
 
 type Mutation {
