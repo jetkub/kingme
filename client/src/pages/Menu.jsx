@@ -84,15 +84,15 @@ const Menu = () => {
 						/>
 					</div>
 					<Link to="/hotseat">
-						<button id="hotseatBtn">
-							Play Hot Seat
+						<button id="hotseatBtn" onClick={handleSolo()}>
+							Play Hot-Seat
 						</button>
 					</Link>
 				</section>
 				<section id="multiplayerContainer">
 					<div id="hostContainer">
 						<Link to="/multiplayer">
-							<button id="hostBtn" onClick={handleHost}>
+							<button id="hostBtn" onClick={handleHost()}>
 								Host a Game
 							</button>
 						</Link>
@@ -100,7 +100,7 @@ const Menu = () => {
 					<div id="joinContainer">
 						<input id="joinInput" maxLength={10} />
 						<Link to="/multiplayer">
-							<button id="joinBtn" onClick={handleAddPlayer}>
+							<button id="joinBtn" onClick={handleAddPlayer()}>
 								Join a Friend
 							</button>
 						</Link>
