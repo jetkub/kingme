@@ -19,7 +19,7 @@ const Menu = () => {
 
 	console.log(user);
 
-	const handleSolo = async (e) => {
+	const handleSolo = async () => {
 		// @ricky we can add these to the db if we want
 		// try {
 		// 	const { data } = await addGame({
@@ -31,7 +31,7 @@ const Menu = () => {
 		// }
 	};
 
-	const handleHost = async (e) => {
+	const handleHost = async () => {
 		try {
 			const { data } = await addGame({
 				variables: { id: user._id },
@@ -42,7 +42,7 @@ const Menu = () => {
 		}
 	};
 
-	const handleAddPlayer = async (e) => {
+	const handleAddPlayer = async () => {
 		try {
 			const { data } = await addPlayerToGame({
 				variables: { id: user._id, gameId: input.value },
