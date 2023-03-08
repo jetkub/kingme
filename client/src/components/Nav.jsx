@@ -14,9 +14,7 @@ const Navigation = () => {
 	return (
 		<nav className='m-2 flex justify-between'>
 			<ul className='flex gap-1 sm:gap-3'>
-				{/* placeholder links. eventually the login buton will trigger a modal w/ a login form */}
-				{/* the /game link is just a way to switch pages from the menu to the game. we can change this up later */}
-				<CustomLink to='/game'>game</CustomLink>
+				{/* <CustomLink to='/hotseat'>game</CustomLink> */}
 				{Auth.loggedIn() ? <UserMenu /> : <CustomLink to='/login'>log in</CustomLink>}
 			</ul>
 		</nav>

@@ -84,7 +84,7 @@ const Menu = () => {
 						/>
 					</div>
 					<Link to="/hotseat">
-						<button id="hotseatBtn" onClick={handleSolo}>
+						<button id="hotseatBtn">
 							Play Hot Seat
 						</button>
 					</Link>
