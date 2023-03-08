@@ -28,6 +28,11 @@ export default function Board() {
   // thereAreGhostPieces tracks whether or not there is a ghost piece on the board
   const [thereAreGhostPieces, setThereAreGhostPieces] = useState(false);
 
+
+  // HERE
+  const [startTurnSquares, setStartTurnSquares] = useState(squares);
+
+
   function BlackSquare({ value, onSquareClick }) {
     return (
       <button className="blackSquare" onClick={onSquareClick} disabled={true}>
@@ -117,6 +122,22 @@ export default function Board() {
       for (let index = 0; index < nextSquares.length; index++) {
         if ((nextSquares[index] === '⚪') || (nextSquares[index] === '🤍')) {
           setThereAreGhostPieces(true);
+        }
+      }
+    }
+
+    // HERE
+    function checkIfPositionMatches() {
+      let matchingPositions = 0
+
+      for (let index = 0; index < squares.length; index++) {
+        if (startTurnSquares[index] === nextSquares[index]) {
+          matchingPositions ++
+            if (matchingPositions === 64) {
+              setDisableEndTurn(true);
+            } else {
+              setDisableEndTurn(false);
+            }
         }
       }
     }
@@ -3150,6 +3171,10 @@ export default function Board() {
           }
       }
     }
+
+
+    
+
     
     // if (the tile clicked on is a single red piece AND it is red's turn AND there are no ghost pieces) then
     if ((nextSquares[i] === '🔴') && !blackIsNext && (thereAreGhostPieces === false)) {
@@ -3180,6 +3205,12 @@ export default function Board() {
     } else if (((nextSquares[i] === null) || (nextSquares[i] === '⚪') || (nextSquares[i] === '🤍'))  && blackIsNext) {
       // check if a valid move was made and, if so, place the selectedPiece
       movementRules();
+
+
+      // HERE
+      checkIfPositionMatches();
+
+
       // if (tile A8 is a single black piece) then
       if (nextSquares[56] === '⚫') {
         // change it to a kinged black piece
@@ -3207,6 +3238,12 @@ export default function Board() {
     } else if (((nextSquares[i] === null) || (nextSquares[i] === '⚪') || (nextSquares[i] === '🤍')) && !blackIsNext) {
       // check if a valid move was made and, if so, place the selectedPiece
       movementRules();
+
+
+      // HERE
+      checkIfPositionMatches();
+
+
       // if (tile B1 is a single red piece) then 
       if (nextSquares[1] === '🔴') {
         // change it to a kinged red piece
@@ -3249,6 +3286,10 @@ export default function Board() {
     setDisableEndTurn(true);
     // allow pieces to be clicked for the start of the next turn
     setDisablePieceClick(false);
+
+
+    // HERE
+    setStartTurnSquares(squares);
   }
 
   return (
