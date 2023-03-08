@@ -57,7 +57,7 @@ function App() {
 					<main className='flex flex-col items-center justify-center'>
 						<Routes>
 							<Route path='/' element={<Menu />} />
-							<Route path='/solo' element={<Checkers />} />
+							<Route path='/hotseat' element={<Checkers />} />
 							<Route path='/multiplayer' element={<Checkers2P />} />
 							<Route path='/login' element={<LoginPage />} />
 							<Route path='/signup' element={<SignupPage />} />
