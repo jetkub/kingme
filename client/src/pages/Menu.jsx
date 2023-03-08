@@ -57,7 +57,7 @@ const Menu = () => {
 		<>
 			<section className="my-5 grid place-content-center align-middle">
 				<div className="container my-4 max-w-6xl">
-					<h1 className="font-hero text-5xl sm:text-6xl md:text-7xl lg:text-8xl">
+					<h1 className="font-hero text-5xl sm:text-6xl md:text-7xl lg:text-8xl my-10">
 						kingme.gg
 					</h1>
 				</div>
