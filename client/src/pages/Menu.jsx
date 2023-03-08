@@ -20,7 +20,6 @@ const Menu = () => {
 	console.log(user);
 
 	const handleSolo = async (e) => {
-		e.preventDefault();
 		// @ricky we can add these to the db if we want
 		// try {
 		// 	const { data } = await addGame({
@@ -33,7 +32,6 @@ const Menu = () => {
 	};
 
 	const handleHost = async (e) => {
-		e.preventDefault();
 		try {
 			const { data } = await addGame({
 				variables: { id: user._id },
@@ -45,7 +43,6 @@ const Menu = () => {
 	};
 
 	const handleAddPlayer = async (e) => {
-		e.preventDefault();
 		try {
 			const { data } = await addPlayerToGame({
 				variables: { id: user._id, gameId: input.value },
