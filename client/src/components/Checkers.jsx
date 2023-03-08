@@ -1,7 +1,29 @@
 import { useState } from 'react';
 import Scoreboard from './Scoreboard'
+import { useMutation, useQuery } from "@apollo/client";
+import { UPDATE_WINS } from '../utils/mutation';
+import { QUERY_ME } from "../utils/queries";
+import { UPDATE_LOSSES } from '../utils/mutation';
 
 export default function Board() {
+
+  const { loading, data } = useQuery(QUERY_ME);
+  const user = data?.me || {};
+  console.log(user);
+
+
+
+  const [updateWins] = useMutation(UPDATE_WINS, {
+    variables: { id: user._id }
+    }
+    );
+
+  const [updateLosses] = useMutation(UPDATE_LOSSES, {
+      variables: { id: user._id }
+      }
+      );
+
+
   let redCount = 0;
   let blackCount = 0;
 
@@ -15,7 +37,7 @@ export default function Board() {
   const [selectedPiece, setSelectedPiece] = useState('⚫');
   const savedPiece = ['🔴', '❤️', '⚫', '🖤']
 
-  const statusMessage = ["Black's Turn", "Red's Turn", "Black Wins!", "Red Wins!"]
+  const statusMessage = [`${user.username}'s Turn`, "Red's Turn", `${user.username} Wins!`, "Red Wins!"]
   const [status, setStatus] = useState(statusMessage[0]);
 
   // ghostPosition tracks where the player picked up a piece from
@@ -79,12 +101,10 @@ export default function Board() {
       }
       if ((redCount === 0) && blackIsNext) {
         setStatus(statusMessage[2]);
-        // TODO Add 1 to Black Player's Win Stat
-        // TODO Add 1 to Red Player's Loss Stat
+        updateWins();
       } else if ((blackCount === 0) && !blackIsNext) {
         setStatus(statusMessage[3]);
-        // TODO Add 1 to Red Player's Win Stat
-        // TODO Add 1 to Black Player's Loss Stat
+        updateLosses();
       }
     }
 

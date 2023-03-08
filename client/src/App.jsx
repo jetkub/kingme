@@ -58,7 +58,7 @@ function App() {
 						<Routes>
 							<Route path='/' element={<Menu />} />
 							<Route path='/hotseat' element={<Checkers />} />
-							<Route path='/multiplayer' element={<Checkers2P />} />
+							<Route path='/multiplayer/:gameid' element={<Checkers2P />} />
 							<Route path='/login' element={<LoginPage />} />
 							<Route path='/signup' element={<SignupPage />} />
 						</Routes>

@@ -22,6 +22,9 @@ export const QUERY_ME = gql`
       wins
       losses
       totalGames
+      games {
+        _id
+      }
     }
   }
 `;
@@ -66,8 +69,8 @@ export const QUERY_GAMES = gql`
 `;
 
 export const QUERY_SINGLE_GAME = gql`
-  query singleGame($gameid: String!) {
-    game(gameid: $gameid) {
+  query singleGame($id: ID!) {
+    game(_id: $id) {
       _id
       gameId
       gameName
@@ -89,5 +92,32 @@ export const QUERY_SINGLE_GAME = gql`
       turnMessage
       boardState
     }
+  }
+`;
+
+export const QUERY_GAME_BY_GAME_ID = gql`
+  query gameByGameId($gameId: String!) {
+    gameByGameId(gameId: $gameId) {
+      _id
+      gameId
+      gameName
+      gameType
+      gameStatus
+      gameWinner
+      gameLoser
+      gameDate
+      gameMoves
+      players {
+        _id
+        username
+        email
+        wins
+        losses
+        totalGames
+      }
+      userTurn
+      turnMessage
+      boardState
+    } 
   }
 `;

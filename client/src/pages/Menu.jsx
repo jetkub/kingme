@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import crownWhite from "../assets/crownwhite.png";
 import crown from "../assets/crown.png";
 import { Link } from "react-router-dom";
@@ -7,12 +7,20 @@ import { CREATE_GAME } from "../utils/mutation";
 import { ADD_PLAYER_TO_GAME } from "../utils/mutation";
 
 import { QUERY_ME } from "../utils/queries";
+import { QUERY_GAME_BY_GAME_ID } from "../utils/queries";
 
 const Menu = () => {
 	const [addGame] = useMutation(CREATE_GAME);
 	const [addPlayerToGame] = useMutation(ADD_PLAYER_TO_GAME);
 	const { loading, data } = useQuery(QUERY_ME);
+	const [hostId, setHostId] = useState(null);
 	const user = data?.me || {};
+  
+	useEffect(() => {
+	  if (user.games && user.games.length > 0) {
+		setHostId(user.games[0]._id);
+	  }
+	}, [user]);
 
 	const input = document.getElementById("joinInput");
 	// console.log(input.value);
@@ -47,11 +55,16 @@ const Menu = () => {
 			const { data } = await addPlayerToGame({
 				variables: { id: user._id, gameId: input.value },
 			});
+			const { data: gameData } = await QUERY_GAME_BY_GAME_ID({
+				variables: { gameId: input.value },
+			});
+			console.log(gameData);
 			console.log(data);
 		} catch (err) {
 			console.error(err);
 		}
 	};
+
 
 	return (
 		<>
@@ -88,7 +101,7 @@ const Menu = () => {
 				</section>
 				<section id="multiplayerContainer">
 					<div id="hostContainer">
-						<Link to="/multiplayer">
+						<Link to={`/multiplayer/${hostId}`}>
 							<button id="hostBtn" onClick={handleHost}>
 								Host a Game
 							</button>
