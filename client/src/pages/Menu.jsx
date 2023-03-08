@@ -1,6 +1,7 @@
 import React from "react";
 import crownWhite from "../assets/crownwhite.png";
 import crown from "../assets/crown.png";
+import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_GAME } from "../utils/mutation";
 import { ADD_PLAYER_TO_GAME } from "../utils/mutation";
