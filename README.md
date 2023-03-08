@@ -1,6 +1,5 @@
 # KINGME - Checkers App
 A fun game to play with a friend
-
 <br>
 <br>
 
@@ -12,8 +11,9 @@ Submitted for evaluation.
 ## Project Deployed
 https://kingme.gg/
 
-<br>
-https://github.
+
+https://github.com/jakubcic/kingme
+
 <br>
 <br>
 
