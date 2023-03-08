@@ -9,7 +9,8 @@ Submitted for evaluation.
 <br>
 <br>
 # Project Deployed
-https://
+https://kingme.gg/
+
 <br>
 https://github.
 <br>
@@ -42,10 +43,11 @@ https://github.
 
 # Technologies Used
 <ul>
-<li>Used to build the app.
-<li>Used 
-
-<li>Used Heroku to deploy the website.
+<li>Application uses React and Vite for the front end.
+<li>Application has a GraphQL API with a Node.js and Express.js server, and uses queries and mutations for retrieving, adding, updating, and deleting data.
+<li>Application uses MongoDB and the Mongoose ODM for the database and protects sensitive API key information on the server.
+<li>Application includes user authentication using JWT.
+<li>Application deployed at live URL on Heroku and loads with no errors.
 </ul>
 <br>
 <br>
@@ -58,7 +60,7 @@ https://github.
 
 # User Story
 <ul>
-<li>As a user I want to play checkers with a friend.
+<li>As a user I want to play checkers with a friend and keep track of my wins and losses.
 
 
 # Challenges
@@ -73,7 +75,7 @@ During the creation of the website the team encountered these challenges to prod
 # Roadmap
 This is a responsive, interactive app using many technologies to.. . Future developments could include:
 <ul>
-<li>Adding more game features like choosing your checkers' color, and choosing the board colors as well
+<li>Adding more game features like choosing your checkers' color, and choosing the board colors as well.
 
 
 
