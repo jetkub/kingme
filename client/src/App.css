@@ -94,22 +94,29 @@
 		transform: translate(80px, 110px);
 	}
 }
+#multiplayerContainer {
+	background-color: black;
+	height: 300px;
+}
 @media (max-width: 1005px) {
 	#deco,
 	#deco2 {
 		display: none;
 	}
+	#multiplayerContainer {
+		height: 500px;
+	}
 }
-#multiplayerContainer {
-	display: flex;
-	background-color: black;
-	height: 300px;
+@media (min-width: 1005px) {
+	#multiplayerContainer {
+		display: flex;
+	}
+	#hostContainer,
+	#joinContainer {
+		flex: 1;
+	}
 }
 
-#hostContainer,
-#joinContainer {
-	flex: 1;
-}
 #hostBtn {
 	margin-top: 120px;
 }
