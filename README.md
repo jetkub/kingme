@@ -1,20 +1,23 @@
-kingme Game 
 # KINGME - Checkers App
 A fun game to play with a friend
 
 <br>
 <br>
-# Project Status
+
+## Project Status
 Submitted for evaluation.
 <br>
 <br>
-# Project Deployed
-https://
+
+## Project Deployed
+https://kingme.gg/
+
 <br>
 https://github.
 <br>
 <br>
-# Screenshots of Webpage
+
+## Screenshots of Webpage
 <img src="public/assets/.png" alt="Website Screenshot1">
 <img src="public/assets/.png" alt="Website Screenshot2">
 <img src="public/assets/.png" alt="Website Screenshot3">
@@ -22,7 +25,7 @@ https://github.
 <br>
 <br>
 
-# Table of Contents
+## Table of Contents
 
   * [Technologies Used](#technologies-used)
 
@@ -40,44 +43,45 @@ https://github.
 <br>
 <br>
 
-# Technologies Used
+## Technologies Used
 <ul>
-<li>Used to build the app.
-<li>Used 
-
-<li>Used Heroku to deploy the website.
+<li>Application uses React and Vite for the front end.
+<li>Application has a GraphQL API with a Node.js and Express.js server, and uses queries and mutations for retrieving, adding, updating, and deleting data.
+<li>Application uses MongoDB and the Mongoose ODM for the database and protects sensitive API key information on the server.
+<li>Application includes user authentication using JWT.
+<li>Application deployed at live URL on Heroku and loads with no errors.
 </ul>
 <br>
 <br>
 
-# Usage
-Users land on a page to login
-Users can choose to save the generated image to a personal gallery page.  Users can view recently created AI images on the "Feed" page.
+## Usage
+
+
 <br>
 <br>
 
-# User Story
+## User Story
 <ul>
-<li>As a user I want to play checkers with a friend.
+<li>As a user I want to play checkers with a friend and keep track of my wins and losses.
 
 
-# Challenges
+## Challenges
 During the creation of the website the team encountered these challenges to production:
 <ul>
-<li>Socket.io
+<li>Socket.io:  This is a library we looked into to using for WebSocket protocol, but in the end proved to be too much to learn in the timeframe available.
 <li>refactoring HTML to REACT
-<li>game logic
-<li>Conncurrently, vite, graphql??
+<li>Game Logic: Throughout the build, the game logic had to be constantly updated to produce a full-fledged game. 
+<li>Graphql: 
+<li>Deployment: Deploying to Heroku invloved changing some scripts, and adding engines to the package.json. Also a path to the dist file needed updating in the server.js file.
 
-# Roadmap
+## Roadmap
 This is a responsive, interactive app using many technologies to.. . Future developments could include:
 <ul>
-<li>
-
-
+<li>Adding more game features like choosing your checkers' color, and choosing the board colors as well.
 <br>
 <br>
-# Contributors
+
+## Contributors
 <ul>
 <li>Ricky Aponte
 <li>Emily Bernard
@@ -91,7 +95,6 @@ This is a responsive, interactive app using many technologies to.. . Future deve
 ## Acknowlegements
 Thanks to:
 <ul>
-<li>Instructor Kris Renaldi for his invaluable help during class sessions.
-<li>Class activities, especially week () as a reference for ().
-<li>Tutors and Ask BCS for their help in troubleshooting different issues.
+<li>Instructor Kris Renaldi for his invaluable help during class sessions and office hours.
+<li>Tutors for their help in troubleshooting different issues.
 <li>(Websties we used)
