@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Header from './components/Header';
 import Checkers from './components/Checkers';
+import Checkers2P from './components/Checkers2p'
 import Menu from './pages/Menu';
 import LoginPage from './pages/Login';
 import SignupPage from './pages/Signup';
@@ -56,7 +57,8 @@ function App() {
 					<main className='flex flex-col items-center justify-center'>
 						<Routes>
 							<Route path='/' element={<Menu />} />
-							<Route path='/game' element={<Checkers />} />
+							<Route path='/solo' element={<Checkers />} />
+							<Route path='/multiplayer' element={<Checkers2P />} />
 							<Route path='/login' element={<LoginPage />} />
 							<Route path='/signup' element={<SignupPage />} />
 						</Routes>
