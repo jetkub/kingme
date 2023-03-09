@@ -109,9 +109,11 @@ export default function Board() {
       if ((redCount === 0) && blackIsNext) {
         setStatus(statusMessage[2]);
         updateWins();
+        setDisableEndTurn(true);
       } else if ((blackCount === 0) && !blackIsNext) {
         setStatus(statusMessage[3]);
         updateLosses();
+        setDisableEndTurn(true);
       }
     }
 
