@@ -115,11 +115,17 @@
 		flex: 1;
 	}
 }
-
+@media (min-width: 1400px) {
+	#hotseatContainer, #multiplayerContainer, #menu {
+		max-width: 1400px;
+	}
+}
 #hostBtn {
 	margin-top: 120px;
 }
 #joinInput {
+	all: unset;
+	background-color: white;
 	font-family: "Space Grotesk", normal;
 	font-weight: 700;
 	font-size: 25px;
