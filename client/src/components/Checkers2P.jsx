@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import Scoreboard from './Scoreboard'
 
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation} from "@apollo/client";
 import { useParams } from 'react-router-dom';
 import { QUERY_SINGLE_GAME } from "../utils/queries";
+
+import { UPDATE_WINS } from '../utils/mutation';
+import { QUERY_ME } from "../utils/queries";
+import { UPDATE_LOSSES } from '../utils/mutation';
 
 export default function Board() {
   
@@ -18,6 +22,21 @@ export default function Board() {
 
     console.log(game);
 
+    const { data: userData } = useQuery(QUERY_ME);
+    const user = userData?.me || {};
+    console.log(user);
+  
+  
+  
+    const [updateWins] = useMutation(UPDATE_WINS, {
+      variables: { id: user._id }
+      }
+      );
+  
+    const [updateLosses] = useMutation(UPDATE_LOSSES, {
+        variables: { id: user._id }
+        }
+        );
 
   
   let redCount = 0;
@@ -34,7 +53,7 @@ export default function Board() {
   const [selectedPiece, setSelectedPiece] = useState('⚫');
   const savedPiece = ['🔴', '❤️', '⚫', '🖤']
 
-  const statusMessage = ["Black's Turn", "Red's Turn", "Black Wins!", "Red Wins!"]
+  const statusMessage = [`${user.username}'s Turn`, "Red's Turn", `${user.username} Wins!`, "Red Wins!"]
   const [status, setStatus] = useState(statusMessage[0]);
 
   // ghostPosition tracks where the player picked up a piece from
