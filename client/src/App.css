@@ -1,16 +1,15 @@
 /* game board styling */
-.board {
-	width: 99vw;
-}
 .board-row {
-	width: 100%;
+	width: 100vw;
+	max-width: 800px;
 }
 .blackSquare,
 .redSquare {
-	font-size: clamp(2.5rem, -1rem + 10vw, 10rem);
+	font-size: clamp(2rem, 1rem + 5vw, 4rem);
 	display: inline-block;
 	width: 12.5%;
 	height: 12.5vw;
+	max-height: 100px;
 	float: left;
 }
 /* .redSquare:focus {
@@ -28,7 +27,7 @@
 	margin-bottom: 10px;
 }
 .endBtn {
-	margin: 5% 0%;
+	margin: 20px 0%;
 }
 /* menu screen styling */
 #menu {
