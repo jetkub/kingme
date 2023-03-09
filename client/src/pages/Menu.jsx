@@ -68,9 +68,9 @@ const Menu = () => {
 
 	return (
 		<>
-			<section className="my-5 grid place-content-center align-middle">
-				<div className="container my-4 max-w-6xl">
-					<h1 className="font-hero text-5xl sm:text-6xl md:text-7xl lg:text-8xl my-10">
+			<section className="my-2 grid place-content-center align-middle">
+				<div className="container my-10 max-w-6xl">
+					<h1 className="font-hero text-5xl sm:text-7xl md:text-8xl lg:text-9xl text-center">
 						kingme.gg
 					</h1>
 				</div>
