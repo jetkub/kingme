@@ -9,19 +9,17 @@ export default function Board() {
 
   const { loading, data } = useQuery(QUERY_ME);
   const user = data?.me || {};
-  console.log(user);
-
-
+  // console.log(user);
 
   const [updateWins] = useMutation(UPDATE_WINS, {
-    variables: { id: user._id }
+      variables: { id: user._id }
     }
-    );
+  );
 
   const [updateLosses] = useMutation(UPDATE_LOSSES, {
       variables: { id: user._id }
-      }
-      );
+    }
+  );
 
 
   let redCount = 0;
@@ -34,7 +32,7 @@ export default function Board() {
   const [squares, setSquares] = useState([undefined, '⚫', undefined, '⚫', undefined, '⚫', undefined, '⚫', '⚫', undefined, '⚫', undefined, '⚫', undefined, '⚫', undefined, undefined, '⚫', undefined, '⚫', undefined, '⚫', undefined, '⚫', null, undefined, null, undefined, null, undefined, null, undefined, undefined, null, undefined, null, undefined, null, undefined, null, '🔴', undefined, '🔴', undefined, '🔴', undefined, '🔴', undefined, undefined, '🔴', undefined, '🔴', undefined, '🔴', undefined, '🔴', '🔴', undefined, '🔴', undefined, '🔴', undefined, '🔴', undefined]);
   
   // selectedPiece tracks which piece the payer has picked up so the same piece can be placed on the next click
-  const [selectedPiece, setSelectedPiece] = useState('⚫');
+  const [selectedPiece, setSelectedPiece] = useState(null);
   const savedPiece = ['🔴', '❤️', '⚫', '🖤']
 
   const statusMessage = [`${user.username}'s Turn`, "Red's Turn", `${user.username} Wins!`, "Red Wins!"]
@@ -44,8 +42,10 @@ export default function Board() {
   const [ghostPosition, setGhostPosition] = useState();
   
   // disableEndTurn tracks whether the endTurnButton is disabled or not
-  const [disableEndTurn, setDisableEndTurn] = useState(true)
-  const [disablePieceClick, setDisablePieceClick] = useState(false)
+  const [disableEndTurn, setDisableEndTurn] = useState(true);
+
+  // disablePieceClick tracks whether or not the pieces can be clicked
+  const [disablePieceClick, setDisablePieceClick] = useState(false);
 
   // thereAreGhostPieces tracks whether or not there is a ghost piece on the board
   const [thereAreGhostPieces, setThereAreGhostPieces] = useState(false);
@@ -54,8 +54,10 @@ export default function Board() {
   const [startTurnSquares, setStartTurnSquares] = useState(squares);
 
   // aPieceWasJumped tracks whether or not a piece has been jumped this turn
-  const [aPieceWasJumped, setAPieceWasJumped] = useState(false)
-
+  const [aPieceWasJumped, setAPieceWasJumped] = useState(false);
+  
+  // landedLocation tracks where a piece was placed
+  const [landedLocation, setLandedLocation] = useState();
 
   function BlackSquare({ value, onSquareClick }) {
     return (
@@ -126,6 +128,8 @@ export default function Board() {
           setDisableEndTurn(false);
           // Allows a new piece to be clicked
           setThereAreGhostPieces(false);
+          // Resets ghostPosition so that the previous ghostPosition isn't a problem
+          setGhostPosition(null);
         }
       }
     }
@@ -150,7 +154,7 @@ export default function Board() {
       }
     }
 
-    // This function checks if all of the pieces are in the same position as they were at the start of the turn and prevents the endTurnButton from functioning if they are
+    // This function checks if all of the pieces are in the same position as they were at the start of the turn and prevents the endTurnButton from functioning if they are 
     function checkIfPositionMatches() {
       let matchingPositions = 0
 
@@ -159,6 +163,8 @@ export default function Board() {
           matchingPositions ++
             if (matchingPositions === 64) {
               setDisableEndTurn(true);
+              // Reset the selectedPiece to null so a new piece can be picked up
+              setSelectedPiece(null);
             } else {
               setDisableEndTurn(false);
             }
@@ -166,10 +172,9 @@ export default function Board() {
       }
     }
 
-    
-    // TODO function checkForMultiJumps() { landedLocation   checkLandedLocation   if (i !== landedPosition) }
 
     // TODO function displayMovementOptions() {}
+
 
     // This function determines which spaces the player is allowed to move their piece to based on where they are moving from and if there is an opponent piece to jump
     function movementRules() {
@@ -202,6 +207,8 @@ export default function Board() {
           removeGhostPieces();
           // record that a piece has been jumped this turn
           setAPieceWasJumped(true);
+          // record where the piece was placed
+          setLandedLocation(i);
         // else if (the player clicks to return their piece to where they picked it up from (B1)) then
         } else if (i === 1) {
           // set the original square (B1) back to a single black piece
@@ -228,11 +235,13 @@ export default function Board() {
           nextSquares[10] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[21] === null) && ((nextSquares[12] === '🔴') || (nextSquares[12] === '❤️')) && (i === 21)) {
           nextSquares[i] = selectedPiece;
           nextSquares[12] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 3) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -254,11 +263,13 @@ export default function Board() {
           nextSquares[12] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[23] === null) && ((nextSquares[14] === '🔴') || (nextSquares[14] === '❤️')) && (i === 23)) {
           nextSquares[i] = selectedPiece;
           nextSquares[14] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 5) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -276,6 +287,7 @@ export default function Board() {
           nextSquares[14] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 7) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -293,6 +305,7 @@ export default function Board() {
           nextSquares[17] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 8) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -314,11 +327,13 @@ export default function Board() {
           nextSquares[17] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[28] === null) && ((nextSquares[19] === '🔴') || (nextSquares[19] === '❤️')) && (i === 28)) {
           nextSquares[i] = selectedPiece;
           nextSquares[19] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 10) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -340,10 +355,12 @@ export default function Board() {
           nextSquares[19] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[30] === null) && ((nextSquares[21] === '🔴') || (nextSquares[21] === '❤️')) && (i === 30)) {
           nextSquares[i] = selectedPiece;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 12) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -365,6 +382,7 @@ export default function Board() {
           nextSquares[21] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 14) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -386,9 +404,10 @@ export default function Board() {
           nextSquares[26] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 17) {
           nextSquares[i] = selectedPiece;
-          setThereAreGhostPieces(false);          
+          setThereAreGhostPieces(false);     
         } else {
           console.log('Invalid Move');
         }
@@ -407,11 +426,13 @@ export default function Board() {
           nextSquares[26] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[37] === null) && ((nextSquares[28] === '🔴') || (nextSquares[28] === '❤️')) && (i === 37)) {
           nextSquares[i] = selectedPiece;
           nextSquares[28] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 19) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -433,11 +454,13 @@ export default function Board() {
           nextSquares[28] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[39] === null) && ((nextSquares[30] === '🔴') || (nextSquares[30] === '❤️')) && (i === 39)) {
           nextSquares[i] = selectedPiece;
           nextSquares[30] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 21) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -455,6 +478,7 @@ export default function Board() {
           nextSquares[30] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 23) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -472,6 +496,7 @@ export default function Board() {
           nextSquares[33] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 24) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -493,11 +518,13 @@ export default function Board() {
           nextSquares[33] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[44] === null) && ((nextSquares[35] === '🔴') || (nextSquares[35] === '❤️')) && (i === 44)) {
           nextSquares[i] = selectedPiece;
           nextSquares[35] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 26) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -519,11 +546,13 @@ export default function Board() {
           nextSquares[35] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[46] === null) && ((nextSquares[37] === '🔴') || (nextSquares[37] === '❤️')) && (i === 46)) {
           nextSquares[i] = selectedPiece;
           nextSquares[37] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 28) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -545,6 +574,7 @@ export default function Board() {
           nextSquares[37] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 30) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -566,6 +596,7 @@ export default function Board() {
           nextSquares[42] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 33) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -587,11 +618,13 @@ export default function Board() {
           nextSquares[42] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[53] === null) && ((nextSquares[44] === '🔴') || (nextSquares[44] === '❤️')) && (i === 53)) {
           nextSquares[i] = selectedPiece;
           nextSquares[44] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 35) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -613,11 +646,13 @@ export default function Board() {
           nextSquares[44] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[55] === null) && ((nextSquares[46] === '🔴') || (nextSquares[46] === '❤️')) && (i === 55)) {
           nextSquares[i] = selectedPiece;
           nextSquares[46] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 37) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -635,6 +670,7 @@ export default function Board() {
           nextSquares[46] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 39) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -652,6 +688,7 @@ export default function Board() {
           nextSquares[49] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 40) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -673,11 +710,13 @@ export default function Board() {
           nextSquares[49] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[60] === null) && ((nextSquares[51] === '🔴') || (nextSquares[51] === '❤️')) && (i === 60)) {
           nextSquares[i] = selectedPiece;
           nextSquares[51] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 42) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -699,11 +738,13 @@ export default function Board() {
           nextSquares[51] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[62] === null) && ((nextSquares[53] === '🔴') || (nextSquares[53] === '❤️')) && (i === 62)) {
           nextSquares[i] = selectedPiece;
           nextSquares[53] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 44) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -725,6 +766,7 @@ export default function Board() {
           nextSquares[53] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 46) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -808,6 +850,7 @@ export default function Board() {
             nextSquares[10] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 1) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -829,11 +872,13 @@ export default function Board() {
             nextSquares[10] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[21] === null) && ((nextSquares[12] === '🔴') || (nextSquares[12] === '❤️')) && (i === 21)) {
             nextSquares[i] = selectedPiece;
             nextSquares[12] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 3) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -855,11 +900,13 @@ export default function Board() {
             nextSquares[12] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[23] === null) && ((nextSquares[14] === '🔴') || (nextSquares[14] === '❤️')) && (i === 23)) {
             nextSquares[i] = selectedPiece;
             nextSquares[14] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 5) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -877,6 +924,7 @@ export default function Board() {
             nextSquares[14] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 7) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -898,6 +946,7 @@ export default function Board() {
             nextSquares[17] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 8) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -927,11 +976,13 @@ export default function Board() {
             nextSquares[17] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[28] === null) && ((nextSquares[19] === '🔴') || (nextSquares[19] === '❤️')) && (i === 28)) {
             nextSquares[i] = selectedPiece;
             nextSquares[19] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 10) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -961,11 +1012,13 @@ export default function Board() {
             nextSquares[19] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[30] === null) && ((nextSquares[21] === '🔴') || (nextSquares[21] === '❤️')) && (i === 30)) {
             nextSquares[i] = selectedPiece;
             nextSquares[21] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 12) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -995,6 +1048,7 @@ export default function Board() {
             nextSquares[21] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 14) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1016,6 +1070,7 @@ export default function Board() {
             nextSquares[10] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[24] === null) && (i === 24) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1029,6 +1084,7 @@ export default function Board() {
             nextSquares[26] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 17) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1050,11 +1106,13 @@ export default function Board() {
             nextSquares[10] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[5] === null) && ((nextSquares[12] === '🔴') || (nextSquares[12] === '❤️')) && (i === 5)) {
             nextSquares[i] = selectedPiece;
             nextSquares[12] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[26] === null) && (i === 26) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1068,11 +1126,13 @@ export default function Board() {
             nextSquares[26] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[37] === null) && ((nextSquares[28] === '🔴') || (nextSquares[28] === '❤️')) && (i === 37)) {
             nextSquares[i] = selectedPiece;
             nextSquares[28] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 19) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1094,11 +1154,13 @@ export default function Board() {
             nextSquares[12] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[7] === null) && ((nextSquares[14] === '🔴') || (nextSquares[14] === '❤️')) && (i === 7)) {
             nextSquares[i] = selectedPiece;
             nextSquares[14] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[28] === null) && (i === 28) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1112,11 +1174,13 @@ export default function Board() {
             nextSquares[28] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[39] === null) && ((nextSquares[30] === '🔴') || (nextSquares[30] === '❤️')) && (i === 39)) {
             nextSquares[i] = selectedPiece;
             nextSquares[30] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 21) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1134,6 +1198,7 @@ export default function Board() {
             nextSquares[14] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[30] === null) && (i === 30) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1143,6 +1208,7 @@ export default function Board() {
             nextSquares[30] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 23) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1160,6 +1226,7 @@ export default function Board() {
             nextSquares[17] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[33] === null) && (i === 33) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1169,6 +1236,7 @@ export default function Board() {
             nextSquares[33] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 24) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1190,11 +1258,13 @@ export default function Board() {
             nextSquares[17] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[12] === null) && ((nextSquares[19] === '🔴') || (nextSquares[19] === '❤️')) && (i === 12)) {
             nextSquares[i] = selectedPiece;
             nextSquares[19] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[33] === null) && (i === 33) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1208,11 +1278,13 @@ export default function Board() {
             nextSquares[33] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[44] === null) && ((nextSquares[35] === '🔴') || (nextSquares[35] === '❤️')) && (i === 44)) {
             nextSquares[i] = selectedPiece;
             nextSquares[35] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 26) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1234,11 +1306,13 @@ export default function Board() {
             nextSquares[19] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[14] === null) && ((nextSquares[21] === '🔴') || (nextSquares[21] === '❤️')) && (i === 14)) {
             nextSquares[i] = selectedPiece;
             nextSquares[21] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[35] === null) && (i === 35) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1252,11 +1326,13 @@ export default function Board() {
             nextSquares[35] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[46] === null) && ((nextSquares[37] === '🔴') || (nextSquares[37] === '❤️')) && (i === 46)) {
             nextSquares[i] = selectedPiece;
             nextSquares[37] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 28) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1278,6 +1354,7 @@ export default function Board() {
             nextSquares[21] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[37] === null) && (i === 37) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1291,6 +1368,7 @@ export default function Board() {
             nextSquares[37] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 30) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1312,6 +1390,7 @@ export default function Board() {
             nextSquares[26] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[40] === null) && (i === 40) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1325,6 +1404,7 @@ export default function Board() {
             nextSquares[42] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 33) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1346,11 +1426,13 @@ export default function Board() {
             nextSquares[26] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[21] === null) && ((nextSquares[28] === '🔴') || (nextSquares[28] === '❤️')) && (i === 21)) {
             nextSquares[i] = selectedPiece;
             nextSquares[28] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[42] === null) && (i === 42) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1364,11 +1446,13 @@ export default function Board() {
             nextSquares[42] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[53] === null) && ((nextSquares[44] === '🔴') || (nextSquares[44] === '❤️')) && (i === 53)) {
             nextSquares[i] = selectedPiece;
             nextSquares[44] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 35) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1390,11 +1474,13 @@ export default function Board() {
             nextSquares[28] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[23] === null) && ((nextSquares[30] === '🔴') || (nextSquares[30] === '❤️')) && (i === 23)) {
             nextSquares[i] = selectedPiece;
             nextSquares[30] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[44] === null) && (i === 44) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1408,11 +1494,13 @@ export default function Board() {
             nextSquares[44] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[55] === null) && ((nextSquares[46] === '🔴') || (nextSquares[46] === '❤️')) && (i === 55)) {
             nextSquares[i] = selectedPiece;
             nextSquares[46] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 37) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1430,6 +1518,7 @@ export default function Board() {
             nextSquares[30] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[46] === null) && (i === 46) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1439,6 +1528,7 @@ export default function Board() {
             nextSquares[46] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 39) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1456,6 +1546,7 @@ export default function Board() {
             nextSquares[33] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[49] === null) && (i === 49) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1465,6 +1556,7 @@ export default function Board() {
             nextSquares[49] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 40) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1486,11 +1578,13 @@ export default function Board() {
             nextSquares[33] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[28] === null) && ((nextSquares[35] === '🔴') || (nextSquares[35] === '❤️')) && (i === 28)) {
             nextSquares[i] = selectedPiece;
             nextSquares[35] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[49] === null) && (i === 49) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1504,11 +1598,13 @@ export default function Board() {
             nextSquares[49] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[60] === null) && ((nextSquares[51] === '🔴') || (nextSquares[51] === '❤️')) && (i === 60)) {
             nextSquares[i] = selectedPiece;
             nextSquares[51] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 42) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1530,11 +1626,13 @@ export default function Board() {
             nextSquares[35] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[30] === null) && ((nextSquares[37] === '🔴') || (nextSquares[37] === '❤️')) && (i === 30)) {
             nextSquares[i] = selectedPiece;
             nextSquares[37] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[51] === null) && (i === 51) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1548,11 +1646,13 @@ export default function Board() {
             nextSquares[51] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[62] === null) && ((nextSquares[53] === '🔴') || (nextSquares[53] === '❤️')) && (i === 62)) {
             nextSquares[i] = selectedPiece;
             nextSquares[53] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 44) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1574,6 +1674,7 @@ export default function Board() {
             nextSquares[37] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[53] === null) && (i === 53) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1587,6 +1688,7 @@ export default function Board() {
             nextSquares[53] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 46) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1608,6 +1710,7 @@ export default function Board() {
             nextSquares[42] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[56] === null) && (i === 56) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1637,11 +1740,13 @@ export default function Board() {
             nextSquares[42] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[37] === null) && ((nextSquares[44] === '🔴') || (nextSquares[44] === '❤️')) && (i === 37)) {
             nextSquares[i] = selectedPiece;
             nextSquares[44] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[58] === null) && (i === 58) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1671,11 +1776,13 @@ export default function Board() {
             nextSquares[44] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[39] === null) && ((nextSquares[46] === '🔴') || (nextSquares[46] === '❤️')) && (i === 39)) {
             nextSquares[i] = selectedPiece;
             nextSquares[46] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[60] === null) && (i === 60) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1701,6 +1808,7 @@ export default function Board() {
             nextSquares[46] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[62] === null) && (i === 62) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -1722,6 +1830,7 @@ export default function Board() {
             nextSquares[49] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 56) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1743,11 +1852,13 @@ export default function Board() {
             nextSquares[49] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[44] === null) && ((nextSquares[51] === '🔴') || (nextSquares[51] === '❤️')) && (i === 44)) {
             nextSquares[i] = selectedPiece;
             nextSquares[51] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 58) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1769,11 +1880,13 @@ export default function Board() {
             nextSquares[51] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
           } else if ((nextSquares[46] === null) && ((nextSquares[53] === '🔴') || (nextSquares[53] === '❤️')) && (i === 46)) {
             nextSquares[i] = selectedPiece;
             nextSquares[53] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
           } else if (i === 60) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1795,6 +1908,7 @@ export default function Board() {
             nextSquares[53] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
           } else if (i === 62) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -1878,6 +1992,7 @@ export default function Board() {
           nextSquares[10] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 17) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1899,11 +2014,13 @@ export default function Board() {
           nextSquares[10] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[5] === null) && ((nextSquares[12] === '⚫') || (nextSquares[12] === '🖤')) && (i === 5)) {
           nextSquares[i] = selectedPiece;
           nextSquares[12] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 19) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1925,11 +2042,13 @@ export default function Board() {
           nextSquares[12] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[7] === null) && ((nextSquares[14] === '⚫') || (nextSquares[14] === '🖤')) && (i === 7)) {
           nextSquares[i] = selectedPiece;
           nextSquares[14] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 21) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1947,6 +2066,7 @@ export default function Board() {
           nextSquares[14] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 23) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1964,6 +2084,7 @@ export default function Board() {
           nextSquares[17] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 24) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -1985,11 +2106,13 @@ export default function Board() {
           nextSquares[17] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[12] === null) && ((nextSquares[19] === '⚫') || (nextSquares[19] === '🖤')) && (i === 12)) {
           nextSquares[i] = selectedPiece;
           nextSquares[19] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 26) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2011,11 +2134,13 @@ export default function Board() {
           nextSquares[19] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[14] === null) && ((nextSquares[21] === '⚫') || (nextSquares[21] === '🖤')) && (i === 14)) {
           nextSquares[i] = selectedPiece;
           nextSquares[21] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 28) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2037,6 +2162,7 @@ export default function Board() {
           nextSquares[21] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 30) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2058,6 +2184,7 @@ export default function Board() {
           nextSquares[26] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 33) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2079,11 +2206,13 @@ export default function Board() {
           nextSquares[26] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[21] === null) && ((nextSquares[28] === '⚫') || (nextSquares[28] === '🖤')) && (i === 21)) {
           nextSquares[i] = selectedPiece;
           nextSquares[28] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 35) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2105,11 +2234,13 @@ export default function Board() {
           nextSquares[28] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[23] === null) && ((nextSquares[30] === '⚫') || (nextSquares[30] === '🖤')) && (i === 23)) {
           nextSquares[i] = selectedPiece;
           nextSquares[30] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 37) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2127,6 +2258,7 @@ export default function Board() {
           nextSquares[30] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 39) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2144,6 +2276,7 @@ export default function Board() {
           nextSquares[33] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 40) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2165,11 +2298,13 @@ export default function Board() {
           nextSquares[33] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[28] === null) && ((nextSquares[35] === '⚫') || (nextSquares[35] === '🖤')) && (i === 28)) {
           nextSquares[i] = selectedPiece;
           nextSquares[35] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 42) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2191,11 +2326,13 @@ export default function Board() {
           nextSquares[35] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[30] === null) && ((nextSquares[37] === '⚫') || (nextSquares[37] === '🖤')) && (i === 30)) {
           nextSquares[i] = selectedPiece;
           nextSquares[37] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 44) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2217,6 +2354,7 @@ export default function Board() {
           nextSquares[37] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 46) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2238,6 +2376,7 @@ export default function Board() {
           nextSquares[42] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 49) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2259,11 +2398,13 @@ export default function Board() {
           nextSquares[42] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[37] === null) && ((nextSquares[44] === '⚫') || (nextSquares[44] === '🖤')) && (i === 37)) {
           nextSquares[i] = selectedPiece;
           nextSquares[44] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 51) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2285,11 +2426,13 @@ export default function Board() {
           nextSquares[44] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[39] === null) && ((nextSquares[46] === '⚫') || (nextSquares[46] === '🖤')) && (i === 39)) {
           nextSquares[i] = selectedPiece;
           nextSquares[46] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 53) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2307,6 +2450,7 @@ export default function Board() {
           nextSquares[46] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 55) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2324,6 +2468,7 @@ export default function Board() {
           nextSquares[49] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 56) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2345,11 +2490,13 @@ export default function Board() {
           nextSquares[49] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[44] === null) && ((nextSquares[51] === '⚫') || (nextSquares[51] === '🖤')) && (i === 44)) {
           nextSquares[i] = selectedPiece;
           nextSquares[51] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 58) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2371,11 +2518,13 @@ export default function Board() {
           nextSquares[51] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if ((nextSquares[46] === null) && ((nextSquares[53] === '⚫') || (nextSquares[53] === '🖤')) && (i === 46)) {
           nextSquares[i] = selectedPiece;
           nextSquares[53] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 60) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2397,6 +2546,7 @@ export default function Board() {
           nextSquares[53] = null;
           removeGhostPieces();
           setAPieceWasJumped(true);
+          setLandedLocation(i);
         } else if (i === 62) {
           nextSquares[i] = selectedPiece;
           setThereAreGhostPieces(false);
@@ -2420,6 +2570,7 @@ export default function Board() {
             nextSquares[10] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 1) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2441,11 +2592,13 @@ export default function Board() {
             nextSquares[10] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[21] === null) && ((nextSquares[12] === '⚫') || (nextSquares[12] === '🖤')) && (i === 21)) {
             nextSquares[i] = selectedPiece;
             nextSquares[12] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 3) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2467,11 +2620,13 @@ export default function Board() {
             nextSquares[12] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[23] === null) && ((nextSquares[14] === '⚫') || (nextSquares[14] === '🖤')) && (i === 23)) {
             nextSquares[i] = selectedPiece;
             nextSquares[14] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 5) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2489,6 +2644,7 @@ export default function Board() {
             nextSquares[14] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 7) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2510,6 +2666,7 @@ export default function Board() {
             nextSquares[17] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 8) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2539,11 +2696,13 @@ export default function Board() {
             nextSquares[17] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[28] === null) && ((nextSquares[19] === '⚫') || (nextSquares[19] === '🖤')) && (i === 28)) {
             nextSquares[i] = selectedPiece;
             nextSquares[19] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 10) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2573,11 +2732,13 @@ export default function Board() {
             nextSquares[19] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[30] === null) && ((nextSquares[21] === '⚫') || (nextSquares[21] === '🖤')) && (i === 30)) {
             nextSquares[i] = selectedPiece;
             nextSquares[21] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 12) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2607,6 +2768,7 @@ export default function Board() {
             nextSquares[21] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 14) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2628,6 +2790,7 @@ export default function Board() {
             nextSquares[10] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[24] === null) && (i === 24) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -2641,6 +2804,7 @@ export default function Board() {
             nextSquares[26] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 17) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2662,11 +2826,13 @@ export default function Board() {
             nextSquares[10] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[5] === null) && ((nextSquares[12] === '⚫') || (nextSquares[12] === '🖤')) && (i === 5)) {
             nextSquares[i] = selectedPiece;
             nextSquares[12] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[26] === null) && (i === 26) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -2680,11 +2846,13 @@ export default function Board() {
             nextSquares[26] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[37] === null) && ((nextSquares[28] === '⚫') || (nextSquares[28] === '🖤')) && (i === 37)) {
             nextSquares[i] = selectedPiece;
             nextSquares[28] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 19) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2706,11 +2874,13 @@ export default function Board() {
             nextSquares[12] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[7] === null) && ((nextSquares[14] === '⚫') || (nextSquares[14] === '🖤')) && (i === 7)) {
             nextSquares[i] = selectedPiece;
             nextSquares[14] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[28] === null) && (i === 28) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -2724,11 +2894,13 @@ export default function Board() {
             nextSquares[28] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[39] === null) && ((nextSquares[30] === '⚫') || (nextSquares[30] === '🖤')) && (i === 39)) {
             nextSquares[i] = selectedPiece;
             nextSquares[30] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 21) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2746,6 +2918,7 @@ export default function Board() {
             nextSquares[14] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[30] === null) && (i === 30) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -2755,6 +2928,7 @@ export default function Board() {
             nextSquares[30] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 23) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2772,6 +2946,7 @@ export default function Board() {
             nextSquares[17] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[33] === null) && (i === 33) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -2781,6 +2956,7 @@ export default function Board() {
             nextSquares[33] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 24) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2802,11 +2978,13 @@ export default function Board() {
             nextSquares[17] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[12] === null) && ((nextSquares[19] === '⚫') || (nextSquares[19] === '🖤')) && (i === 12)) {
             nextSquares[i] = selectedPiece;
             nextSquares[19] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[33] === null) && (i === 33) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -2820,11 +2998,13 @@ export default function Board() {
             nextSquares[33] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[44] === null) && ((nextSquares[35] === '⚫') || (nextSquares[35] === '🖤')) && (i === 44)) {
             nextSquares[i] = selectedPiece;
             nextSquares[35] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 26) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2846,11 +3026,13 @@ export default function Board() {
             nextSquares[19] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[14] === null) && ((nextSquares[21] === '⚫') || (nextSquares[21] === '🖤')) && (i === 14)) {
             nextSquares[i] = selectedPiece;
             nextSquares[21] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[35] === null) && (i === 35) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -2864,11 +3046,13 @@ export default function Board() {
             nextSquares[35] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[46] === null) && ((nextSquares[37] === '⚫') || (nextSquares[37] === '🖤')) && (i === 46)) {
             nextSquares[i] = selectedPiece;
             nextSquares[37] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 28) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2890,6 +3074,7 @@ export default function Board() {
             nextSquares[21] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[37] === null) && (i === 37) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -2903,6 +3088,7 @@ export default function Board() {
             nextSquares[37] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 30) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2924,6 +3110,7 @@ export default function Board() {
             nextSquares[26] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[40] === null) && (i === 40) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -2937,6 +3124,7 @@ export default function Board() {
             nextSquares[42] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 33) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -2958,11 +3146,13 @@ export default function Board() {
             nextSquares[26] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[21] === null) && ((nextSquares[28] === '⚫') || (nextSquares[28] === '🖤')) && (i === 21)) {
             nextSquares[i] = selectedPiece;
             nextSquares[28] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[42] === null) && (i === 42) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -2976,11 +3166,13 @@ export default function Board() {
             nextSquares[42] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[53] === null) && ((nextSquares[44] === '⚫') || (nextSquares[44] === '🖤')) && (i === 53)) {
             nextSquares[i] = selectedPiece;
             nextSquares[44] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 35) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -3002,11 +3194,13 @@ export default function Board() {
             nextSquares[28] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[23] === null) && ((nextSquares[30] === '⚫') || (nextSquares[30] === '🖤')) && (i === 23)) {
             nextSquares[i] = selectedPiece;
             nextSquares[30] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[44] === null) && (i === 44) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -3020,11 +3214,13 @@ export default function Board() {
             nextSquares[44] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[55] === null) && ((nextSquares[46] === '⚫') || (nextSquares[46] === '🖤')) && (i === 55)) {
             nextSquares[i] = selectedPiece;
             nextSquares[46] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 37) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -3042,6 +3238,7 @@ export default function Board() {
             nextSquares[30] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[46] === null) && (i === 46) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -3051,6 +3248,7 @@ export default function Board() {
             nextSquares[46] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 39) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -3068,6 +3266,7 @@ export default function Board() {
             nextSquares[33] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[49] === null) && (i === 49) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -3077,6 +3276,7 @@ export default function Board() {
             nextSquares[49] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 40) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -3098,11 +3298,13 @@ export default function Board() {
             nextSquares[33] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[28] === null) && ((nextSquares[35] === '⚫') || (nextSquares[35] === '🖤')) && (i === 28)) {
             nextSquares[i] = selectedPiece;
             nextSquares[35] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[49] === null) && (i === 49) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -3116,11 +3318,13 @@ export default function Board() {
             nextSquares[49] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[60] === null) && ((nextSquares[51] === '⚫') || (nextSquares[51] === '🖤')) && (i === 60)) {
             nextSquares[i] = selectedPiece;
             nextSquares[51] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 42) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -3142,11 +3346,13 @@ export default function Board() {
             nextSquares[35] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[30] === null) && ((nextSquares[37] === '⚫') || (nextSquares[37] === '🖤')) && (i === 30)) {
             nextSquares[i] = selectedPiece;
             nextSquares[37] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[51] === null) && (i === 51) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -3160,11 +3366,13 @@ export default function Board() {
             nextSquares[51] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[62] === null) && ((nextSquares[53] === '⚫') || (nextSquares[53] === '🖤')) && (i === 62)) {
             nextSquares[i] = selectedPiece;
             nextSquares[53] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 44) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -3186,6 +3394,7 @@ export default function Board() {
             nextSquares[37] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[53] === null) && (i === 53) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -3199,6 +3408,7 @@ export default function Board() {
             nextSquares[53] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 46) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -3220,6 +3430,7 @@ export default function Board() {
             nextSquares[42] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[56] === null) && (i === 56) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -3249,11 +3460,13 @@ export default function Board() {
             nextSquares[42] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[37] === null) && ((nextSquares[44] === '⚫') || (nextSquares[44] === '🖤')) && (i === 37)) {
             nextSquares[i] = selectedPiece;
             nextSquares[44] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[58] === null) && (i === 58) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -3283,11 +3496,13 @@ export default function Board() {
             nextSquares[44] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[39] === null) && ((nextSquares[46] === '⚫') || (nextSquares[46] === '🖤')) && (i === 39)) {
             nextSquares[i] = selectedPiece;
             nextSquares[46] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[60] === null) && (i === 60) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -3313,6 +3528,7 @@ export default function Board() {
             nextSquares[46] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[62] === null) && (i === 62) && (!aPieceWasJumped)) {
             nextSquares[i] = selectedPiece;
             removeGhostPieces();
@@ -3334,6 +3550,7 @@ export default function Board() {
             nextSquares[49] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 56) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -3355,11 +3572,13 @@ export default function Board() {
             nextSquares[49] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if ((nextSquares[44] === null) && ((nextSquares[51] === '⚫') || (nextSquares[51] === '🖤')) && (i === 44)) {
             nextSquares[i] = selectedPiece;
             nextSquares[51] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
         } else if (i === 58) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -3381,11 +3600,13 @@ export default function Board() {
             nextSquares[51] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
           } else if ((nextSquares[46] === null) && ((nextSquares[53] === '⚫') || (nextSquares[53] === '🖤')) && (i === 46)) {
             nextSquares[i] = selectedPiece;
             nextSquares[53] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
           } else if (i === 60) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -3407,6 +3628,7 @@ export default function Board() {
             nextSquares[53] = null;
             removeGhostPieces();
             setAPieceWasJumped(true);
+            setLandedLocation(i);
           } else if (i === 62) {
             nextSquares[i] = selectedPiece;
             setThereAreGhostPieces(false);
@@ -3418,33 +3640,79 @@ export default function Board() {
 
 
     
-
-    
     // if (the tile clicked on is a single red piece AND it is red's turn AND there are no ghost pieces) then
     if ((nextSquares[i] === '🔴') && !blackIsNext && (thereAreGhostPieces === false)) {
-      // set the selectedPiece to a single red piece
-      changeSelectedPiece();
-      // set the tile to display a single ghost piece
-      nextSquares[i] = '⚪';
-      // set the ghostPosition to the tile clicked
-      getGhostPosition();
-      // check if there are ghost pieces on the board
-      checkForGhostPieces();
+      // if (a piece has already been moved this turn) then
+      if (selectedPiece !== null) {
+        // if (the tile clicked isn't where the piece moved this turn was placed) then
+        if (i !== landedLocation) {
+          // do nothing
+          return;
+        // else (if the tile clicked is where the piece moved this turn was placed)
+        } else {
+          // set the tile to display a single ghost piece
+          nextSquares[i] = '⚪';
+          // set the ghostPosition to the tile clicked
+          getGhostPosition();
+          // check if there are ghost pieces on the board
+          checkForGhostPieces();
+        }
+      // else (if a piece hasn't already been moved this turn)
+      } else {
+        // set the selectedPiece to a single red piece
+        changeSelectedPiece();
+        // set the tile to display a single ghost piece
+        nextSquares[i] = '⚪';
+        // set the ghostPosition to the tile clicked
+        getGhostPosition();
+        // check if there are ghost pieces on the board
+        checkForGhostPieces();
+      }
     } else if ((nextSquares[i] === '❤️') && !blackIsNext && (thereAreGhostPieces === false)) {
-      changeSelectedPiece();
-      nextSquares[i] = '🤍';
-      getGhostPosition();
-      checkForGhostPieces();
+      if (selectedPiece !== null) {
+        if (i !== landedLocation) {
+          return;
+        } else {
+          nextSquares[i] = '🤍';
+          getGhostPosition();
+          checkForGhostPieces();
+        }
+      } else {
+        changeSelectedPiece();
+        nextSquares[i] = '🤍';
+        getGhostPosition();
+        checkForGhostPieces();
+      }
     } else if ((nextSquares[i] === '⚫') && blackIsNext && (thereAreGhostPieces === false)) {
-      changeSelectedPiece();
-      nextSquares[i] = '⚪';
-      getGhostPosition();
-      checkForGhostPieces();
+      if (selectedPiece !== null) {
+        if (i !== landedLocation) {
+          return;
+        } else {
+          nextSquares[i] = '⚪';
+          getGhostPosition();
+          checkForGhostPieces();
+        }
+      } else {
+        changeSelectedPiece();
+        nextSquares[i] = '⚪';
+        getGhostPosition();
+        checkForGhostPieces();
+      }
     } else if ((nextSquares[i] === '🖤') && blackIsNext && (thereAreGhostPieces === false)) {
-      changeSelectedPiece();
-      nextSquares[i] = '🤍';
-      getGhostPosition();
-      checkForGhostPieces();
+      if (selectedPiece !== null) {
+        if (i !== landedLocation) {
+          return;
+        } else {
+          nextSquares[i] = '🤍';
+          getGhostPosition();
+          checkForGhostPieces();
+        }
+      } else {
+        changeSelectedPiece();
+        nextSquares[i] = '🤍';
+        getGhostPosition();
+        checkForGhostPieces();
+      }
     // else if ((the tile clicked on is empty OR occupied by a ghost piece) AND it is black's turn) then
     } else if (((nextSquares[i] === null) || (nextSquares[i] === '⚪') || (nextSquares[i] === '🤍'))  && blackIsNext) {
       // check if a valid move was made and, if so, place the selectedPiece
@@ -3526,6 +3794,8 @@ export default function Board() {
     setStartTurnSquares(squares);
     // set aPieceWasJumped to false for the start of the next turn
     setAPieceWasJumped(false);
+    // set selectedPiece to null for the start of the next turn
+    setSelectedPiece(null);
   }
 
   return (

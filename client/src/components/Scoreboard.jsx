@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Scoreboard = (props) => {
-	console.log(props);
+	// console.log(props);
 	let textContent = props.status;
 	return (
 		<div className="my-10">
