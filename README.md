@@ -1,5 +1,5 @@
 # KINGME - Checkers App
-A fun game to play with a friend
+A fun game to play with a friend.
 <br>
 <br>
 
@@ -18,9 +18,9 @@ https://github.com/jakubcic/kingme
 <br>
 
 ## Screenshots of Webpage
-<img src="pics/kingmeUpdatedLandingPage.png" alt="Website Screenshot1">
-<img src="pics/kingmeggLoginPage.png" alt="Website Screenshot2">
-<img src="pics/kingmeFullBoard.png" alt="Website Screenshot3">
+<img src="pics/kingmeLandPageFinal.png" alt="Website Screenshot1">
+<img src="pics/kingmeLoginPageFinal.png" alt="Website Screenshot2">
+<img src="pics/kingmeFullBoardUserName.png" alt="Website Screenshot3">
 <br>
 <br>
 <br>
@@ -28,8 +28,6 @@ https://github.com/jakubcic/kingme
 ## Table of Contents
 
   * [Technologies Used](#technologies-used)
-
-  * [Usage](#usage)
   
   * [User Story](#user-story)
 
@@ -54,15 +52,9 @@ https://github.com/jakubcic/kingme
 <br>
 <br>
 
-## Usage
-
-
-<br>
-<br>
-
 ## User Story
 <ul>
-<li>As a user I want to play checkers with a friend and keep track of my wins and losses.
+<li>As a user I want to play checkers with a friend and keep track of my wins and losses as I build game strategy.
 </ul>
 <br>
 <br>
@@ -75,14 +67,16 @@ During the creation of the website the team encountered these challenges to prod
 <li>refactoring HTML to REACT
 <li>Game Logic: Throughout the build, the game logic had to be constantly updated to produce a full-fledged game. 
 <li>Graphql: 
-<li>Deployment: Deploying to Heroku invloved changing some scripts, and adding engines to the package.json. Also a path to the dist file needed updating in the server.js file.
+<li>Deployment: Deploying to Heroku was not quick or easy.  In the end, we had to change some scripts, and add engines to the package.json. Also a path to the dist file needed updating in the server.js file.
 </ul>
 <br>
 
 ## Roadmap
-This is a responsive, interactive app using many technologies to.. . Future developments could include:
+This is a responsive, interactive app using many technologies to create a fun game and user experience. Future developments could include:
 <ul>
-<li>Adding more game features like choosing your checkers' color, and choosing the board colors as well.
+<li>Adding user features, such as being able to change the colors of the board and the checker pieces.
+<li>Adding a chat feature for players to communicate.
+<li>Adding a computer player & even chatGPT for a one player experience.
 </ul>
 <br>
 <br>
@@ -103,4 +97,3 @@ Thanks to:
 <ul>
 <li>Instructor Kris Renaldi for his invaluable help during class sessions and office hours.
 <li>Tutors for their help in troubleshooting different issues.
-<li>(Websties we used)
