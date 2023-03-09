@@ -1,7 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { QUERY_ME } from "../utils/queries";
+
+
 
 const Scoreboard = (props) => {
+ 
+	const { loading, data } = useQuery(QUERY_ME);
+	const user = data?.me || {};
+	console.log(user);
+	
 	console.log(props);
 	let textContent = props.status;
 	return (
@@ -20,7 +29,7 @@ const Scoreboard = (props) => {
 				>
 					{textContent}
 				</h1>
-			) : textContent === "Black's Turn" ? (
+			) : textContent === `${user.username}'s Turn` ? (
 				<h1
 					style={{ color: "black" }}
 					className="font-hero text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
