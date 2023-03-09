@@ -18,28 +18,28 @@ const Scoreboard = (props) => {
 			{textContent === "Black Wins!" ? (
 				<h1
 					style={{ color: "black" }}
-					className="font-hero text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+					className="font-hero text-center text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
 				>
 					{textContent}
 				</h1>
 			) : textContent === "Red Wins!" ? (
 				<h1
 					style={{ color: "red" }}
-					className="font-hero text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+					className="font-hero text-center text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
 				>
 					{textContent}
 				</h1>
 			) : textContent === `${user.username}'s Turn` ? (
 				<h1
 					style={{ color: "black" }}
-					className="font-hero text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+					className="font-hero text-center text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
 				>
 					{textContent}
 				</h1>
 			) : (
 				<h1
 					style={{ color: "red" }}
-					className="font-hero text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+					className="font-hero text-center text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
 				>
 					{textContent}
 				</h1>
