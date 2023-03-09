@@ -108,7 +108,7 @@ const Menu = () => {
 						</Link>
 					</div>
 					<div id="joinContainer">
-						<input id="joinInput" maxLength={10} autoFocus/>
+						<input id="joinInput" maxLength={10} autoFocus placeholder="Game ID"/>
 						<Link to="/multiplayer">
 							<button id="joinBtn" onClick={handleAddPlayer}>
 								Join a Friend
