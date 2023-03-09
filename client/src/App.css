@@ -115,11 +115,11 @@
 		flex: 1;
 	}
 }
-@media (min-width: 1400px) {
+/* @media (min-width: 1400px) {
 	#hotseatContainer, #multiplayerContainer, #menu {
 		max-width: 1400px;
 	}
-}
+} */
 #hostBtn {
 	margin-top: 120px;
 }
