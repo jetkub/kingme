@@ -41,7 +41,7 @@ const UserMenu = () => {
     <Menu as="div" className="relative inline-block text-left">
       <div className="">
         <Menu.Button className="flex h-full w-full items-center justify-center gap-x-1.5 rounded-none border-4 border-neutral-800 bg-neutral-50 px-6 py-2 font-base text-lg font-bold text-neutral-900 ring-1 ring-inset ring-gray-300 hover:bg-neutral-200">
-          user
+          User
           <ChevronDownIcon
             className="-mr-1 mt-0.5 h-5 w-5 stroke-red-600 text-neutral-500"
             aria-hidden="true"
@@ -95,7 +95,7 @@ const UserMenu = () => {
                     "block w-full px-4 py-2 text-left"
                   )}
                 >
-                  log out
+                  Log Out
                 </button>
               )}
             </Menu.Item>
