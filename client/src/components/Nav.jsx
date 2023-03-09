@@ -5,9 +5,9 @@ import UserMenu from './UserMenu';
 
 const stlyeClasses = {
 	navBtn:
-		'border-4 border-neutral-800 bg-neutral-50 hover:bg-neutral-200 px-4 py-1 font-base font-bold text-neutral-900',
+		'border-4 border-neutral-800 bg-white hover:bg-neutral-200 px-4 py-1 font-base font-bold text-neutral-900',
 	navBtnActive:
-		'border-4 border-neutral-800 bg-neutral-50 hover:bg-neutral-200 px-4 py-1 font-base font-bold text-neutral-900 underline underline-offset-[7px] decoration-[3px]',
+		'border-4 border-neutral-800 bg-white hover:bg-neutral-200 px-4 py-1 font-base font-bold text-neutral-900 underline underline-offset-[7px] decoration-[3px]',
 };
 
 const Navigation = () => {

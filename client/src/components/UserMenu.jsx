@@ -40,7 +40,7 @@ const UserMenu = () => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div className="">
-        <Menu.Button className="flex h-full w-full items-center justify-center gap-x-1.5 rounded-none border-4 border-neutral-800 bg-neutral-50 px-6 py-2 font-base text-lg font-bold text-neutral-900 ring-1 ring-inset ring-gray-300 hover:bg-neutral-200">
+        <Menu.Button className="flex h-full w-full items-center justify-center gap-x-1.5 rounded-none border-4 border-neutral-800 bg-white px-6 py-2 font-base text-lg font-bold text-neutral-900 ring-1 ring-inset ring-gray-300 hover:bg-neutral-200">
           User
           <ChevronDownIcon
             className="-mr-1 mt-0.5 h-5 w-5 stroke-red-600 text-neutral-500"
@@ -58,7 +58,7 @@ const UserMenu = () => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 mt-2 w-72 origin-top-right divide-y-2 divide-neutral-400 rounded-none border-4 border-t-0 border-neutral-800 bg-neutral-200 font-base text-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 z-10 mt-2 w-72 origin-top-right divide-y-2 divide-neutral-400 rounded-none border-4 border-t-0 border-neutral-800 bg-white font-base text-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="px-4 py-3">
             <p className="text-base text-neutral-900">Signed in as</p>
             <p className="truncate font-medium text-neutral-800">

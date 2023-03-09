@@ -68,14 +68,14 @@ const Menu = () => {
 
 	return (
 		<>
-			<section className="my-5 grid place-content-center align-middle">
-				<div className="container my-4 max-w-6xl">
-					<h1 className="font-hero text-5xl sm:text-6xl md:text-7xl lg:text-8xl my-10">
+			<section className="my-2 grid place-content-center align-middle">
+				<div className="container my-10 max-w-6xl">
+					<h1 className="font-hero text-5xl sm:text-7xl md:text-8xl lg:text-9xl text-center">
 						kingme.gg
 					</h1>
 				</div>
 			</section>
-			<div id="menu">
+			<div id="menu" className="w-full border-t-2 border-t-black">
 				<section id="hotseatContainer">
 					<div id="deco2">
 						<img
@@ -108,7 +108,7 @@ const Menu = () => {
 						</Link>
 					</div>
 					<div id="joinContainer">
-						<input id="joinInput" maxLength={10} autoFocus/>
+						<input id="joinInput" maxLength={10} autoFocus placeholder="Game ID"/>
 						<Link to="/multiplayer">
 							<button id="joinBtn" onClick={handleAddPlayer}>
 								Join a Friend
