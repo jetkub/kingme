@@ -75,7 +75,7 @@ const Menu = () => {
 					</h1>
 				</div>
 			</section>
-			<div id="menu">
+			<div id="menu" className="w-full border-t-2 border-t-black">
 				<section id="hotseatContainer">
 					<div id="deco2">
 						<img

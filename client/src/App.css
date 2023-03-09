@@ -32,9 +32,8 @@
 /* menu screen styling */
 #menu {
 	background-color: rgb(255, 69, 69);
-	border: solid 2px black;
+	/* border: solid 2px black; */
 	text-align: center;
-	width: 100vw;
 }
 #hotseatBtn,
 #hostBtn,
