@@ -3638,7 +3638,6 @@ export default function Board() {
       }
     }
 
-
     
     // if (the tile clicked on is a single red piece AND it is red's turn AND there are no ghost pieces) then
     if ((nextSquares[i] === '🔴') && !blackIsNext && (thereAreGhostPieces === false)) {
