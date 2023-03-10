@@ -150,6 +150,7 @@ export default function Board() {
       for (let index = 0; index < nextSquares.length; index++) {
         if ((nextSquares[index] === '⚪') || (nextSquares[index] === '🤍')) {
           setThereAreGhostPieces(true);
+          setDisableEndTurn(true);
         }
       }
     }
@@ -167,6 +168,7 @@ export default function Board() {
               setSelectedPiece(null);
             } else {
               setDisableEndTurn(false);
+              checkForGhostPieces();
             }
         }
       }
