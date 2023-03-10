@@ -1,8 +1,19 @@
 # [kingme.gg](https://kingme.gg/)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![GitHub repo size](https://img.shields.io/github/repo-size/jakubcic/kingme)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/jakubcic/kingme)
+![GitHub language count](https://img.shields.io/github/languages/count/jakubcic/kingme)
+![GitHub top language](https://img.shields.io/github/languages/top/jakubcic/kingme)
+<br>
+![GitHub contributors](https://img.shields.io/github/contributors/jakubcic/kingme)
+![GitHub last commit](https://img.shields.io/github/last-commit/jakubcic/kingme)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/jakubcic/kingme)
+<br>
+
 A fun game to play with a friend in your web browser!
 <br>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Project Status
 Submitted for evaluation.
