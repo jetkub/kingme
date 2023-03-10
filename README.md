@@ -1,4 +1,4 @@
-# kingme.gg
+# [kingme.gg](https://kingme.gg/)
 A fun game to play with a friend in your web browser!
 <br>
 
