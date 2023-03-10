@@ -62,12 +62,11 @@ kingme.gg is a checkers web application built with React, Node, Express, MongoDB
 
 ## Challenges
 We had a lot of challenges during the build of this project. Some of the more significant ones were:
-<ul>
-<li>*Socket.io*: This is a library we looked into to using for the WebSocket protocol, but online multiplayer was a far greater challenge than we had anticipated. If we had more time, we would have liked to have implemented this. We plan to continue working on this project and will add this feature in the future.
-<li>We started with mockups using HTML and CSS and had to refactor these into React components using a mix of TailwindCSS and custom CSS.
-<li>*Game Logic*: Throughout the development process the game logic had to be constantly updated to produce a full-fledged game and squash bugs as we found them.
-<li>*Deployment*: Deploying to Heroku was not as quick or easy as we would've liked. Since we chose to use Vite we had to use a different build script that what we're used to and made some changes that we didn't anticipate. We had to change some scripts in the package.json and adjust some environment varibles to get it to deploy properly. Once we got heroku to build the app we still weren't able to get it to run properly. This thankfully was a quick fix: we needed to update the path in our *server.js* file to the `dist` directory instead of the `build` directory.
-</ul>
+
+ - **Socket.io**: This is a library we looked into to using for the WebSocket protocol, but online multiplayer was a far greater challenge than we had anticipated. If we had more time, we would have liked to have implemented this. We plan to continue working on this project and will add this feature in the future.
+ - We started with mockups using HTML and CSS and had to refactor these into React components using a mix of TailwindCSS and custom CSS.
+ - **Game Logic**: Throughout the development process the game logic had to be constantly updated to produce a full-fledged game and squash bugs as we found them.
+ - **Deployment**: Deploying to Heroku was not as quick or easy as we would've liked. Since we chose to use Vite we had to use a different build script that what we're used to and made some changes that we didn't anticipate. We had to change some scripts in the package.json and adjust some environment varibles to get it to deploy properly. Once we got heroku to build the app we still weren't able to get it to run properly. This thankfully was a quick fix: we needed to update the path in our *server.js* file to the `dist` directory instead of the `build` directory.
 <br>
 
 ## Roadmap
@@ -81,17 +80,14 @@ This is a responsive, interactive app using many technologies to create a fun ga
 
 
 ## Contributors
-<ul>
-<li>Ricky Aponte
-<li>Emily Bernard
-<li>Jakub Cichon
-<li>Ann Hixson
-<li>Chris Lemmon
-</ul>
+- Ricky Aponte
+- Emily Bernard
+- Jakub Cichon
+- Ann Hixson
+- Chris Lemmon
 <br>
 
 ## Acknowledgements
 Thanks to:
-<ul>
-<li>Instructor Kris Renaldi for his invaluable help during class sessions and office hours.
-<li>Tutors for their help in troubleshooting different issues.
+- Instructor Kris Renaldi for his invaluable help during class sessions and office hours.
+- Tutors for their help in troubleshooting different issues.
