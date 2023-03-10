@@ -80,11 +80,11 @@ This is a responsive, interactive app using many technologies to create a fun ga
 
 
 ## Contributors
-- Ricky Aponte
-- Emily Bernard
-- Jakub Cichon
-- Ann Hixson
-- Chris Lemmon
+- [Ricky Aponte](https://github.com/Eaponte24)
+- [Emily Bernard](https://github.com/EmilyBernard )
+- [Jakub Cichon](https://github.com/jakubcic)
+- [Ann Hixson](https://github.com/AnnHixson)
+- [Chris Lemmon](https://github.com/theLemmonade)
 <br>
 
 ## Acknowledgements
