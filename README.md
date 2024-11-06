@@ -1,3 +1,4 @@
+# ! NOTE: I've paused the heroku dynos, I can't afford hosting
 # [kingme.gg](https://kingme.gg/)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
