@@ -1,5 +1,5 @@
 # ! NOTE: I've paused the heroku dynos, I can't afford hosting
-# [kingme.gg](https://kingme.gg/)
+# [kingme.gg](https://kingmegg.herokuapp.com)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![GitHub repo size](https://img.shields.io/github/repo-size/jakubcic/kingme)
@@ -21,7 +21,7 @@ Submitted for evaluation.
 <br>
 
 ## Project Deployed
-[kingme.gg](https://kingme.gg/)
+[kingme.gg](https://kingmegg.herokuapp.com)
 
 [github.com/jakubcic/kingme](https://github.com/jakubcic/kingme)
 <br>
